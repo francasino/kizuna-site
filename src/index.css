@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: global tweaks */
+html, body, #root { min-height: 100%; }
