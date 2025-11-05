@@ -131,8 +131,29 @@ export default function App() {
         </nav>
       </header>
 
-      {/* Hero Carousel */}
-      <section id="home" className="relative overflow-hidden h-[70vh] flex items-center justify-center text-center">
+      {/* Hero headline only (no carousel here) */}
+      <section id="home" className="py-24 sm:py-32 text-center relative">
+        <div className="mx-auto max-w-3xl px-4 text-emerald-950">
+          <img src={logo} alt="Kizuna Global" className="mx-auto h-28 w-auto mb-8" />
+          <h1 className="font-serif text-4xl sm:text-5xl leading-tight">
+            Impulsamos una sociedad resiliente, avanzada y abierta
+          </h1>
+          <p className="mt-4 text-lg text-emerald-900/80">
+            Educación, salud mental, igualdad e inteligencia artificial ética al servicio del bienestar integral y la innovación responsable.
+          </p>
+          <div className="mt-6 flex justify-center flex-wrap gap-3">
+            <a href="#areas" className="rounded-2xl bg-emerald-900 text-white px-5 py-3 shadow hover:shadow-md transition">
+              {t.explore}
+            </a>
+            <a href="#join" className="rounded-2xl bg-white text-emerald-900 ring-1 ring-emerald-900/15 px-5 py-3 hover:bg-emerald-50 transition">
+              {t.collaborate}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Carousel now BELOW hero, ABOVE “about” */}
+      <section id="carousel" className="relative overflow-hidden h-[50vh] flex items-center justify-center text-center mt-0">
         {images.map((img, i) => (
           <motion.img
             key={i}
@@ -144,12 +165,14 @@ export default function App() {
             transition={{ duration: 1 }}
           />
         ))}
-        <div className="absolute inset-0 bg-emerald-900/50" />
+        <div className="absolute inset-0 bg-emerald-900/40" />
         <div className="relative z-10 text-white px-4">
-          <img src={logo} alt="Kizuna Global" className="mx-auto h-28 w-auto mb-6 drop-shadow-lg" />
-          <h1 className="font-serif text-4xl sm:text-5xl max-w-3xl mx-auto leading-tight">
-            Impulsamos una sociedad resiliente, avanzada y abierta
-          </h1>
+          <h2 className="font-serif text-3xl sm:text-4xl">
+            Nuestra labor en imágenes
+          </h2>
+          <p className="mt-2 text-sm sm:text-base text-white/90">
+            Una muestra visual de nuestros proyectos y acciones en red
+          </p>
         </div>
       </section>
 
