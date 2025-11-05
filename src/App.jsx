@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 import logo from "./assets/kizuna-logo.png";
-import bg from "public/bg.png"; // ✅ background image imported
+import bg from "./assets/bg.png"; // ✅ background image imported
 
 // ───────── Small reusable components ─────────
 const LogoMark = ({ className = "w-8 h-8" }) => (
