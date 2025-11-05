@@ -15,14 +15,9 @@ import {
   PiggyBank,
 } from "lucide-react";
 
-// --- If you want to use your uploaded logo file instead of inline base64 ---
-// import logo from "./assets/kizuna-logo.png";
+import logo from "./assets/kizuna-logo.png"; // ✅ your actual logo file
 
-// For this standalone version, a base64 placeholder is fine; replace with import above if desired.
-const LOGO_SRC =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAArwAAAK8CAIAAACC2PsUAAEAAElEQVR42oydW5YkOQ5jCd//mg31YRIJkLTImjnT012VGeFuD0..."; // truncated for brevity
-
-// --- Reusable mini logo mark ---
+// --- Mini logo mark for bullets/dividers ---
 const LogoMark = ({ className = "w-8 h-8" }) => (
   <svg viewBox="0 0 100 100" className={className} aria-hidden>
     <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="4" />
@@ -37,13 +32,9 @@ const LogoMark = ({ className = "w-8 h-8" }) => (
   </svg>
 );
 
-// --- Simple section wrapper ---
+// --- Section wrapper ---
 const Section = ({ id, eyebrow, title, children }) => (
-  <section
-    id={id}
-    className="scroll-mt-24 py-16 sm:py-24 bg-white/60"
-    aria-labelledby={`${id}-title`}
-  >
+  <section id={id} className="scroll-mt-24 py-16 sm:py-24 bg-white/60" aria-labelledby={`${id}-title`}>
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
@@ -52,10 +43,7 @@ const Section = ({ id, eyebrow, title, children }) => (
         transition={{ duration: 0.6 }}
       >
         <p className="text-sm uppercase tracking-widest text-emerald-700/80">{eyebrow}</p>
-        <h2
-          id={`${id}-title`}
-          className="mt-2 text-3xl sm:text-4xl font-semibold text-emerald-950"
-        >
+        <h2 id={`${id}-title`} className="mt-2 text-3xl sm:text-4xl font-semibold text-emerald-950">
           {title}
         </h2>
       </motion.div>
@@ -86,8 +74,7 @@ const CatalanFlag = () => (
     title="Català"
     className="inline-block w-5 h-3 rounded-sm shadow ring-1 ring-black/10"
     style={{
-      background:
-        "repeating-linear-gradient(to right, #f6c400 0 6px, #d7263d 6px 12px)",
+      background: "repeating-linear-gradient(to right, #f6c400 0 6px, #d7263d 6px 12px)",
     }}
   />
 );
@@ -95,7 +82,6 @@ const CatalanFlag = () => (
 export default function App() {
   const [lang, setLang] = useState("es");
 
-  // Detect browser language once
   useEffect(() => {
     const n = (navigator.language || "es").slice(0, 2);
     if (n === "en") setLang("en");
@@ -103,49 +89,49 @@ export default function App() {
     else setLang("es");
   }, []);
 
-  // --- Translation dictionary (simplified to key sections) ---
   const t = useMemo(
-    () => ({
-      es: {
-        about: "Quiénes somos",
-        areas: "Áreas de acción",
-        eu: "Cooperación EU",
-        ods: "Agenda 2030",
-        team: "Equipo",
-        join: "Súmate",
-        news: "Noticias",
-        participate: "Participa",
-        explore: "Explorar áreas",
-        collaborate: "Colabora",
-        send: "Enviar",
-      },
-      ca: {
-        about: "Qui som",
-        areas: "Àrees d'acció",
-        eu: "Cooperació UE",
-        ods: "Agenda 2030",
-        team: "Equip",
-        join: "Uneix-t'hi",
-        news: "Notícies",
-        participate: "Participa",
-        explore: "Explora àrees",
-        collaborate: "Col·labora",
-        send: "Envia",
-      },
-      en: {
-        about: "About",
-        areas: "Areas",
-        eu: "EU Cooperation",
-        ods: "2030 Agenda",
-        team: "Team",
-        join: "Join",
-        news: "News",
-        participate: "Participate",
-        explore: "Explore areas",
-        collaborate: "Collaborate",
-        send: "Send",
-      },
-    })[lang],
+    () =>
+      ({
+        es: {
+          about: "Quiénes somos",
+          areas: "Áreas de acción",
+          eu: "Cooperación EU",
+          ods: "Agenda 2030",
+          team: "Equipo",
+          join: "Súmate",
+          news: "Noticias",
+          participate: "Participa",
+          explore: "Explorar áreas",
+          collaborate: "Colabora",
+          send: "Enviar",
+        },
+        ca: {
+          about: "Qui som",
+          areas: "Àrees d'acció",
+          eu: "Cooperació UE",
+          ods: "Agenda 2030",
+          team: "Equip",
+          join: "Uneix-t'hi",
+          news: "Notícies",
+          participate: "Participa",
+          explore: "Explora àrees",
+          collaborate: "Col·labora",
+          send: "Envia",
+        },
+        en: {
+          about: "About",
+          areas: "Areas",
+          eu: "EU Cooperation",
+          ods: "2030 Agenda",
+          team: "Team",
+          join: "Join",
+          news: "News",
+          participate: "Participate",
+          explore: "Explore areas",
+          collaborate: "Collaborate",
+          send: "Send",
+        },
+      })[lang],
     [lang]
   );
 
@@ -167,17 +153,17 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-emerald-50 text-emerald-950 relative">
-      {/* ---- Fixed background image ---- */}
+      {/* ✅ Fixed background image */}
       <div
         className="fixed inset-0 -z-10 bg-cover bg-center"
-        style={{ backgroundImage: "url('/bg.jpg')" }}
+        style={{ backgroundImage: "url('/bg.png')" }}
       />
 
       {/* ---- Navbar ---- */}
       <header className="sticky top-0 z-50 backdrop-blur bg-emerald-900/80 border-b border-white/10">
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
           <a href="#home" className="flex items-center gap-3 text-white">
-            <img src={LOGO_SRC} alt="Kizuna Global" className="h-7 w-auto" />
+            <img src={logo} alt="Kizuna Global" className="h-7 w-auto" />
             <span className="font-serif tracking-[0.25em] hidden sm:block">
               KIZUNA GLOBAL
             </span>
@@ -239,7 +225,7 @@ export default function App() {
           className="mx-auto max-w-3xl px-4"
         >
           <img
-            src={LOGO_SRC}
+            src={logo}
             alt="Kizuna Global Logo"
             className="mx-auto h-24 w-auto mb-8"
           />
@@ -267,7 +253,7 @@ export default function App() {
         </motion.div>
       </section>
 
-      {/* ---- Example sections (trimmed for brevity) ---- */}
+      {/* ---- Example about section ---- */}
       <Section id="about" eyebrow="Introducción" title="Quiénes somos">
         <p>
           KIZUNA GLOBAL nace en España como asociación sin ánimo de lucro con
@@ -277,6 +263,7 @@ export default function App() {
         </p>
       </Section>
 
+      {/* ---- Team ---- */}
       <Section id="team" eyebrow="Gobernanza" title="Junta Directiva">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {team.map((m, i) => (
@@ -299,86 +286,11 @@ export default function App() {
         </div>
       </Section>
 
-      <Section id="news" eyebrow="Actualidad" title="Noticias y redes">
-        <div className="rounded-2xl bg-white p-6 ring-1 ring-emerald-900/10 shadow-sm">
-          <h3 className="font-semibold flex items-center gap-2 mb-4">
-            <Newspaper className="w-5 h-5" /> Síguenos
-          </h3>
-          <div className="flex gap-3">
-            <a
-              href="#"
-              className="inline-flex items-center gap-2 rounded-xl ring-1 ring-emerald-900/15 px-4 py-3 hover:bg-emerald-50 transition"
-            >
-              <img
-                alt="LinkedIn"
-                src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg"
-                className="w-5 h-5"
-              />
-              LinkedIn
-            </a>
-            <a
-              href="#"
-              className="inline-flex items-center gap-2 rounded-xl ring-1 ring-emerald-900/15 px-4 py-3 hover:bg-emerald-50 transition"
-            >
-              <img
-                alt="Instagram"
-                src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg"
-                className="w-5 h-5"
-              />
-              Instagram
-            </a>
-          </div>
-        </div>
-      </Section>
-
-      <Section id="donate" eyebrow="Apoya nuestra misión" title="Donaciones">
-        <div className="rounded-2xl bg-gradient-to-br from-white to-emerald-50 p-6 ring-1 ring-emerald-900/10 shadow-sm">
-          <div className="flex items-center gap-3 text-emerald-800">
-            <PiggyBank className="w-6 h-6" />
-            <p>
-              Tu contribución impulsa programas de educación, salud mental e IA
-              ética.
-            </p>
-          </div>
-          <div className="mt-4 grid sm:grid-cols-2 gap-3 items-center">
-            <label className="text-sm text-emerald-900/80">IBAN (placeholder)</label>
-            <code className="rounded-xl bg-white px-4 py-3 ring-1 ring-emerald-900/10 text-emerald-900 font-semibold tracking-wider">
-              ES00 0000 0000 00 0000000000
-            </code>
-          </div>
-        </div>
-      </Section>
-
-      <Section id="join" eyebrow="Participa" title="Súmate">
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="rounded-2xl bg-gradient-to-br from-white to-emerald-50 p-6 ring-1 ring-emerald-900/10 shadow-sm max-w-xl mx-auto"
-        >
-          <h3 className="font-semibold mb-3">Contáctanos</h3>
-          <input
-            className="rounded-xl border border-emerald-900/20 bg-white px-4 py-3 w-full mb-3 outline-none focus:ring-2 focus:ring-emerald-500"
-            placeholder="Nombre"
-          />
-          <input
-            className="rounded-xl border border-emerald-900/20 bg-white px-4 py-3 w-full mb-3 outline-none focus:ring-2 focus:ring-emerald-500"
-            placeholder="Email"
-            type="email"
-          />
-          <textarea
-            className="rounded-xl border border-emerald-900/20 bg-white px-4 py-3 w-full mb-3 h-28 outline-none focus:ring-2 focus:ring-emerald-500"
-            placeholder="Mensaje"
-          />
-          <button className="mt-2 inline-flex items-center gap-2 rounded-2xl bg-emerald-900 px-5 py-3 text-white hover:shadow-md transition">
-            {t.send} <ChevronRight className="w-4 h-4" />
-          </button>
-        </form>
-      </Section>
-
       {/* ---- Footer ---- */}
       <footer className="mt-10 border-t border-emerald-900/10 bg-white/70">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 text-emerald-900">
-            <img src={LOGO_SRC} alt="Kizuna" className="h-6 w-auto" />
+            <img src={logo} alt="Kizuna" className="h-6 w-auto" />
             <span className="font-serif tracking-[0.2em]">KIZUNA GLOBAL</span>
           </div>
           <div className="text-sm text-emerald-900/70">
