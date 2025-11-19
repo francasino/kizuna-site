@@ -339,21 +339,16 @@ export default function App() {
       {/* Carousel BELOW hero */}
       <section id="carousel" className="relative overflow-hidden h-[50vh] flex items-center justify-center text-center">
         {images.map((img, i) => (
-          <motion.img
-            key={i}
-            src={img}
-            alt="carousel"
-            className="absolute inset-0 w-full h-full"
-            style={{
-              objectFit: img.height > img.width ? "contain" : "cover",
-              objectPosition: "center",
-              backgroundColor: img.height > img.width ? "#0002" : "transparent",
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: i === index ? 1 : 0 }}
-            transition={{ duration: 1 }}
-          />
-        ))}
+            <motion.img
+              key={i}
+              src={img}
+              alt="carousel image"
+              className="absolute inset-0 w-full h-full object-contain bg-black"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: i === index ? 1 : 0 }}
+              transition={{ duration: 1 }}
+            />
+          ))}
         <div className="absolute inset-0 bg-emerald-900/40" />
         <div className="relative z-10 text-white px-4">
           <h2 className="font-serif text-3xl sm:text-4xl">{t.carouselTitle}</h2>
