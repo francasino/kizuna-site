@@ -23,6 +23,8 @@ import img4 from "./assets/mont1.jpeg";
 import img5 from "./assets/consell1.jpg";
 import img6 from "./assets/consell2.jpg";
 
+const isVertical = (w, h) => h > w;
+
 // ───────── Helpers ─────────
 const LogoMark = ({ className = "w-8 h-8" }) => (
   <svg viewBox="0 0 100 100" className={className} aria-hidden>
@@ -341,7 +343,12 @@ export default function App() {
             key={i}
             src={img}
             alt="carousel"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full"
+            style={{
+              objectFit: isVertical(img.width, img.height) ? "contain" : "cover",
+              objectPosition: "center",
+              backgroundColor: "#0002", // soft backdrop behind portrait images
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: i === index ? 1 : 0 }}
             transition={{ duration: 1 }}
