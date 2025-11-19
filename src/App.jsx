@@ -16,12 +16,12 @@ import {
 import logo from "./assets/kizuna-logo.png";
 import bg from "./assets/bg.png";
 // // Import your images at the top of App.jsx (right after other imports)
-// import img1 from "./assets/ela1.jpeg";
-// import img2 from "./assets/ela2.jpeg";
-// import img3 from "./assets/ela3.jpeg";
-// import img4 from "./assets/mont1.jpeg";
-// import img5 from "./assets/consell1.jpg";
-// import img6 from "./assets/consell2.jpg";
+import img1 from "./assets/ela1.jpeg";
+import img2 from "./assets/ela2.jpeg";
+import img3 from "./assets/ela3.jpeg";
+import img4 from "./assets/mont1.jpeg";
+import img5 from "./assets/consell1.jpg";
+import img6 from "./assets/consell2.jpg";
 
 // ───────── Helpers ─────────
 const LogoMark = ({ className = "w-8 h-8" }) => (
