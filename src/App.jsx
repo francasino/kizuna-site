@@ -17,11 +17,11 @@ import logo from "./assets/kizuna-logo.png";
 import bg from "./assets/bg.png";
 // Import your images at the top of App.jsx (right after other imports)
 import img1 from "./assets/ela1.jpg";
-import img1 from "./assets/ela2.jpg";
-import img1 from "./assets/ela3.jpg";
-import img1 from "./assets/mont1.jpg";
-import img1 from "./assets/consell1.jpg";
-import img1 from "./assets/consell2.jpg";
+import img2 from "./assets/ela2.jpg";
+import img3 from "./assets/ela3.jpg";
+import img4 from "./assets/mont1.jpg";
+import img5 from "./assets/consell1.jpg";
+import img6 from "./assets/consell2.jpg";
 
 // ───────── Helpers ─────────
 const LogoMark = ({ className = "w-8 h-8" }) => (
@@ -82,7 +82,7 @@ const CatalanFlag = () => (
 export default function App() {
   const [lang, setLang] = useState("es");
   const [index, setIndex] = useState(0);
-  const images = [bg, ela1, ela2, ela3, mont1, consell1, consell2]
+  const images = [bg, img1, img2, img3, img4, img5, img6]
 
   // Auto-loop carousel
   useEffect(() => {
