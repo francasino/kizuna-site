@@ -345,9 +345,9 @@ export default function App() {
             alt="carousel"
             className="absolute inset-0 w-full h-full"
             style={{
-              objectFit: isVertical(img.width, img.height) ? "contain" : "cover",
+              objectFit: img.height > img.width ? "contain" : "cover",
               objectPosition: "center",
-              backgroundColor: "#0002", // soft backdrop behind portrait images
+              backgroundColor: img.height > img.width ? "#0002" : "transparent",
             }}
             initial={{ opacity: 0 }}
             animate={{ opacity: i === index ? 1 : 0 }}
