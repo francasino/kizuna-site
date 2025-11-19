@@ -6,5 +6,5 @@ import react from "@vitejs/plugin-react";
 // you can leave base as "/".
 export default defineConfig({
   plugins: [react()],
-  base: "/dist",
+  base: "/",
 });
