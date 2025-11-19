@@ -84,7 +84,7 @@ const CatalanFlag = () => (
 export default function App() {
   const [lang, setLang] = useState("es");
   const [index, setIndex] = useState(0);
-  const images = [bg, logo, img1, img5]
+  const images = [bg, logo, img1, img2, img3, img4, img5, img6]
   //const images = [bg, img1, img2, img3, img4, img5, img6]
 
   // Auto-loop carousel
