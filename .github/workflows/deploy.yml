@@ -24,8 +24,13 @@ jobs:
           node-version: 20
           # remove cache: npm because you don't have a lockfile
 
-      - run: npm install          #  works without package-lock.json
-      - run: npm run build
+      - run: npm install          # works without package-lock.json
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_GDRIVE_API_KEY: ${{ secrets.VITE_GDRIVE_API_KEY }}
+          VITE_GDRIVE_FOLDER_ID: ${{ secrets.VITE_GDRIVE_FOLDER_ID }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
