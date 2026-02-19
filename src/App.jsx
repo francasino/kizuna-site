@@ -361,7 +361,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="rounded-2xl overflow-hidden shadow">
             <iframe
-              src="https://drive.google.com/embeddedfolderview?id=15uM1uNRBcqwHtQauayG0FIT62zvHzFRZ?usp=sharing#grid"  
+              src="https://drive.google.com/embeddedfolderview?id=15uM1uNRBcqwHtQauayG0FIT62zvHzFRZ#grid"  
               style={{ width: "100%", height: "650px", border: 0 }}
               loading="lazy"
               title="Gallery"
