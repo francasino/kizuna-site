@@ -15,13 +15,91 @@ import {
 
 import logo from "./assets/kizuna-logo.png";
 import bg from "./assets/bg.png";
-// // Import your images at the top of App.jsx (right after other imports)
-// import img1 from "./assets/ela1.jpeg";
-// import img2 from "./assets/ela2.jpeg";
-// import img3 from "./assets/ela3.jpeg";
-// import img4 from "./assets/mont1.jpeg";
-// import img5 from "./assets/consell1.jpg";
-// import img6 from "./assets/consell2.jpg";
+// Import your images at the top of App.jsx (right after other imports)
+import img1 from "./assets/ela1.jpeg";
+import img2 from "./assets/ela2.jpeg";
+import img3 from "./assets/ela3.jpeg";
+import img4 from "./assets/mont1.jpeg";
+import img5 from "./assets/consell1.jpg";
+import img6 from "./assets/consell2.jpg";
+
+const DRIVE_API_KEY = import.meta.env.VITE_GDRIVE_API_KEY;
+const DRIVE_FOLDER_ID = import.meta.env.VITE_GDRIVE_FOLDER_ID;
+
+const fallbackImages = useMemo(
+  () => [bg, logo, img1, img2, img3, img4, img5, img6],
+  []
+);
+
+const [images, setImages] = useState(fallbackImages);
+const [index, setIndex] = useState(0);
+
+// Fetch Drive images once (and cache briefly to avoid hammering the API)
+useEffect(() => {
+  const cacheKey = "drive_images_cache_v1";
+  const cacheTtlMs = 10 * 60 * 1000; // 10 minutes
+
+  const load = async () => {
+    // If not configured, keep fallback
+    if (!DRIVE_API_KEY || !DRIVE_FOLDER_ID) return;
+
+    // Try cache
+    try {
+      const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+      if (cached?.ts && Array.isArray(cached.images) && Date.now() - cached.ts < cacheTtlMs) {
+        if (cached.images.length) {
+          setImages(cached.images);
+          setIndex(0);
+        }
+        return;
+      }
+    } catch {
+      // ignore cache errors
+    }
+
+    try {
+      // Drive search query: files in folder, images only, not trashed
+      const q = encodeURIComponent(
+        `'${DRIVE_FOLDER_ID}' in parents and (mimeType contains 'image/') and trashed = false`
+      );
+
+      // Ask only for what we need
+      const fields = encodeURIComponent("files(id,name,createdTime,mimeType)");
+
+      const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&orderBy=createdTime desc&pageSize=100&key=${DRIVE_API_KEY}`;
+
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Drive API error ${res.status}`);
+      const data = await res.json();
+
+      const driveUrls = (data.files || []).map(
+        (f) => `https://drive.google.com/uc?export=view&id=${f.id}`
+      );
+
+      if (driveUrls.length > 0) {
+        setImages(driveUrls);
+        setIndex(0);
+        localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), images: driveUrls }));
+      } else {
+        setImages(fallbackImages);
+      }
+    } catch (e) {
+      console.warn("Drive load failed, using fallback images:", e);
+      setImages(fallbackImages);
+    }
+  };
+
+  load();
+}, [DRIVE_API_KEY, DRIVE_FOLDER_ID, fallbackImages]);
+
+// Auto-loop carousel (same behavior as before)
+useEffect(() => {
+  if (!images.length) return;
+  const interval = setInterval(() => {
+    setIndex((i) => (i + 1) % images.length);
+  }, 3500);
+  return () => clearInterval(interval);
+}, [images]);
 
 const isVertical = (w, h) => h > w;
 
@@ -337,38 +415,25 @@ export default function App() {
         </div>
       </section>
 
-      {/* Carousel BELOW hero */}
-      {/* <section id="carousel" className="relative overflow-hidden h-[50vh] flex items-center justify-center text-center">
+      <section id="carousel" className="relative overflow-hidden h-[50vh] flex items-center justify-center text-center">
         {images.map((img, i) => (
-            <motion.img
-              key={i}
-              src={img}
-              alt="carousel image"
-              className="absolute inset-0 w-full h-full object-contain bg-black"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: i === index ? 1 : 0 }}
-              transition={{ duration: 1 }}
-            />
-          ))}
+          <motion.img
+            key={i}
+            src={img}
+            alt="carousel"
+            className="absolute inset-0 w-full h-full object-contain bg-black"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: i === index ? 1 : 0 }}
+            transition={{ duration: 1 }}
+          />
+        ))}
         <div className="absolute inset-0 bg-emerald-900/40" />
         <div className="relative z-10 text-white px-4">
           <h2 className="font-serif text-3xl sm:text-4xl">{t.carouselTitle}</h2>
           <p className="mt-2 text-sm sm:text-base text-white/90">{t.carouselLead}</p>
         </div>
-      </section> */}
-            {/* Gallery (Google Drive public folder embed)  https://drive.google.com/drive/folders/15uM1uNRBcqwHtQauayG0FIT62zvHzFRZ?usp=sharing*/}
-      <section id="carousel" className="py-10">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="rounded-2xl overflow-hidden shadow">
-            <iframe
-              src="https://drive.google.com/embeddedfolderview?id=15uM1uNRBcqwHtQauayG0FIT62zvHzFRZ#grid"  
-              style={{ width: "100%", height: "650px", border: 0 }}
-              loading="lazy"
-              title="Gallery"
-            />
-          </div>
-        </div>
       </section>
+
 
 
       {/* About */}
