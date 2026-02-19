@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ChevronRight,
@@ -26,10 +26,8 @@ import img6 from "./assets/consell2.jpg";
 const DRIVE_API_KEY = import.meta.env.VITE_GDRIVE_API_KEY;
 const DRIVE_FOLDER_ID = import.meta.env.VITE_GDRIVE_FOLDER_ID;
 
-const fallbackImages = useMemo(
-  () => [bg, logo, img1, img2, img3, img4, img5, img6],
-  []
-);
+const fallbackImages = [bg, logo, img1, img2, img3, img4, img5, img6];
+
 
 const [images, setImages] = useState(fallbackImages);
 const [index, setIndex] = useState(0);
