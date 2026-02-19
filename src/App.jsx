@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ChevronRight,
@@ -29,75 +29,75 @@ const DRIVE_FOLDER_ID = import.meta.env.VITE_GDRIVE_FOLDER_ID;
 const fallbackImages = [bg, logo, img1, img2, img3, img4, img5, img6];
 
 
-const [images, setImages] = useState(fallbackImages);
-const [index, setIndex] = useState(0);
+// const [images, setImages] = useState(fallbackImages);
+// const [index, setIndex] = useState(0);
 
-// Fetch Drive images once (and cache briefly to avoid hammering the API)
-useEffect(() => {
-  const cacheKey = "drive_images_cache_v1";
-  const cacheTtlMs = 10 * 60 * 1000; // 10 minutes
+// // Fetch Drive images once (and cache briefly to avoid hammering the API)
+// useEffect(() => {
+//   const cacheKey = "drive_images_cache_v1";
+//   const cacheTtlMs = 10 * 60 * 1000; // 10 minutes
 
-  const load = async () => {
-    // If not configured, keep fallback
-    if (!DRIVE_API_KEY || !DRIVE_FOLDER_ID) return;
+//   const load = async () => {
+//     // If not configured, keep fallback
+//     if (!DRIVE_API_KEY || !DRIVE_FOLDER_ID) return;
 
-    // Try cache
-    try {
-      const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-      if (cached?.ts && Array.isArray(cached.images) && Date.now() - cached.ts < cacheTtlMs) {
-        if (cached.images.length) {
-          setImages(cached.images);
-          setIndex(0);
-        }
-        return;
-      }
-    } catch {
-      // ignore cache errors
-    }
+//     // Try cache
+//     try {
+//       const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+//       if (cached?.ts && Array.isArray(cached.images) && Date.now() - cached.ts < cacheTtlMs) {
+//         if (cached.images.length) {
+//           setImages(cached.images);
+//           setIndex(0);
+//         }
+//         return;
+//       }
+//     } catch {
+//       // ignore cache errors
+//     }
 
-    try {
-      // Drive search query: files in folder, images only, not trashed
-      const q = encodeURIComponent(
-        `'${DRIVE_FOLDER_ID}' in parents and (mimeType contains 'image/') and trashed = false`
-      );
+//     try {
+//       // Drive search query: files in folder, images only, not trashed
+//       const q = encodeURIComponent(
+//         `'${DRIVE_FOLDER_ID}' in parents and (mimeType contains 'image/') and trashed = false`
+//       );
 
-      // Ask only for what we need
-      const fields = encodeURIComponent("files(id,name,createdTime,mimeType)");
+//       // Ask only for what we need
+//       const fields = encodeURIComponent("files(id,name,createdTime,mimeType)");
 
-      const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&orderBy=createdTime desc&pageSize=100&key=${DRIVE_API_KEY}`;
+//       const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&orderBy=createdTime desc&pageSize=100&key=${DRIVE_API_KEY}`;
 
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`Drive API error ${res.status}`);
-      const data = await res.json();
+//       const res = await fetch(url);
+//       if (!res.ok) throw new Error(`Drive API error ${res.status}`);
+//       const data = await res.json();
 
-      const driveUrls = (data.files || []).map(
-        (f) => `https://drive.google.com/uc?export=view&id=${f.id}`
-      );
+//       const driveUrls = (data.files || []).map(
+//         (f) => `https://drive.google.com/uc?export=view&id=${f.id}`
+//       );
 
-      if (driveUrls.length > 0) {
-        setImages(driveUrls);
-        setIndex(0);
-        localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), images: driveUrls }));
-      } else {
-        setImages(fallbackImages);
-      }
-    } catch (e) {
-      console.warn("Drive load failed, using fallback images:", e);
-      setImages(fallbackImages);
-    }
-  };
+//       if (driveUrls.length > 0) {
+//         setImages(driveUrls);
+//         setIndex(0);
+//         localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), images: driveUrls }));
+//       } else {
+//         setImages(fallbackImages);
+//       }
+//     } catch (e) {
+//       console.warn("Drive load failed, using fallback images:", e);
+//       setImages(fallbackImages);
+//     }
+//   };
 
-  load();
-}, [DRIVE_API_KEY, DRIVE_FOLDER_ID, fallbackImages]);
+//   load();
+// }, [DRIVE_API_KEY, DRIVE_FOLDER_ID, fallbackImages]);
 
-// Auto-loop carousel (same behavior as before)
-useEffect(() => {
-  if (!images.length) return;
-  const interval = setInterval(() => {
-    setIndex((i) => (i + 1) % images.length);
-  }, 3500);
-  return () => clearInterval(interval);
-}, [images]);
+// // Auto-loop carousel (same behavior as before)
+// useEffect(() => {
+//   if (!images.length) return;
+//   const interval = setInterval(() => {
+//     setIndex((i) => (i + 1) % images.length);
+//   }, 3500);
+//   return () => clearInterval(interval);
+// }, [images]);
 
 const isVertical = (w, h) => h > w;
 
@@ -170,6 +170,74 @@ export default function App() {
   //   }, 3500);
   //   return () => clearInterval(interval);
   // }, [images.length]);
+
+  const [images, setImages] = useState(fallbackImages);
+  const [index, setIndex] = useState(0);
+
+  // Fetch Drive images once (and cache briefly to avoid hammering the API)
+  useEffect(() => {
+    const cacheKey = "drive_images_cache_v1";
+    const cacheTtlMs = 10 * 60 * 1000; // 10 minutes
+
+    const load = async () => {
+      // If not configured, keep fallback
+      if (!DRIVE_API_KEY || !DRIVE_FOLDER_ID) return;
+
+      // Try cache
+      try {
+        const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+        if (cached?.ts && Array.isArray(cached.images) && Date.now() - cached.ts < cacheTtlMs) {
+          if (cached.images.length) {
+            setImages(cached.images);
+            setIndex(0);
+          }
+          return;
+        }
+      } catch {
+        // ignore cache errors
+      }
+
+      try {
+        const q = encodeURIComponent(
+          `'${DRIVE_FOLDER_ID}' in parents and (mimeType contains 'image/') and trashed = false`
+        );
+
+        const fields = encodeURIComponent("files(id,name,createdTime,mimeType)");
+        const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&orderBy=createdTime desc&pageSize=100&key=${DRIVE_API_KEY}`;
+
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Drive API error ${res.status}`);
+        const data = await res.json();
+
+        const driveUrls = (data.files || []).map(
+          (f) => `https://drive.google.com/uc?export=view&id=${f.id}`
+        );
+
+        if (driveUrls.length > 0) {
+          setImages(driveUrls);
+          setIndex(0);
+          localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), images: driveUrls }));
+        } else {
+          setImages(fallbackImages);
+        }
+      } catch (e) {
+        console.warn("Drive load failed, using fallback images:", e);
+        setImages(fallbackImages);
+      }
+    };
+
+    load();
+  }, []);
+
+  // Auto-loop carousel (same behavior as before)
+  useEffect(() => {
+    if (!images.length) return;
+    const interval = setInterval(() => {
+      setIndex((i) => (i + 1) % images.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, [images]);
+
 
   // Language detection
   useEffect(() => {
