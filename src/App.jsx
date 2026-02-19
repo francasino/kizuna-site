@@ -270,6 +270,7 @@ export default function App() {
     { role: { es: "Presidenta", ca: "Presidenta", en: "President" }[lang], name: "Lidia Adelantado Virgili" },
     { role: { es: "Vicepresidente", ca: "Vicepresident", en: "Vice President" }[lang], name: "Francisco José Casino Cembellín" },
     { role: { es: "Tesorero", ca: "Tresorer", en: "Treasurer" }[lang], name: "David Domènech Vallvé" },
+    { role: { es: "Voluntaria", ca: "Voluntària", en: "Volunteer" }[lang], name: "Esther Creus" },
   ];
 
   // ───────── Layout ─────────
