@@ -16,12 +16,12 @@ import {
 import logo from "./assets/kizuna-logo.png";
 import bg from "./assets/bg.png";
 // // Import your images at the top of App.jsx (right after other imports)
-import img1 from "./assets/ela1.jpeg";
-import img2 from "./assets/ela2.jpeg";
-import img3 from "./assets/ela3.jpeg";
-import img4 from "./assets/mont1.jpeg";
-import img5 from "./assets/consell1.jpg";
-import img6 from "./assets/consell2.jpg";
+// import img1 from "./assets/ela1.jpeg";
+// import img2 from "./assets/ela2.jpeg";
+// import img3 from "./assets/ela3.jpeg";
+// import img4 from "./assets/mont1.jpeg";
+// import img5 from "./assets/consell1.jpg";
+// import img6 from "./assets/consell2.jpg";
 
 const isVertical = (w, h) => h > w;
 
@@ -83,17 +83,17 @@ const CatalanFlag = () => (
 // ───────── Main component ─────────
 export default function App() {
   const [lang, setLang] = useState("es");
-  const [index, setIndex] = useState(0);
-  const images = [bg, logo, img1, img2, img3, img4, img5, img6]
-  //const images = [bg, img1, img2, img3, img4, img5, img6]
+  //const [index, setIndex] = useState(0);
+  // const images = [bg, logo, img1, img2, img3, img4, img5, img6]
+  // //const images = [bg, img1, img2, img3, img4, img5, img6]
 
-  // Auto-loop carousel
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((i) => (i + 1) % images.length);
-    }, 3500);
-    return () => clearInterval(interval);
-  }, [images.length]);
+  // // Auto-loop carousel
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setIndex((i) => (i + 1) % images.length);
+  //   }, 3500);
+  //   return () => clearInterval(interval);
+  // }, [images.length]);
 
   // Language detection
   useEffect(() => {
@@ -240,7 +240,7 @@ export default function App() {
       icon: <HeartHandshake className="w-6 h-6" />,
       title: t.areas3,
       points: [
-        { es: "Centro médico y de bienestar homologado", ca: "Centre mèdic i de benestar homologat", en: "Licensed health & wellbeing center" }[lang],
+        { es: "Agencia inclusiva de viajes y eventos homologada", ca: "Agència inclusiva de viatges i esdeveniments homologada", en: "Inclusive, certified travel and events agency" }[lang],
         { es: "Resiliencia, autocuidado y prevención del estrés digital", ca: "Resiliència, autocura i prevenció de l'estrès digital", en: "Resilience, self-care & digital-stress prevention" }[lang],
         { es: "IA para apoyo emocional y detección temprana", ca: "IA per a suport emocional i detecció precoç", en: "AI for emotional support & early detection" }[lang],
       ],
@@ -338,7 +338,7 @@ export default function App() {
       </section>
 
       {/* Carousel BELOW hero */}
-      <section id="carousel" className="relative overflow-hidden h-[50vh] flex items-center justify-center text-center">
+      {/* <section id="carousel" className="relative overflow-hidden h-[50vh] flex items-center justify-center text-center">
         {images.map((img, i) => (
             <motion.img
               key={i}
@@ -355,7 +355,21 @@ export default function App() {
           <h2 className="font-serif text-3xl sm:text-4xl">{t.carouselTitle}</h2>
           <p className="mt-2 text-sm sm:text-base text-white/90">{t.carouselLead}</p>
         </div>
+      </section> */}
+            {/* Gallery (Google Drive public folder embed)  https://drive.google.com/drive/folders/15uM1uNRBcqwHtQauayG0FIT62zvHzFRZ?usp=sharing*/}
+      <section id="carousel" className="py-10">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="rounded-2xl overflow-hidden shadow">
+            <iframe
+              src="https://drive.google.com/embeddedfolderview?id=15uM1uNRBcqwHtQauayG0FIT62zvHzFRZ?usp=sharing#grid"  
+              style={{ width: "100%", height: "650px", border: 0 }}
+              loading="lazy"
+              title="Gallery"
+            />
+          </div>
+        </div>
       </section>
+
 
       {/* About */}
       <Section id="about" eyebrow={{ es: "Introducción", ca: "Introducció", en: "Introduction" }[lang]} title={t.about}>
