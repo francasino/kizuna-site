@@ -202,16 +202,24 @@ export default function App() {
           `'${DRIVE_FOLDER_ID}' in parents and (mimeType contains 'image/') and trashed = false`
         );
 
-        const fields = encodeURIComponent("files(id,name,createdTime,mimeType)");
+        const fields = encodeURIComponent("files(id,name,createdTime,mimeType,thumbnailLink)");
         const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&orderBy=createdTime desc&pageSize=100&key=${DRIVE_API_KEY}`;
 
         const res = await fetch(url);
         if (!res.ok) throw new Error(`Drive API error ${res.status}`);
         const data = await res.json();
 
-        const driveUrls = (data.files || []).map(
-          (f) => `https://drive.google.com/uc?export=view&id=${f.id}`
-        );
+        const driveUrls = (data.files || []).map((f) => {
+          // Prefer the API-provided thumbnailLink (usually most reliable for embedding)
+          if (f.thumbnailLink) {
+            // thumbnailLink often ends with something like "=s220"
+            // Increase size for better quality:
+            return f.thumbnailLink.replace(/=s\d+$/, "=s2000");
+          }
+        
+          // Fallback: also works well for embedding
+          return `https://drive.google.com/thumbnail?id=${f.id}&sz=w2000`;
+        });
 
         if (driveUrls.length > 0) {
           setImages(driveUrls);
