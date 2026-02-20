@@ -27,7 +27,7 @@ const DRIVE_API_KEY = import.meta.env.VITE_GDRIVE_API_KEY;
 const DRIVE_FOLDER_ID = import.meta.env.VITE_GDRIVE_FOLDER_ID;
 const DRIVE_LOGOS_FOLDER_ID = import.meta.env.VITE_GDRIVE_LOGOS_FOLDER_ID;
 
-const fallbackImages = [bg, logo, img1, img2, img3, img4, img5, img6];
+const fallbackImages = [bg, logo, img1, img2, img3, img4, img5, img6]; 
 
 
 // const [images, setImages] = useState(fallbackImages);
