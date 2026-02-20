@@ -25,6 +25,7 @@ import img6 from "./assets/consell2.jpg";
 
 const DRIVE_API_KEY = import.meta.env.VITE_GDRIVE_API_KEY;
 const DRIVE_FOLDER_ID = import.meta.env.VITE_GDRIVE_FOLDER_ID;
+const DRIVE_LOGOS_FOLDER_ID = import.meta.env.VITE_GDRIVE_LOGOS_FOLDER_ID;
 
 const fallbackImages = [bg, logo, img1, img2, img3, img4, img5, img6];
 
@@ -173,6 +174,61 @@ export default function App() {
 
   const [images, setImages] = useState(fallbackImages);
   const [index, setIndex] = useState(0);
+  const [logos, setLogos] = useState([]);
+
+  useEffect(() => {
+    const cacheKey = "drive_logos_cache_v1";
+    const cacheTtlMs = 60 * 60 * 1000; // 1 hour (logos change less often)
+
+    const loadLogos = async () => {
+      if (!DRIVE_API_KEY || !DRIVE_LOGOS_FOLDER_ID) return;
+
+      // Cache
+      try {
+        const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+        if (cached?.ts && Array.isArray(cached.logos) && Date.now() - cached.ts < cacheTtlMs) {
+          setLogos(cached.logos);
+          return;
+        }
+      } catch {}
+
+      try {
+        const q = encodeURIComponent(
+          `'${DRIVE_LOGOS_FOLDER_ID}' in parents and (mimeType contains 'image/') and trashed = false`
+        );
+
+        const fields = encodeURIComponent("files(id,name,createdTime,mimeType,thumbnailLink)");
+        const url =
+          `https://www.googleapis.com/drive/v3/files` +
+          `?q=${q}` +
+          `&fields=${fields}` +
+          `&orderBy=name` +
+          `&pageSize=200` +
+          `&supportsAllDrives=true` +
+          `&includeItemsFromAllDrives=true` +
+          `&key=${DRIVE_API_KEY}`;
+
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Drive API error ${res.status}`);
+        const data = await res.json();
+
+        const items = (data.files || []).map((f) => ({
+          name: f.name || "Partner logo",
+          url: f.thumbnailLink
+            ? f.thumbnailLink.replace(/=s\d+$/, "=s1000")
+            : `https://drive.google.com/thumbnail?id=${f.id}&sz=w1000`,
+        }));
+
+        setLogos(items);
+        localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), logos: items }));
+      } catch (e) {
+        console.warn("Logo load failed:", e);
+        setLogos([]); // keep section, but empty grid
+      }
+    };
+
+    loadLogos();
+  }, []);
 
   // Fetch Drive images once (and cache briefly to avoid hammering the API)
   useEffect(() => {
@@ -290,6 +346,9 @@ export default function App() {
           donateTitle: "Donaciones",
           donateText: "Tu contribución impulsa programas de educación, salud mental e IA ética.",
           ibanLabel: "IBAN (placeholder)",
+          partnersLogosTitle: "Instituciones colaboradoras y alianzas",
+          partnersLogosLead:
+            "Las personas e instituciones que forman Kizuna Global colaboran o han colaborado con múltiples entidades del ámbito social, educativo, tecnológico y estratégico.",
         },
         ca: {
           about: "Qui som",
@@ -322,6 +381,9 @@ export default function App() {
           donateTitle: "Donacions",
           donateText: "La teva aportació impulsa programes d'educació, salut mental i IA ètica.",
           ibanLabel: "IBAN (exemple)",
+          partnersLogosTitle: "Institucions col·laboradores i aliances",
+          partnersLogosLead:
+            "Les persones i institucions que formen Kizuna Global col·laboren o han col·laborat amb múltiples entitats de l’àmbit social, educatiu, tecnològic i estratègic.",
         },
         en: {
           about: "About",
@@ -354,6 +416,9 @@ export default function App() {
           donateTitle: "Donations",
           donateText: "Your contribution powers education, mental health and ethical-AI programmes.",
           ibanLabel: "IBAN (placeholder)",
+          partnersLogosTitle: "Collaborating institutions & partners",
+          partnersLogosLead:
+            "Members of Kizuna Global, both personally and institutionally, collaborate or have collaborated with multiple organisations across social, educational, technological and strategic fields.",
         },
       })[lang],
     [lang]
@@ -407,6 +472,8 @@ export default function App() {
     { name: "Fundación La Caixa", icon: <HeartHandshake className="w-6 h-6" /> },
     { name: "CERV Programme", icon: <Building2 className="w-6 h-6" /> },
   ];
+
+  
 
   const ods = [
     { n: 3, t: { es: "Salud y bienestar", ca: "Salut i benestar", en: "Good health & wellbeing" }[lang] },
@@ -553,6 +620,62 @@ export default function App() {
               <div className="font-semibold text-emerald-900">{p.name}</div>
             </div>
           ))}
+        </div>
+      </Section>
+
+            {/* Collaborating institutions & partners (logos) */}
+      <Section
+        id="collaborators"
+        eyebrow={{ es: "Colaboraciones", ca: "Col·laboracions", en: "Collaborations" }[lang]}
+        title={t.partnersLogosTitle}
+      >
+        <p className="text-emerald-900/80 max-w-3xl">
+          {t.partnersLogosLead}
+        </p>
+
+        {/* Logo grid */}
+        <div className="mt-8">
+          {(!DRIVE_LOGOS_FOLDER_ID || !DRIVE_API_KEY) && (
+            <div className="rounded-xl bg-amber-50 ring-1 ring-amber-200 p-4 text-sm text-amber-900">
+              { { es:"Configura VITE_GDRIVE_LOGOS_FOLDER_ID para cargar los logos desde Drive.",
+                  ca:"Configura VITE_GDRIVE_LOGOS_FOLDER_ID per carregar els logos des de Drive.",
+                  en:"Set VITE_GDRIVE_LOGOS_FOLDER_ID to load logos from Drive." }[lang] }
+            </div>
+          )}
+
+          <div
+            className="
+              mt-4 grid gap-4
+              [grid-template-columns:repeat(auto-fit,minmax(140px,1fr))]
+              sm:[grid-template-columns:repeat(auto-fit,minmax(160px,1fr))]
+            "
+          >
+            {logos.map((l, i) => (
+              <div
+                key={`${l.name}-${i}`}
+                className="group rounded-2xl bg-white/95 ring-1 ring-emerald-900/10 shadow-sm
+                           flex items-center justify-center p-5 h-24 sm:h-28"
+                title={l.name}
+              >
+                <img
+                  src={l.url}
+                  alt={l.name}
+                  loading="lazy"
+                  className="max-h-full max-w-full object-contain
+                             opacity-90 group-hover:opacity-100 transition
+                             grayscale group-hover:grayscale-0"
+                />
+              </div>
+            ))}
+          </div>
+
+          {logos.length === 0 && DRIVE_LOGOS_FOLDER_ID && DRIVE_API_KEY && (
+            <p className="mt-4 text-sm text-emerald-900/70">
+              { { es:"No se han encontrado logos en la carpeta de Drive.",
+                  ca:"No s’han trobat logos a la carpeta de Drive.",
+                  en:"No logos found in the Drive folder." }[lang] }
+            </p>
+          )}
         </div>
       </Section>
 
