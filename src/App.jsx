@@ -23,6 +23,12 @@ import img4 from "./assets/mont1.jpeg";
 import img5 from "./assets/consell1.jpg";
 import img6 from "./assets/consell2.jpg";
 
+
+const TECHSOUP_LOGO = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/TechSoup_Logo.svg/330px-TechSoup_Logo.svg.png";
+
+const GOODSTACK_LOGO = "https://mma.prnasia.com/media2/2666427/5448931/Goodstack_Logo.jpg?p=medium600";
+
+
 const DRIVE_API_KEY = import.meta.env.VITE_GDRIVE_API_KEY;
 const DRIVE_FOLDER_ID = import.meta.env.VITE_GDRIVE_FOLDER_ID;
 const DRIVE_LOGOS_FOLDER_ID = import.meta.env.VITE_GDRIVE_LOGOS_FOLDER_ID;
@@ -699,7 +705,7 @@ export default function App() {
         </div>
       </Section>
 
-      {/* News / Social */}
+      /* {/* News / Social */}
       <Section id="news" eyebrow={{ es: "Actualidad", ca: "Actualitat", en: "Updates" }[lang]} title={t.newsTitle || { es: "Síguenos en redes", ca: "Segueix-nos a les xarxes", en: "Follow us on social" }[lang]}>
         <div className="flex flex-wrap gap-3">
           <a href="#" className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-3 ring-1 ring-emerald-900/15 hover:bg-emerald-50 transition">
@@ -714,7 +720,7 @@ export default function App() {
         <p className="mt-2 text-sm text-emerald-900/70">
           { {es:"Sustituye los enlaces por tus perfiles oficiales.", ca:"Substitueix els enllaços pels teus perfils oficials.", en:"Replace the links with your official profiles."}[lang] }
         </p>
-      </Section>
+      </Section> */
 
       {/* Team */}
       <Section id="team" eyebrow={{ es: "Gobernanza", ca: "Governança", en: "Governance" }[lang]} title={t.team}>
@@ -733,7 +739,7 @@ export default function App() {
         </div>
       </Section>
 
-      {/* Donations */}
+      /* {/* Donations */}
       <Section id="donate" eyebrow={t.donateEyebrow} title={t.donateTitle}>
         <div className="rounded-2xl bg-gradient-to-br from-white to-emerald-50 p-6 ring-1 ring-emerald-900/10 shadow-sm">
           <div className="flex items-center gap-3 text-emerald-800">
@@ -747,7 +753,7 @@ export default function App() {
             </code>
           </div>
         </div>
-      </Section>
+      </Section> */
 
       {/* Join / Contact */}
       <Section id="join" eyebrow={{ es: "Participa", ca: "Participa", en: "Get involved" }[lang]} title={t.join}>
