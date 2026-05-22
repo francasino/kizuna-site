@@ -705,7 +705,8 @@ export default function App() {
         </div>
       </Section>
 
-      /* {/* News / Social */}
+     {/* News / Social */}
+      {/*
       <Section id="news" eyebrow={{ es: "Actualidad", ca: "Actualitat", en: "Updates" }[lang]} title={t.newsTitle || { es: "Síguenos en redes", ca: "Segueix-nos a les xarxes", en: "Follow us on social" }[lang]}>
         <div className="flex flex-wrap gap-3">
           <a href="#" className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-3 ring-1 ring-emerald-900/15 hover:bg-emerald-50 transition">
@@ -720,7 +721,8 @@ export default function App() {
         <p className="mt-2 text-sm text-emerald-900/70">
           { {es:"Sustituye los enlaces por tus perfiles oficiales.", ca:"Substitueix els enllaços pels teus perfils oficials.", en:"Replace the links with your official profiles."}[lang] }
         </p>
-      </Section> */
+      </Section>
+      */}
 
       {/* Team */}
       <Section id="team" eyebrow={{ es: "Gobernanza", ca: "Governança", en: "Governance" }[lang]} title={t.team}>
@@ -739,7 +741,8 @@ export default function App() {
         </div>
       </Section>
 
-      /* {/* Donations */}
+      {/* Donations */}
+      {/*
       <Section id="donate" eyebrow={t.donateEyebrow} title={t.donateTitle}>
         <div className="rounded-2xl bg-gradient-to-br from-white to-emerald-50 p-6 ring-1 ring-emerald-900/10 shadow-sm">
           <div className="flex items-center gap-3 text-emerald-800">
@@ -753,7 +756,8 @@ export default function App() {
             </code>
           </div>
         </div>
-      </Section> */
+      </Section>
+      */}
 
       {/* Join / Contact */}
       <Section id="join" eyebrow={{ es: "Participa", ca: "Participa", en: "Get involved" }[lang]} title={t.join}>
