@@ -11,11 +11,11 @@ import {
   Star,
   Newspaper,
   PiggyBank,
+  Download
 } from "lucide-react";
 
 import logo from "./assets/kizuna-logo.png";
 import bg from "./assets/bg.png";
-// Import your images at the top of App.jsx (right after other imports)
 import img1 from "./assets/ela1.jpeg";
 import img2 from "./assets/ela2.jpeg";
 import img3 from "./assets/ela3.jpeg";
@@ -23,88 +23,11 @@ import img4 from "./assets/mont1.jpeg";
 import img5 from "./assets/consell1.jpg";
 import img6 from "./assets/consell2.jpg";
 
-
-const TECHSOUP_LOGO = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/TechSoup_Logo.svg/330px-TechSoup_Logo.svg.png";
-
-const GOODSTACK_LOGO = "https://mma.prnasia.com/media2/2666427/5448931/Goodstack_Logo.jpg?p=medium600";
-
-
 const DRIVE_API_KEY = import.meta.env.VITE_GDRIVE_API_KEY;
 const DRIVE_FOLDER_ID = import.meta.env.VITE_GDRIVE_FOLDER_ID;
 const DRIVE_LOGOS_FOLDER_ID = import.meta.env.VITE_GDRIVE_LOGOS_FOLDER_ID;
 
 const fallbackImages = [bg, logo, img1, img2, img3, img4, img5, img6]; 
-
-
-// const [images, setImages] = useState(fallbackImages);
-// const [index, setIndex] = useState(0);
-
-// // Fetch Drive images once (and cache briefly to avoid hammering the API)
-// useEffect(() => {
-//   const cacheKey = "drive_images_cache_v1";
-//   const cacheTtlMs = 10 * 60 * 1000; // 10 minutes
-
-//   const load = async () => {
-//     // If not configured, keep fallback
-//     if (!DRIVE_API_KEY || !DRIVE_FOLDER_ID) return;
-
-//     // Try cache
-//     try {
-//       const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-//       if (cached?.ts && Array.isArray(cached.images) && Date.now() - cached.ts < cacheTtlMs) {
-//         if (cached.images.length) {
-//           setImages(cached.images);
-//           setIndex(0);
-//         }
-//         return;
-//       }
-//     } catch {
-//       // ignore cache errors
-//     }
-
-//     try {
-//       // Drive search query: files in folder, images only, not trashed
-//       const q = encodeURIComponent(
-//         `'${DRIVE_FOLDER_ID}' in parents and (mimeType contains 'image/') and trashed = false`
-//       );
-
-//       // Ask only for what we need
-//       const fields = encodeURIComponent("files(id,name,createdTime,mimeType)");
-
-//       const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&orderBy=createdTime desc&pageSize=100&key=${DRIVE_API_KEY}`;
-
-//       const res = await fetch(url);
-//       if (!res.ok) throw new Error(`Drive API error ${res.status}`);
-//       const data = await res.json();
-
-//       const driveUrls = (data.files || []).map(
-//         (f) => `https://drive.google.com/uc?export=view&id=${f.id}`
-//       );
-
-//       if (driveUrls.length > 0) {
-//         setImages(driveUrls);
-//         setIndex(0);
-//         localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), images: driveUrls }));
-//       } else {
-//         setImages(fallbackImages);
-//       }
-//     } catch (e) {
-//       console.warn("Drive load failed, using fallback images:", e);
-//       setImages(fallbackImages);
-//     }
-//   };
-
-//   load();
-// }, [DRIVE_API_KEY, DRIVE_FOLDER_ID, fallbackImages]);
-
-// // Auto-loop carousel (same behavior as before)
-// useEffect(() => {
-//   if (!images.length) return;
-//   const interval = setInterval(() => {
-//     setIndex((i) => (i + 1) % images.length);
-//   }, 3500);
-//   return () => clearInterval(interval);
-// }, [images]);
 
 const isVertical = (w, h) => h > w;
 
@@ -166,30 +89,19 @@ const CatalanFlag = () => (
 // ───────── Main component ─────────
 export default function App() {
   const [lang, setLang] = useState("es");
-  //const [index, setIndex] = useState(0);
-  // const images = [bg, logo, img1, img2, img3, img4, img5, img6]
-  // //const images = [bg, img1, img2, img3, img4, img5, img6]
-
-  // // Auto-loop carousel
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setIndex((i) => (i + 1) % images.length);
-  //   }, 3500);
-  //   return () => clearInterval(interval);
-  // }, [images.length]);
-
   const [images, setImages] = useState(fallbackImages);
   const [index, setIndex] = useState(0);
   const [logos, setLogos] = useState([]);
+  
+  // Estado para el banner de cookies
+  const [showCookieBanner, setShowCookieBanner] = useState(false);
 
   useEffect(() => {
     const cacheKey = "drive_logos_cache_v1";
-    const cacheTtlMs = 60 * 60 * 1000; // 1 hour (logos change less often)
+    const cacheTtlMs = 60 * 60 * 1000;
 
     const loadLogos = async () => {
       if (!DRIVE_API_KEY || !DRIVE_LOGOS_FOLDER_ID) return;
-
-      // Cache
       try {
         const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
         if (cached?.ts && Array.isArray(cached.logos) && Date.now() - cached.ts < cacheTtlMs) {
@@ -202,17 +114,9 @@ export default function App() {
         const q = encodeURIComponent(
           `'${DRIVE_LOGOS_FOLDER_ID}' in parents and (mimeType contains 'image/') and trashed = false`
         );
-
         const fields = encodeURIComponent("files(id,name,createdTime,mimeType,thumbnailLink)");
         const url =
-          `https://www.googleapis.com/drive/v3/files` +
-          `?q=${q}` +
-          `&fields=${fields}` +
-          `&orderBy=name` +
-          `&pageSize=200` +
-          `&supportsAllDrives=true` +
-          `&includeItemsFromAllDrives=true` +
-          `&key=${DRIVE_API_KEY}`;
+          `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&orderBy=name&pageSize=200&supportsAllDrives=true&includeItemsFromAllDrives=true&key=${DRIVE_API_KEY}`;
 
         const res = await fetch(url);
         if (!res.ok) throw new Error(`Drive API error ${res.status}`);
@@ -229,23 +133,19 @@ export default function App() {
         localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), logos: items }));
       } catch (e) {
         console.warn("Logo load failed:", e);
-        setLogos([]); // keep section, but empty grid
+        setLogos([]); 
       }
     };
 
     loadLogos();
   }, []);
 
-  // Fetch Drive images once (and cache briefly to avoid hammering the API)
   useEffect(() => {
     const cacheKey = "drive_images_cache_v1";
-    const cacheTtlMs = 10 * 60 * 1000; // 10 minutes
+    const cacheTtlMs = 10 * 60 * 1000;
 
     const load = async () => {
-      // If not configured, keep fallback
       if (!DRIVE_API_KEY || !DRIVE_FOLDER_ID) return;
-
-      // Try cache
       try {
         const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
         if (cached?.ts && Array.isArray(cached.images) && Date.now() - cached.ts < cacheTtlMs) {
@@ -255,15 +155,12 @@ export default function App() {
           }
           return;
         }
-      } catch {
-        // ignore cache errors
-      }
+      } catch {}
 
       try {
         const q = encodeURIComponent(
           `'${DRIVE_FOLDER_ID}' in parents and (mimeType contains 'image/') and trashed = false`
         );
-
         const fields = encodeURIComponent("files(id,name,createdTime,mimeType,thumbnailLink)");
         const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=${fields}&orderBy=createdTime desc&pageSize=100&key=${DRIVE_API_KEY}`;
 
@@ -272,14 +169,9 @@ export default function App() {
         const data = await res.json();
 
         const driveUrls = (data.files || []).map((f) => {
-          // Prefer the API-provided thumbnailLink (usually most reliable for embedding)
           if (f.thumbnailLink) {
-            // thumbnailLink often ends with something like "=s220"
-            // Increase size for better quality:
             return f.thumbnailLink.replace(/=s\d+$/, "=s2000");
           }
-        
-          // Fallback: also works well for embedding
           return `https://drive.google.com/thumbnail?id=${f.id}&sz=w2000`;
         });
 
@@ -291,7 +183,7 @@ export default function App() {
           setImages(fallbackImages);
         }
       } catch (e) {
-        console.warn("Drive load failed, using fallback images:", e);
+        console.warn("Drive load failed:", e);
         setImages(fallbackImages);
       }
     };
@@ -299,7 +191,6 @@ export default function App() {
     load();
   }, []);
 
-  // Auto-loop carousel (same behavior as before)
   useEffect(() => {
     if (!images.length) return;
     const interval = setInterval(() => {
@@ -308,14 +199,23 @@ export default function App() {
     return () => clearInterval(interval);
   }, [images]);
 
-
-  // Language detection
   useEffect(() => {
     const n = (navigator.language || "es").slice(0, 2);
     if (n === "en") setLang("en");
     else if (n === "ca") setLang("ca");
     else setLang("es");
+
+    // Verificar si las cookies ya fueron aceptadas
+    const cookiesAccepted = localStorage.getItem("kizuna_cookies_accepted");
+    if (!cookiesAccepted) {
+      setShowCookieBanner(true);
+    }
   }, []);
+
+  const handleAcceptCookies = () => {
+    localStorage.setItem("kizuna_cookies_accepted", "true");
+    setShowCookieBanner(false);
+  };
 
   // ───────── Translations ─────────
   const t = useMemo(
@@ -348,13 +248,26 @@ export default function App() {
           areas3: "Salud y Bienestar Integral",
           partnersTitle: "Colaboraciones y Red Internacional",
           newsTitle: "Síguenos en redes",
-          donateEyebrow: "Apoya nuestra misión",
-          donateTitle: "Donaciones",
-          donateText: "Tu contribución impulsa programas de educación, salud mental e IA ética.",
-          ibanLabel: "IBAN (placeholder)",
           partnersLogosTitle: "Instituciones colaboradoras y alianzas",
           partnersLogosLead:
             "Las personas e instituciones que forman Kizuna Global colaboran o han colaborado con múltiples entidades del ámbito social, educativo, tecnológico y estratégico.",
+          
+          // Textos legales
+          legalEyebrow: "Marco normativo",
+          legalTitle: "Políticas y Transparencia",
+          legalNotice: "Aviso Legal",
+          legalNoticeText: "Titular de la web: KIZUNA GLOBAL INICIATIVES SOCIALS. NIF: G24875486. Dirección: Tarragona. Correo de contacto: fran.casino@gmail.com. Entidad debidamente inscrita en el Registre d'Entitats de la Generalitat de Catalunya (Número de registro: 79454).",
+          privacyPolicy: "Política de Privacidad (RGPD)",
+          privacyText: "KIZUNA GLOBAL INICIATIVES SOCIALS es la entidad responsable de custodiar y tratar los datos personales recogidos a través de nuestros formularios o medios de contacto. Estos datos se utilizan exclusivamente para gestionar la relación con empresas, alumnado y colaboradores. Puede solicitar en cualquier momento la modificación o el borrado de sus datos escribiendo a nuestro correo de contacto.",
+          equality: "Compromiso con la Igualdad",
+          equalityText: "Declaración de Compromiso con la Igualdad de Género y Oportunidades: La entidad aplica de forma rigurosa criterios de no discriminación y fomento de la igualdad en la selección del profesorado, el personal y en el acceso de los alumnos a los cursos e iniciativas.",
+          transparency: "Transparencia",
+          transparencyText: "Estamos fuertemente comprometidos con la transparencia corporativa e institucional, poniendo a disposición de la administración pública y de la ciudadanía la información relativa a nuestra gestión y gobernanza.",
+          transparencyLink: "Descargar Memoria de Transparencia 2026 (PDF)",
+          cookiePolicy: "Política de Cookies",
+          cookiePolicyText: "Esta página web utiliza cookies técnicas para permitir su correcto funcionamiento, y cookies analíticas para mejorar la experiencia de navegación. El usuario puede revocar su consentimiento o configurar su navegador para bloquearlas.",
+          cookieBannerText: "Utilizamos cookies propias y de terceros para el correcto funcionamiento de la web y mejorar tu experiencia. Al pulsar 'Aceptar', consientes su uso.",
+          cookieAccept: "Aceptar cookies"
         },
         ca: {
           about: "Qui som",
@@ -383,13 +296,25 @@ export default function App() {
           areas3: "Salut i Benestar Integral",
           partnersTitle: "Col·laboracions i Xarxa Internacional",
           newsTitle: "Segueix-nos a les xarxes",
-          donateEyebrow: "Dóna suport a la missió",
-          donateTitle: "Donacions",
-          donateText: "La teva aportació impulsa programes d'educació, salut mental i IA ètica.",
-          ibanLabel: "IBAN (exemple)",
           partnersLogosTitle: "Institucions col·laboradores i aliances",
           partnersLogosLead:
             "Les persones i institucions que formen Kizuna Global col·laboren o han col·laborat amb múltiples entitats de l’àmbit social, educatiu, tecnològic i estratègic.",
+            
+          legalEyebrow: "Marc normatiu",
+          legalTitle: "Polítiques i Transparència",
+          legalNotice: "Avís Legal",
+          legalNoticeText: "Titular de la web: KIZUNA GLOBAL INICIATIVES SOCIALS. NIF: G24875486. Adreça: Tarragona. Correu de contacte: fran.casino@gmail.com. Entitat degudament inscrita al Registre d'Entitats de la Generalitat de Catalunya (Número de registre: 79454).",
+          privacyPolicy: "Política de Privacitat (RGPD)",
+          privacyText: "KIZUNA GLOBAL INICIATIVES SOCIALS és l'entitat responsable de custodiar i tractar les dades personals recollides a través dels nostres formularis. Aquestes dades s'utilitzen exclusivament per gestionar la relació amb empreses, alumnat i col·laboradors. Pot sol·licitar la modificació o esborrament de les seves dades escrivint al nostre correu de contacte.",
+          equality: "Compromís amb la Igualtat",
+          equalityText: "Declaració de Compromís amb la Igualtat de Gènere i Oportunitats: L'entitat aplica de forma rigorosa criteris de no discriminació i foment de la igualtat en la selecció del professorat, el personal i en l'accés dels alumnes als cursos.",
+          transparency: "Transparència",
+          transparencyText: "Estem fortament compromesos amb la transparència corporativa i institucional, posant a disposició de l'administració i la ciutadania la informació relativa a la nostra gestió.",
+          transparencyLink: "Descarregar Memòria de Transparència 2026 (PDF)",
+          cookiePolicy: "Política de Galetes",
+          cookiePolicyText: "Aquesta pàgina web utilitza galetes tècniques per permetre el seu correcte funcionament. L'usuari pot configurar el seu navegador per bloquejar-les.",
+          cookieBannerText: "Utilitzem galetes per garantir el funcionament de la web i millorar la teva experiència. En prémer 'Acceptar', consents el seu ús.",
+          cookieAccept: "Acceptar galetes"
         },
         en: {
           about: "About",
@@ -418,13 +343,25 @@ export default function App() {
           areas3: "Health & Integral Wellbeing",
           partnersTitle: "Collaborations & International Network",
           newsTitle: "Follow us on social",
-          donateEyebrow: "Support our mission",
-          donateTitle: "Donations",
-          donateText: "Your contribution powers education, mental health and ethical-AI programmes.",
-          ibanLabel: "IBAN (placeholder)",
           partnersLogosTitle: "Collaborating institutions & partners",
           partnersLogosLead:
             "Members of Kizuna Global, both personally and institutionally, collaborate or have collaborated with multiple organisations across social, educational, technological and strategic fields.",
+            
+          legalEyebrow: "Legal Framework",
+          legalTitle: "Policies & Transparency",
+          legalNotice: "Legal Notice",
+          legalNoticeText: "Website Owner: KIZUNA GLOBAL INICIATIVES SOCIALS. NIF: G24875486. Address: Tarragona, Spain. Contact email: fran.casino@gmail.com. Registered in the Registre d'Entitats de la Generalitat de Catalunya (Registration Number: 79454).",
+          privacyPolicy: "Privacy Policy (GDPR)",
+          privacyText: "KIZUNA GLOBAL INICIATIVES SOCIALS is responsible for guarding and processing the personal data collected through our forms. This data is used exclusively to manage the relationship with companies, students, and collaborators. You may request the modification or deletion of your data at any time by writing to our contact email.",
+          equality: "Commitment to Equality",
+          equalityText: "Declaration of Commitment to Gender Equality and Opportunities: The entity strictly applies non-discrimination criteria and promotes equality in the selection of teachers, staff, and student access to courses.",
+          transparency: "Transparency",
+          transparencyText: "We are strongly committed to corporate and institutional transparency, making information regarding our management and governance available to the public and administration.",
+          transparencyLink: "Download 2026 Transparency Report (PDF)",
+          cookiePolicy: "Cookie Policy",
+          cookiePolicyText: "This website uses technical cookies to ensure its proper functioning. Users can configure their browser to block them.",
+          cookieBannerText: "We use cookies to ensure the website functions properly and to improve your experience. By clicking 'Accept', you consent to their use.",
+          cookieAccept: "Accept cookies"
         },
       })[lang],
     [lang]
@@ -436,8 +373,7 @@ export default function App() {
     { href: "#partners", label: t.partners },
     { href: "#ods", label: t.ods },
     { href: "#team", label: t.team },
-    { href: "#join", label: t.join },
-    { href: "#news", label: t.news },
+    { href: "#join", label: t.join }
   ];
 
   const areas = [
@@ -478,8 +414,6 @@ export default function App() {
     { name: "Fundación La Caixa", icon: <HeartHandshake className="w-6 h-6" /> },
     { name: "CERV Programme", icon: <Building2 className="w-6 h-6" /> },
   ];
-
-  
 
   const ods = [
     { n: 3, t: { es: "Salud y bienestar", ca: "Salut i benestar", en: "Good health & wellbeing" }[lang] },
@@ -553,7 +487,7 @@ export default function App() {
         </nav>
       </header>
 
-      {/* Hero (headline only) */}
+      {/* Hero */}
       <section id="home" className="py-24 sm:py-32 text-center relative">
         <div className="mx-auto max-w-3xl px-4 text-emerald-950">
           <img src={logo} alt="Kizuna Global" className="mx-auto h-28 w-auto mb-8" />
@@ -580,8 +514,6 @@ export default function App() {
           <p className="mt-2 text-sm sm:text-base text-white/90">{t.carouselLead}</p>
         </div>
       </section>
-
-
 
       {/* About */}
       <Section id="about" eyebrow={{ es: "Introducción", ca: "Introducció", en: "Introduction" }[lang]} title={t.about}>
@@ -629,7 +561,7 @@ export default function App() {
         </div>
       </Section>
 
-            {/* Collaborating institutions & partners (logos) */}
+      {/* Collaborating institutions & partners (logos) */}
       <Section
         id="collaborators"
         eyebrow={{ es: "Colaboraciones", ca: "Col·laboracions", en: "Collaborations" }[lang]}
@@ -638,8 +570,6 @@ export default function App() {
         <p className="text-emerald-900/80 max-w-3xl">
           {t.partnersLogosLead}
         </p>
-
-        {/* Logo grid */}
         <div className="mt-8">
           {(!DRIVE_LOGOS_FOLDER_ID || !DRIVE_API_KEY) && (
             <div className="rounded-xl bg-amber-50 ring-1 ring-amber-200 p-4 text-sm text-amber-900">
@@ -648,7 +578,6 @@ export default function App() {
                   en:"Set VITE_GDRIVE_LOGOS_FOLDER_ID to load logos from Drive." }[lang] }
             </div>
           )}
-
           <div
             className="
               mt-4 grid gap-4
@@ -674,14 +603,6 @@ export default function App() {
               </div>
             ))}
           </div>
-
-          {logos.length === 0 && DRIVE_LOGOS_FOLDER_ID && DRIVE_API_KEY && (
-            <p className="mt-4 text-sm text-emerald-900/70">
-              { { es:"No se han encontrado logos en la carpeta de Drive.",
-                  ca:"No s’han trobat logos a la carpeta de Drive.",
-                  en:"No logos found in the Drive folder." }[lang] }
-            </p>
-          )}
         </div>
       </Section>
 
@@ -705,25 +626,6 @@ export default function App() {
         </div>
       </Section>
 
-     {/* News / Social */}
-      {/*
-      <Section id="news" eyebrow={{ es: "Actualidad", ca: "Actualitat", en: "Updates" }[lang]} title={t.newsTitle || { es: "Síguenos en redes", ca: "Segueix-nos a les xarxes", en: "Follow us on social" }[lang]}>
-        <div className="flex flex-wrap gap-3">
-          <a href="#" className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-3 ring-1 ring-emerald-900/15 hover:bg-emerald-50 transition">
-            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" className="w-5 h-5" />
-            LinkedIn
-          </a>
-          <a href="#" className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-3 ring-1 ring-emerald-900/15 hover:bg-emerald-50 transition">
-            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" className="w-5 h-5" />
-            Instagram
-          </a>
-        </div>
-        <p className="mt-2 text-sm text-emerald-900/70">
-          { {es:"Sustituye los enlaces por tus perfiles oficiales.", ca:"Substitueix els enllaços pels teus perfils oficials.", en:"Replace the links with your official profiles."}[lang] }
-        </p>
-      </Section>
-      */}
-
       {/* Team */}
       <Section id="team" eyebrow={{ es: "Gobernanza", ca: "Governança", en: "Governance" }[lang]} title={t.team}>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -740,24 +642,6 @@ export default function App() {
           ))}
         </div>
       </Section>
-
-      {/* Donations */}
-      {/*
-      <Section id="donate" eyebrow={t.donateEyebrow} title={t.donateTitle}>
-        <div className="rounded-2xl bg-gradient-to-br from-white to-emerald-50 p-6 ring-1 ring-emerald-900/10 shadow-sm">
-          <div className="flex items-center gap-3 text-emerald-800">
-            <PiggyBank className="w-6 h-6" />
-            <p>{t.donateText}</p>
-          </div>
-          <div className="mt-4 grid sm:grid-cols-2 gap-3 items-center">
-            <label className="text-sm text-emerald-900/80">{t.ibanLabel}</label>
-            <code className="rounded-xl bg-white px-4 py-3 ring-1 ring-emerald-900/10 text-emerald-900 font-semibold tracking-wider">
-              ES00 0000 0000 00 0000000000
-            </code>
-          </div>
-        </div>
-      </Section>
-      */}
 
       {/* Join / Contact */}
       <Section id="join" eyebrow={{ es: "Participa", ca: "Participa", en: "Get involved" }[lang]} title={t.join}>
@@ -793,18 +677,74 @@ export default function App() {
         </form>
       </Section>
 
+      {/* Legal & Transparency Texts */}
+      <Section id="legal-section" eyebrow={t.legalEyebrow} title={t.legalTitle}>
+        <div className="grid gap-8 sm:grid-cols-2 mt-4 text-emerald-900/85">
+          <div id="transparencia" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
+            <h3 className="font-semibold text-lg mb-2">{t.transparency}</h3>
+            <p className="text-sm leading-relaxed">{t.transparencyText}</p>
+            <a href="#" className="inline-flex items-center gap-2 text-sm text-emerald-700 hover:text-emerald-900 font-medium mt-3 hover:underline">
+              <Download className="w-4 h-4" /> {t.transparencyLink}
+            </a>
+          </div>
+          
+          <div id="aviso-legal" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
+            <h3 className="font-semibold text-lg mb-2">{t.legalNotice}</h3>
+            <p className="text-sm leading-relaxed">{t.legalNoticeText}</p>
+          </div>
+
+          <div id="privacidad" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
+            <h3 className="font-semibold text-lg mb-2">{t.privacyPolicy}</h3>
+            <p className="text-sm leading-relaxed">{t.privacyText}</p>
+          </div>
+
+          <div id="igualdad" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
+            <h3 className="font-semibold text-lg mb-2">{t.equality}</h3>
+            <p className="text-sm leading-relaxed">{t.equalityText}</p>
+          </div>
+
+          <div id="cookies" className="sm:col-span-2 rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
+            <h3 className="font-semibold text-lg mb-2">{t.cookiePolicy}</h3>
+            <p className="text-sm leading-relaxed">{t.cookiePolicyText}</p>
+          </div>
+        </div>
+      </Section>
+
       {/* Footer */}
       <footer className="mt-10 border-t border-emerald-900/10 bg-white/70">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3 text-emerald-900">
             <img src={logo} alt="Kizuna" className="h-10 w-auto" />
             <span className="font-serif tracking-[0.2em]">KIZUNA GLOBAL</span>
           </div>
-          <div className="text-sm text-emerald-900/70">
+          
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-emerald-900/80 font-medium">
+            <a href="#transparencia" className="hover:text-emerald-900 hover:underline">{t.transparency}</a>
+            <a href="#aviso-legal" className="hover:text-emerald-900 hover:underline">{t.legalNotice}</a>
+            <a href="#privacidad" className="hover:text-emerald-900 hover:underline">{t.privacyPolicy}</a>
+            <a href="#cookies" className="hover:text-emerald-900 hover:underline">{t.cookiePolicy}</a>
+          </div>
+
+          <div className="text-sm text-emerald-900/70 text-center md:text-right">
             © {new Date().getFullYear()} Kizuna Global — Asociación sin ánimo de lucro.
           </div>
         </div>
       </footer>
+
+      {/* Cookie Banner */}
+      {showCookieBanner && (
+        <div className="fixed bottom-0 left-0 right-0 z-[100] bg-emerald-950 text-white p-4 sm:p-5 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm opacity-90 max-w-3xl">
+            {t.cookieBannerText}
+          </p>
+          <button 
+            onClick={handleAcceptCookies}
+            className="shrink-0 rounded-xl bg-white px-5 py-2.5 text-emerald-950 font-medium hover:bg-emerald-50 transition"
+          >
+            {t.cookieAccept}
+          </button>
+        </div>
+      )}
 
       <style>{`html{scroll-behavior:smooth}`}</style>
     </div>
