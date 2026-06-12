@@ -46,8 +46,9 @@ const LogoMark = ({ className = "w-8 h-8" }) => (
   </svg>
 );
 
-const Section = ({ id, eyebrow, title, children }) => (
-  <section id={id} className="scroll-mt-24 py-16 sm:py-24 bg-white/70" aria-labelledby={`${id}-title`}>
+// Se añade la propiedad "className" con un valor por defecto para permitir fondos distintos
+const Section = ({ id, eyebrow, title, children, className = "bg-white/70" }) => (
+  <section id={id} className={`scroll-mt-24 py-16 sm:py-24 ${className}`} aria-labelledby={`${id}-title`}>
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
@@ -677,8 +678,13 @@ export default function App() {
         </form>
       </Section>
 
-      {/* Legal & Transparency Texts */}
-      <Section id="legal-section" eyebrow={t.legalEyebrow} title={t.legalTitle}>
+      {/* Legal & Transparency Texts con fondo distinto */}
+      <Section 
+        id="legal-section" 
+        eyebrow={t.legalEyebrow} 
+        title={t.legalTitle}
+        className="bg-emerald-900/10 border-t border-emerald-900/10 backdrop-blur-sm"
+      >
         <div className="grid gap-8 sm:grid-cols-2 mt-4 text-emerald-900/85">
           <div id="transparencia" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
             <h3 className="font-semibold text-lg mb-2">{t.transparency}</h3>
@@ -710,9 +716,9 @@ export default function App() {
         </div>
       </Section>
 
-      {/* Footer */}
-      <footer className="mt-10 border-t border-emerald-900/10 bg-white/70">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
+      {/* Footer sin borde superior porque ya lo aporta la sección legal */}
+      <footer className="bg-emerald-900/10 backdrop-blur-sm pb-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3 text-emerald-900">
             <img src={logo} alt="Kizuna" className="h-10 w-auto" />
             <span className="font-serif tracking-[0.2em]">KIZUNA GLOBAL</span>
