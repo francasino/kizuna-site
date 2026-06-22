@@ -11,7 +11,8 @@ import {
   Star,
   Newspaper,
   PiggyBank,
-  Download
+  Download,
+  CalendarCheck
 } from "lucide-react";
 
 import logo from "./assets/kizuna-logo.png";
@@ -46,7 +47,6 @@ const LogoMark = ({ className = "w-8 h-8" }) => (
   </svg>
 );
 
-// Se añade la propiedad "className" con un valor por defecto para permitir fondos distintos
 const Section = ({ id, eyebrow, title, children, className = "bg-white/70" }) => (
   <section id={id} className={`scroll-mt-24 py-16 sm:py-24 ${className}`} aria-labelledby={`${id}-title`}>
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -206,7 +206,6 @@ export default function App() {
     else if (n === "ca") setLang("ca");
     else setLang("es");
 
-    // Verificar si las cookies ya fueron aceptadas
     const cookiesAccepted = localStorage.getItem("kizuna_cookies_accepted");
     if (!cookiesAccepted) {
       setShowCookieBanner(true);
@@ -244,9 +243,12 @@ export default function App() {
             "KIZUNA GLOBAL nace en España como asociación sin ánimo de lucro con vocación nacional e internacional. Trabajamos para el desarrollo social, educativo, tecnológico y empresarial desde una perspectiva ética, humana e inclusiva, alineada con la Agenda 2030.",
           aboutP2:
             "En un contexto de ciberamenazas crecientes, impulsamos la resiliencia, la preparación digital y el equilibrio emocional de la ciudadanía, integrando salud mental, igualdad y tecnología ética.",
+          aboutP3:
+            "Estamos firmemente comprometidos con la diseminación de proyectos sociales que ayuden a concienciar sobre los problemas actuales y la aportación de diversos colectivos al bienestar de la sociedad. Por ello, contamos con una marcada voluntad formadora de personas y organizadora de eventos, con el propósito de alcanzar al máximo número posible de ciudadanos.",
           areas1: "Social, Educativa y Tecnológica",
           areas2: "Empresarial y Estratégica",
           areas3: "Salud y Bienestar Integral",
+          areas4: "Formación Corporativa, Eventos y Logística",
           partnersTitle: "Colaboraciones y Red Internacional",
           newsTitle: "Síguenos en redes",
           partnersLogosTitle: "Instituciones colaboradoras y alianzas",
@@ -261,7 +263,7 @@ export default function App() {
           privacyPolicy: "Política de Privacidad (RGPD)",
           privacyText: "KIZUNA GLOBAL INICIATIVES SOCIALS es la entidad responsable de custodiar y tratar los datos personales recogidos a través de nuestros formularios o medios de contacto. Estos datos se utilizan exclusivamente para gestionar la relación con empresas, alumnado y colaboradores. Puede solicitar en cualquier momento la modificación o el borrado de sus datos escribiendo a nuestro correo de contacto.",
           equality: "Compromiso con la Igualdad",
-          equalityText: "Declaración de Compromiso con la Igualdad de Género y Oportunidades: La entidad aplica de forma rigurosa criterios de no discriminación y fomento de la igualdad en la selección del profesorado, el personal y en el acceso de los alumnos a los cursos e iniciativas.",
+          equalityText: "Declaración de Compromiso con la Igualdad de Género y Oportunidades: La entidad aplica de forma rigorosa criterios de no discriminación y fomento de la igualdad en la selección del profesorado, el personal y en el acceso de los alumnos a los cursos e iniciativas.",
           transparency: "Transparencia",
           transparencyText: "Estamos fuertemente comprometidos con la transparencia corporativa e institucional, poniendo a disposición de la administración pública y de la ciudadanía la información relativa a nuestra gestión y gobernanza.",
           transparencyLink: "Descargar Memoria de Transparencia 2026 (PDF)",
@@ -292,9 +294,12 @@ export default function App() {
             "KIZUNA GLOBAL neix a l'Estat com a associació sense ànim de lucre amb vocació nacional i internacional. Treballem pel desenvolupament social, educatiu, tecnològic i empresarial amb una perspectiva ètica, humana i inclusiva, alineada amb l'Agenda 2030.",
           aboutP2:
             "Davant l'augment d'amenaces digitals, impulsem la resiliència, la preparació digital i l'equilibri emocional de la ciutadania, integrant salut mental, igualtat i tecnologia ètica.",
+          aboutP3:
+            "Estem fermament compromesos amb la disseminació de projectes socials que ajudin a conscienciar sobre els problemes actuals i l'aportació de diversos col·lectius al benestar de la societat. Per això, comptem amb una marcada voluntat formadora de persones i organitzadora d'esdeveniments, amb el propòsit d'arribar al màxim nombre possible de ciutadans.",
           areas1: "Social, Educativa i Tecnològica",
           areas2: "Empresarial i Estratègica",
           areas3: "Salut i Benestar Integral",
+          areas4: "Formació Corporativa, Esdeveniments i Logística",
           partnersTitle: "Col·laboracions i Xarxa Internacional",
           newsTitle: "Segueix-nos a les xarxes",
           partnersLogosTitle: "Institucions col·laboradores i aliances",
@@ -307,7 +312,7 @@ export default function App() {
           legalNoticeText: "Titular de la web: KIZUNA GLOBAL INICIATIVES SOCIALS. NIF: G24875486. Adreça: Tarragona. Correu de contacte: fran.casino@gmail.com. Entitat degudament inscrita al Registre d'Entitats de la Generalitat de Catalunya (Número de registre: 79454).",
           privacyPolicy: "Política de Privacitat (RGPD)",
           privacyText: "KIZUNA GLOBAL INICIATIVES SOCIALS és l'entitat responsable de custodiar i tractar les dades personals recollides a través dels nostres formularis. Aquestes dades s'utilitzen exclusivament per gestionar la relació amb empreses, alumnat i col·laboradors. Pot sol·licitar la modificació o esborrament de les seves dades escrivint al nostre correu de contacte.",
-          equality: "Compromís amb la Igualtat",
+          equality: "Compromís amb la Igualdad",
           equalityText: "Declaració de Compromís amb la Igualtat de Gènere i Oportunitats: L'entitat aplica de forma rigorosa criteris de no discriminació i foment de la igualtat en la selecció del professorat, el personal i en l'accés dels alumnes als cursos.",
           transparency: "Transparència",
           transparencyText: "Estem fortament compromesos amb la transparència corporativa i institucional, posant a disposició de l'administració i la ciutadania la informació relativa a la nostra gestió.",
@@ -339,9 +344,12 @@ export default function App() {
             "KIZUNA GLOBAL is a non-profit founded in Spain with national and international scope. We drive social, educational, technological and business development with an ethical, human and inclusive approach aligned with the 2030 Agenda.",
           aboutP2:
             "Amid growing cyber-threats, we strengthen resilience, digital readiness and emotional balance, integrating mental health, equality and ethical technology.",
+          aboutP3:
+            "We are firmly committed to the dissemination of social projects that help raise awareness of current challenges and the contribution of diverse groups to the well-being of society. Consequently, we possess a strong drive toward training people and organizing events, aiming to reach as many individuals as possible.",
           areas1: "Social, Educational & Technological",
           areas2: "Business & Strategy",
           areas3: "Health & Integral Wellbeing",
+          areas4: "Corporate Training, Events & Logistics",
           partnersTitle: "Collaborations & International Network",
           newsTitle: "Follow us on social",
           partnersLogosTitle: "Collaborating institutions & partners",
@@ -360,7 +368,7 @@ export default function App() {
           transparencyText: "We are strongly committed to corporate and institutional transparency, making information regarding our management and governance available to the public and administration.",
           transparencyLink: "Download 2026 Transparency Report (PDF)",
           cookiePolicy: "Cookie Policy",
-          cookiePolicyText: "This website uses technical cookies to ensure its proper functioning. Users can configure their browser to block them.",
+          cookiePolicyText: "This website uses technical cookies to ensure its its proper functioning. Users can configure their browser to block them.",
           cookieBannerText: "We use cookies to ensure the website functions properly and to improve your experience. By clicking 'Accept', you consent to their use.",
           cookieAccept: "Accept cookies"
         },
@@ -403,6 +411,15 @@ export default function App() {
         { es: "Agencia inclusiva de viajes y eventos homologada", ca: "Agència inclusiva de viatges i esdeveniments homologada", en: "Inclusive, certified travel and events agency" }[lang],
         { es: "Resiliencia, autocuidado y prevención del estrés digital", ca: "Resiliència, autocura i prevenció de l'estrès digital", en: "Resilience, self-care & digital-stress prevention" }[lang],
         { es: "IA para apoyo emocional y detección temprana", ca: "IA per a suport emocional i detecció precoç", en: "AI for emotional support & early detection" }[lang],
+      ],
+    },
+    {
+      icon: <CalendarCheck className="w-6 h-6" />,
+      title: t.areas4,
+      points: [
+        { es: "Organización integral de eventos, congresos y su logística asociada", ca: "Organització integral d'esdeveniments, congressos i la seva logística associada", en: "End-to-end management of events, congresses, and related logistics" }[lang],
+        { es: "Formación a empresas en múltiples ámbitos, preparación de eventos y diseminación", ca: "Formació a empreses en múltiples àmbits, preparació d'esdeveniments i disseminació", en: "Corporate training in multiple fields, event preparation, and dissemination" }[lang],
+        { es: "Capacitaciones en nuevas tecnologías, ciberseguridad y salud mental adaptadas a todo tipo de colectivos", ca: "Capacitacions en noves tecnologies, ciberseguretat i salut mental adaptades a tot tipus de col·lectius", en: "Training on new technologies, cybersecurity, and mental health considering all target groups" }[lang],
       ],
     },
   ];
@@ -520,11 +537,12 @@ export default function App() {
       <Section id="about" eyebrow={{ es: "Introducción", ca: "Introducció", en: "Introduction" }[lang]} title={t.about}>
         <p>{t.aboutP1}</p>
         <p className="mt-4">{t.aboutP2}</p>
+        <p className="mt-4">{t.aboutP3}</p>
       </Section>
 
       {/* Areas */}
       <Section id="areas" eyebrow={{ es: "Qué hacemos", ca: "Què fem", en: "What we do" }[lang]} title={t.areas}>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
           {areas.map((a, i) => (
             <motion.div
               key={i}
@@ -678,7 +696,7 @@ export default function App() {
         </form>
       </Section>
 
-      {/* Legal & Transparency Texts con fondo distinto */}
+      {/* Legal & Transparency Texts */}
       <Section 
         id="legal-section" 
         eyebrow={t.legalEyebrow} 
@@ -716,7 +734,7 @@ export default function App() {
         </div>
       </Section>
 
-      {/* Footer sin borde superior porque ya lo aporta la sección legal */}
+      {/* Footer */}
       <footer className="bg-emerald-900/10 backdrop-blur-sm pb-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3 text-emerald-900">
