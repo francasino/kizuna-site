@@ -255,15 +255,21 @@ export default function App() {
           partnersLogosLead:
             "Las personas e instituciones que forman Kizuna Global colaboran o han colaborado con múltiples entidades del ámbito social, educativo, tecnológico y estratégico.",
           
-          // Textos legales
+          // Textos legales estructurados
           legalEyebrow: "Marco normativo",
           legalTitle: "Políticas y Transparencia",
           legalNotice: "Aviso Legal",
-          legalNoticeText: "Titular de la web: KIZUNA GLOBAL INICIATIVES SOCIALS. NIF: G24875486. Dirección: Tarragona. Correo de contacto: fran.casino@gmail.com. Entidad debidamente inscrita en el Registre d'Entitats de la Generalitat de Catalunya (Número de registro: 79454).",
+          legalNoticeIntro: "En cumplimiento de la normativa vigente, se exponen los datos identificativos de la entidad titular de este sitio web:",
+          legalOwner: "Titular de la entidad",
+          legalNIF: "NIF",
+          legalRegistry: "Inscripción registral",
+          legalAddress: "Domicilio social",
+          legalContact: "Correo de contacto",
           privacyPolicy: "Política de Privacidad (RGPD)",
           privacyText: "KIZUNA GLOBAL INICIATIVES SOCIALS es la entidad responsable de custodiar y tratar los datos personales recogidos a través de nuestros formularios o medios de contacto. Estos datos se utilizan exclusivamente para gestionar la relación con empresas, alumnado y colaboradores. Puede solicitar en cualquier momento la modificación o el borrado de sus datos escribiendo a nuestro correo de contacto.",
-          equality: "Compromiso con la Igualdad",
-          equalityText: "Declaración de Compromiso con la Igualdad de Género y Oportunidades: La entidad aplica de forma rigorosa criterios de no discriminación y fomento de la igualdad en la selección del profesorado, el personal y en el acceso de los alumnos a los cursos e iniciativas.",
+          equality: "Compromiso con la Igualdad y GEP",
+          equalityText: "KIZUNA GLOBAL aplica de forma rigurosa criterios de no discriminación, equidad y fomento de la igualdad de oportunidades en todas sus actividades, selecciones de personal e iniciativas formativas. En alineación con las directrices de la Comisión Europea, la entidad dispone de un Plan de Igualdad de Género (Gender Equality Plan - GEP) aprobado institucionalmente.",
+          equalityLink: "Descargar Gender Equality Plan (GEP) (PDF)",
           transparency: "Transparencia",
           transparencyText: "Estamos fuertemente comprometidos con la transparencia corporativa e institucional, poniendo a disposición de la administración pública y de la ciudadanía la información relativa a nuestra gestión y gobernanza.",
           transparencyLink: "Descargar Memoria de Transparencia 2026 (PDF)",
@@ -291,7 +297,7 @@ export default function App() {
           carouselTitle: "La nostra tasca en imatges",
           carouselLead: "Mostra visual dels nostres projectes i aliances internacionals",
           aboutP1:
-            "KIZUNA GLOBAL neix a l'Estat com a associació sense ànim de lucre amb vocació nacional i internacional. Treballem pel desenvolupament social, educatiu, tecnològic i empresarial amb una perspectiva ètica, humana i inclusiva, alineada amb l'Agenda 2030.",
+            "KIZUNA GLOBAL neix a l'Estat com a associació sense ànim de lucre amb vocació nacional i internacional. Treballem pel desenvolupament social, educatiu, tecnològic i empresarial amb una perspectiva ètica, humana i inclusiva, aliniada amb l'Agenda 2030.",
           aboutP2:
             "Davant l'augment d'amenaces digitals, impulsem la resiliència, la preparació digital i l'equilibri emocional de la ciutadania, integrant salut mental, igualtat i tecnologia ètica.",
           aboutP3:
@@ -299,21 +305,27 @@ export default function App() {
           areas1: "Social, Educativa i Tecnològica",
           areas2: "Empresarial i Estratègica",
           areas3: "Salut i Benestar Integral",
-          areas4: "Formació Corporativa, Esdeveniments i Logística",
+          areas4: "Formación Corporativa, Eventos y Logística",
           partnersTitle: "Col·laboracions i Xarxa Internacional",
           newsTitle: "Segueix-nos a les xarxes",
           partnersLogosTitle: "Institucions col·laboradores i aliances",
           partnersLogosLead:
             "Les persones i institucions que formen Kizuna Global col·laboren o han col·laborat amb múltiples entitats de l’àmbit social, educatiu, tecnològic i estratègic.",
-            
+          
           legalEyebrow: "Marc normatiu",
           legalTitle: "Polítiques i Transparència",
           legalNotice: "Avís Legal",
-          legalNoticeText: "Titular de la web: KIZUNA GLOBAL INICIATIVES SOCIALS. NIF: G24875486. Adreça: Tarragona. Correu de contacte: fran.casino@gmail.com. Entitat degudament inscrita al Registre d'Entitats de la Generalitat de Catalunya (Número de registre: 79454).",
+          legalNoticeIntro: "En compliment de la normativa vigent, s'exposen les dades identificatives de l'entitat titular d'aquest lloc web:",
+          legalOwner: "Titular de l'entitat",
+          legalNIF: "NIF",
+          legalRegistry: "Inscripció registral",
+          legalAddress: "Domicili social",
+          legalContact: "Correu de contacte",
           privacyPolicy: "Política de Privacitat (RGPD)",
           privacyText: "KIZUNA GLOBAL INICIATIVES SOCIALS és l'entitat responsable de custodiar i tractar les dades personals recollides a través dels nostres formularis. Aquestes dades s'utilitzen exclusivament per gestionar la relació amb empreses, alumnat i col·laboradors. Pot sol·licitar la modificació o esborrament de les seves dades escrivint al nostre correu de contacte.",
-          equality: "Compromís amb la Igualdad",
-          equalityText: "Declaració de Compromís amb la Igualtat de Gènere i Oportunitats: L'entitat aplica de forma rigorosa criteris de no discriminació i foment de la igualtat en la selecció del professorat, el personal i en l'accés dels alumnes als cursos.",
+          equality: "Compromís amb la Igualtat i GEP",
+          equalityText: "KIZUNA GLOBAL aplica de forma rigorosa criteris de no-discriminació, equitat i foment de la igualtat d'oportunitats en totes les seves activitats, seleccions de personal i iniciatives formatives. En alineació amb les directrius de la Comissió Europea, l'entitat disposa d'un Pla d'Igualtat de Gènere (Gender Equality Plan - GEP) aprovat institucionalment.",
+          equalityLink: "Descarregar Gender Equality Plan (GEP) (PDF)",
           transparency: "Transparència",
           transparencyText: "Estem fortament compromesos amb la transparència corporativa i institucional, posant a disposició de l'administració i la ciutadania la informació relativa a la nostra gestió.",
           transparencyLink: "Descarregar Memòria de Transparència 2026 (PDF)",
@@ -355,15 +367,21 @@ export default function App() {
           partnersLogosTitle: "Collaborating institutions & partners",
           partnersLogosLead:
             "Members of Kizuna Global, both personally and institutionally, collaborate or have collaborated with multiple organisations across social, educational, technological and strategic fields.",
-            
+          
           legalEyebrow: "Legal Framework",
           legalTitle: "Policies & Transparency",
           legalNotice: "Legal Notice",
-          legalNoticeText: "Website Owner: KIZUNA GLOBAL INICIATIVES SOCIALS. NIF: G24875486. Address: Tarragona, Spain. Contact email: fran.casino@gmail.com. Registered in the Registre d'Entitats de la Generalitat de Catalunya (Registration Number: 79454).",
+          legalNoticeIntro: "In compliance with current regulations, the identifying data of the entity that owns this website are set out below:",
+          legalOwner: "Entity Owner",
+          legalNIF: "Tax ID (NIF)",
+          legalRegistry: "Official Registration",
+          legalAddress: "Registered Office",
+          legalContact: "Contact Email",
           privacyPolicy: "Privacy Policy (GDPR)",
           privacyText: "KIZUNA GLOBAL INICIATIVES SOCIALS is responsible for guarding and processing the personal data collected through our forms. This data is used exclusively to manage the relationship with companies, students, and collaborators. You may request the modification or deletion of your data at any time by writing to our contact email.",
-          equality: "Commitment to Equality",
-          equalityText: "Declaration of Commitment to Gender Equality and Opportunities: The entity strictly applies non-discrimination criteria and promotes equality in the selection of teachers, staff, and student access to courses.",
+          equality: "Commitment to Equality & GEP",
+          equalityText: "KIZUNA GLOBAL strictly applies non-discrimination criteria, fairness, and promotes equality of opportunities in all its activities, staff selection, and training initiatives. In alignment with the European Commission guidelines, the entity has an institutionally approved Gender Equality Plan (GEP).",
+          equalityLink: "Download Gender Equality Plan (GEP) (PDF)",
           transparency: "Transparency",
           transparencyText: "We are strongly committed to corporate and institutional transparency, making information regarding our management and governance available to the public and administration.",
           transparencyLink: "Download 2026 Transparency Report (PDF)",
@@ -439,7 +457,7 @@ export default function App() {
     { n: 5, t: { es: "Igualdad de género", ca: "Igualtat de gènere", en: "Gender equality" }[lang] },
     { n: 8, t: { es: "Trabajo decente y crecimiento", ca: "Feina digna i creixement", en: "Decent work & growth" }[lang] },
     { n: 9, t: { es: "Innovación e infraestructura", ca: "Innovació i infraestructura", en: "Industry, innovation & infrastructure" }[lang] },
-    { n: 10, t: { es: "Reducción de desigualdades", ca: "Reducció de desigualtats", en: "Reduced inequalities" }[lang] },
+    { n: 10, t: { es: "Reducción de desigualdades", ca: "Reducció de desafiaments", en: "Reduced inequalities" }[lang] },
     { n: 17, t: { es: "Alianzas para los objetivos", ca: "Aliances per als objectius", en: "Partnerships for the goals" }[lang] },
   ];
 
@@ -583,7 +601,7 @@ export default function App() {
       {/* Collaborating institutions & partners (logos) */}
       <Section
         id="collaborators"
-        eyebrow={{ es: "Colaboraciones", ca: "Col·laboracions", en: "Collaborations" }[lang]}
+        browser={{ es: "Colaboraciones", ca: "Col·laboracions", en: "Collaborations" }[lang]}
         title={t.partnersLogosTitle}
       >
         <p className="text-emerald-900/80 max-w-3xl">
@@ -714,7 +732,14 @@ export default function App() {
           
           <div id="aviso-legal" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
             <h3 className="font-semibold text-lg mb-2">{t.legalNotice}</h3>
-            <p className="text-sm leading-relaxed">{t.legalNoticeText}</p>
+            <p className="text-sm leading-relaxed mb-3 opacity-90">{t.legalNoticeIntro}</p>
+            <ul className="text-sm space-y-1.5 font-medium">
+              <li><span className="text-emerald-900/60 font-normal">{t.legalOwner}:</span> KIZUNA GLOBAL INICIATIVES SOCIALS</li>
+              <li><span className="text-emerald-900/60 font-normal">{t.legalNIF}:</span> G24875486</li>
+              <li><span className="text-emerald-900/60 font-normal">{t.legalRegistry}:</span> Registre d'Entitats de la Generalitat de Catalunya (№ 79454)</li>
+              <li><span className="text-emerald-900/60 font-normal">{t.legalAddress}:</span> AVGDA LLUIS COMPANYS 14, LOCAL B1, 43005, TARRAGONA</li>
+              <li><span className="text-emerald-900/60 font-normal">{t.legalContact}:</span> fran.casino@gmail.com</li>
+            </ul>
           </div>
 
           <div id="privacidad" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
@@ -722,9 +747,21 @@ export default function App() {
             <p className="text-sm leading-relaxed">{t.privacyText}</p>
           </div>
 
-          <div id="igualdad" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
-            <h3 className="font-semibold text-lg mb-2">{t.equality}</h3>
-            <p className="text-sm leading-relaxed">{t.equalityText}</p>
+          <div id="igualdad" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm flex flex-col justify-between">
+            <div>
+              <h3 className="font-semibold text-lg mb-2">{t.equality}</h3>
+              <p className="text-sm leading-relaxed">{t.equalityText}</p>
+            </div>
+            <div className="mt-4 pt-2 border-t border-emerald-900/5">
+              <a 
+                href="https://drive.google.com/file/d/1-6Hiij5fECy21HnnU0P6fXu93lXu3KK_/view?usp=drive_link" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center gap-2 text-sm text-emerald-700 hover:text-emerald-900 font-semibold hover:underline"
+              >
+                <Download className="w-4 h-4" /> {t.equalityLink}
+              </a>
+            </div>
           </div>
 
           <div id="cookies" className="sm:col-span-2 rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
