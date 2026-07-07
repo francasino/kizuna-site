@@ -1,0 +1,1411 @@
+/**
+ * Course Controller and Navigation Logic (SPA Architecture)
+ * Integrates with ScormWrapper for progress persistence in Evolmind
+ */
+
+const CourseController = {
+  currentSlideIndex: 0,
+  completedSlides: new Set(),
+  highestVisitedIndex: 0,
+  currentTimer: null,
+  studentName: "",
+  consented: false,
+  secondsRemaining: 0,
+  userAnswers: {},
+  oceanAnswers: {},
+  isQuizActive: false,
+  shuffledQuizQuestions: [],
+  totalAccumulatedSeconds: 0,
+  sessionStartTime: null,
+  timerBypassed: false,
+  isResetting: false,
+
+  // OCEAN questions mapping for the interactive autoevaluación in Module 2
+  oceanQuestions: [
+    { id: 'A1', block: 'A', text: '¿Te resulta muy incómodo decir "no" o ignorar a un compañero o cliente que te pide ayuda urgente por correo?' },
+    { id: 'A2', block: 'A', text: 'Si recibes un correo con el logo de un proveedor conocido, ¿asumes que es legítimo sin verificar la dirección exacta del remitente?' },
+    { id: 'A3', block: 'A', text: '¿Te sentirías descortés si llamas por teléfono a un superior para confirmar si realmente te ha enviado un archivo adjunto?' },
+    { id: 'B1', block: 'B', text: '¿Trabajas habitualmente en modo "multitarea" (ej. leyendo correos mientras estás en una reunión o llamada)?' },
+    { id: 'B2', block: 'B', text: '¿Sueles hacer clic rápidamente en "Aceptar" o "Recordar más tarde" en las ventanas emergentes (alertas, actualizaciones) para que no te molesten?' },
+    { id: 'B3', block: 'B', text: 'Cuando tienes prisa, ¿utilizas la misma contraseña del trabajo para registrarte en webs o servicios personales?' },
+    { id: 'C1', block: 'C', text: 'Si recibes un email de la alta dirección (CEO) o de una institución (Hacienda) exigiendo una acción inmediata, ¿sientes un pico de ansiedad que te impulsa a resolverlo en el acto?' },
+    { id: 'C2', block: 'C', text: '¿Te preocupa tanto cometer un error que, si sospechas que has hecho clic en un virus, intentarías solucionarlo por tu cuenta antes de avisar a IT por miedo a una bronca?' },
+    { id: 'C3', block: 'C', text: '¿Te sientes fácilmente abrumado y bloqueado cuando recibes demasiadas alertas de seguridad o correos en un mismo día?' },
+    { id: 'D1', block: 'D', text: '¿Sueles utilizar aplicaciones gratuitas de internet (IA, conversores de PDF) para hacer tu trabajo más rápido, aunque la empresa no las haya autorizadas (Shadow IT)?' },
+    { id: 'D2', block: 'D', text: 'Si ves un enlace llamativo o un código QR en la oficina, ¿sientes la curiosidad de escanearlo o abrirlo para ver de qué trata?' },
+    { id: 'D3', block: 'D', text: '¿Crees que, al tener conocimientos informáticos medios-altos, es casi imposible que un hacker logre engañarte a ti?' },
+    { id: 'E1', block: 'E', text: '¿Sueles compartir fotos de tu puesto de trabajo, proyectos o viajes de empresa de forma pública en tus redes sociales?' },
+    { id: 'E2', block: 'E', text: '¿Aceptas solicitudes de conexión en LinkedIn de personas de tu sector que no conoces, asumiendo que es bueno para el networking?' },
+    { id: 'E3', block: 'E', text: '¿Hablas cómodamente sobre temas sensibles de la empresa o clientes mientras estás en lugares públicos (trenes, cafeterías) o teletrabajando en un coworking?' }
+  ],
+
+  init() {
+    this.sessionStartTime = Date.now();
+    this.cacheDOM();
+    this.bindEvents();
+    
+    // Initialize SCORM Connection
+    ScormWrapper.initialize();
+    
+    // Load progress from LMS
+    this.loadLMSData();
+    
+    // Render Sidebar modules
+    this.renderModulesSidebar();
+    
+    // Check if Onboarding is completed
+    if (this.consented && this.studentName) {
+      this.onboardingOverlay.style.display = "none";
+      // Show current slide
+      this.showSlide(this.currentSlideIndex);
+    } else {
+      this.onboardingOverlay.style.display = "flex";
+      // Pre-fill name input with LMS name if available
+      const lmsName = ScormWrapper.getValue("cmi.core.student_name") || "";
+      if (lmsName && lmsName !== "Francisco Pérez García") {
+        this.inputStudentName.value = lmsName;
+        this.btnOnboardingStart.disabled = (lmsName.trim().length < 2);
+      }
+    }
+  },
+
+  cacheDOM() {
+    this.btnPrev = document.getElementById("btn-prev");
+    this.btnNext = document.getElementById("btn-next");
+    this.btnBypassTimer = document.getElementById("btn-bypass-timer");
+    this.btnResetProgress = document.getElementById("btn-reset-progress");
+    this.slideViewport = document.getElementById("slide-viewport");
+    this.contentContainer = document.getElementById("content-container");
+    this.slideScreenCard = document.getElementById("slide-screen-card");
+    this.slideExtendedCard = document.getElementById("slide-extended-card");
+    
+    this.headerModuleTitle = document.getElementById("header-module-title");
+    this.headerSlideTitle = document.getElementById("header-slide-title");
+    this.slideCounter = document.getElementById("slide-counter");
+    
+    this.visualTitle = document.getElementById("visual-title");
+    this.screenTextContent = document.getElementById("screen-text-content");
+    this.extendedTextContent = document.getElementById("extended-text-content");
+    
+    this.timerIndicator = document.getElementById("timer-indicator");
+    this.timerText = document.getElementById("timer-text");
+    this.timerProgressLine = document.getElementById("timer-progress-line");
+    
+    this.sidebar = document.getElementById("sidebar");
+    this.menuToggle = document.getElementById("menu-toggle");
+    this.sidebarBackdrop = document.getElementById("sidebar-backdrop");
+    
+    this.progressPercentText = document.getElementById("progress-percent");
+    this.progressBar = document.getElementById("progress-bar");
+    this.modulesList = document.getElementById("modules-list");
+
+    // Onboarding elements
+    this.onboardingOverlay = document.getElementById("onboarding-overlay");
+    this.onboardingScreen1 = document.getElementById("onboarding-screen-1");
+    this.onboardingScreen2 = document.getElementById("onboarding-screen-2");
+    
+    this.chkTerms = document.getElementById("chk-terms");
+    this.chkPrivacy = document.getElementById("chk-privacy");
+    this.chkEula = document.getElementById("chk-eula");
+    
+    this.btnOnboardingNext1 = document.getElementById("btn-onboarding-next-1");
+    this.btnOnboardingBack = document.getElementById("btn-onboarding-back");
+    this.btnOnboardingStart = document.getElementById("btn-onboarding-start");
+    
+    this.inputStudentName = document.getElementById("input-student-name");
+    
+    this.linkTerms = document.getElementById("link-terms");
+    this.linkPrivacy = document.getElementById("link-privacy");
+    this.linkEula = document.getElementById("link-eula");
+    
+    this.legalModal = document.getElementById("legal-modal");
+    this.legalModalTitle = document.getElementById("legal-modal-title");
+    this.legalModalBody = document.getElementById("legal-modal-body");
+    this.btnCloseLegalModal = document.getElementById("btn-close-legal-modal");
+  },
+
+  bindEvents() {
+    this.btnPrev.addEventListener("click", () => this.goToPrevSlide());
+    this.btnNext.addEventListener("click", () => this.goToNextSlide());
+    this.btnBypassTimer.addEventListener("click", () => this.toggleTimerBypass());
+    this.btnResetProgress.addEventListener("click", () => this.resetProgress());
+    
+    // Mobile menu events
+    this.menuToggle.addEventListener("click", () => this.toggleSidebar(true));
+    this.sidebarBackdrop.addEventListener("click", () => this.toggleSidebar(false));
+
+    // Onboarding events
+    const checkScreen1Consents = () => {
+      this.btnOnboardingNext1.disabled = !(this.chkTerms.checked && this.chkPrivacy.checked && this.chkEula.checked);
+    };
+    
+    this.chkTerms.addEventListener("change", checkScreen1Consents);
+    this.chkPrivacy.addEventListener("change", checkScreen1Consents);
+    this.chkEula.addEventListener("change", checkScreen1Consents);
+    
+    this.btnOnboardingNext1.addEventListener("click", () => {
+      this.onboardingScreen1.style.display = "none";
+      this.onboardingScreen2.style.display = "flex";
+      this.inputStudentName.focus();
+    });
+    
+    this.btnOnboardingBack.addEventListener("click", () => {
+      this.onboardingScreen2.style.display = "none";
+      this.onboardingScreen1.style.display = "flex";
+    });
+    
+    const checkNameInput = () => {
+      const nameVal = this.inputStudentName.value.trim();
+      this.btnOnboardingStart.disabled = (nameVal.length < 2);
+    };
+    
+    this.inputStudentName.addEventListener("input", checkNameInput);
+    this.inputStudentName.addEventListener("keyup", (e) => {
+      if (e.key === "Enter" && !this.btnOnboardingStart.disabled) {
+        this.startCourseAfterOnboarding();
+      }
+    });
+    
+    this.btnOnboardingStart.addEventListener("click", () => this.startCourseAfterOnboarding());
+    
+    // Legal link clicks
+    this.linkTerms.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.showLegalModal("terms");
+    });
+    this.linkPrivacy.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.showLegalModal("privacy");
+    });
+    this.linkEula.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.showLegalModal("eula");
+    });
+    
+    this.btnCloseLegalModal.addEventListener("click", () => {
+      this.legalModal.style.display = "none";
+    });
+    
+    this.legalModal.addEventListener("click", (e) => {
+      if (e.target === this.legalModal) {
+        this.legalModal.style.display = "none";
+      }
+    });
+  },
+
+  startCourseAfterOnboarding() {
+    this.studentName = this.inputStudentName.value.trim();
+    this.consented = true;
+    
+    // Hide onboarding overlay
+    this.onboardingOverlay.style.display = "none";
+    
+    // Save to LMS / SCORM
+    this.saveLMSData();
+    
+    // Refresh modules and show slide 1 (index 0)
+    this.renderModulesSidebar();
+    this.currentSlideIndex = 0;
+    this.showSlide(0);
+  },
+
+  showLegalModal(type) {
+    let title = "";
+    let html = "";
+    
+    if (type === "terms") {
+      title = "Términos y Condiciones (T&C)";
+      html = `
+        <h4>1. Aceptación de los Términos</h4>
+        <p>Al acceder y utilizar este curso de capacitación en Prevención de Riesgos Digitales (PRD), usted acepta quedar vinculado por los presentes Términos y Condiciones, así como por todas las leyes y regulaciones aplicables en España.</p>
+        
+        <h4>2. Propiedad Intelectual y Restricción de Uso</h4>
+        <p>El acceso a este curso otorga una licencia personal, intransferible y no exclusiva. Queda estrictamente prohibida la reproducción, distribución, comunicación pública, transformación o grabación (incluyendo capturas de pantalla o software de grabación de pantalla) total o parcial del contenido sin autorización previa, expresa y por escrito de los titulares de los derechos.</p>
+        
+        <h4>3. Exención de Responsabilidad (Disclaimer Legal)</h4>
+        <p>El contenido de este curso, incluidas las referencias a normativas y marcos legales, se proporciona con fines estrictamente informativos y educativos. En ningún caso constituye asesoramiento legal, técnico, jurídico o profesional. Los autores y la entidad organizadora no se hacen responsables de las decisiones tomadas o de los daños y perjuicios derivados de la aplicación de los conocimientos adquiridos en este curso.</p>
+        
+        <h4>4. Cancelación de Acceso</h4>
+        <p>La organización se reserva el derecho de suspender o cancelar inmediatamente el acceso al curso a cualquier usuario que sea detectado compartiendo sus credenciales de acceso o distribuyendo el material protegido, sin derecho a reembolso y reservándose el derecho a iniciar acciones legales.</p>
+      `;
+    } else if (type === "privacy") {
+      title = "Política de Privacidad (Cumplimiento RGPD)";
+      html = `
+        <h4>1. Responsable del Tratamiento de Datos</h4>
+        <p>El responsable del tratamiento de los datos recabados en este curso de formación es <b>Kizuna Global Initiatives Socials</b>.</p>
+        
+        <h4>2. Datos Obtenidos y Finalidad</h4>
+        <p>Procesamos tu nombre completo, dirección de correo electrónico, respuestas a cuestionarios y tu progreso del curso. La única finalidad es la correcta realización de la acción formativa y la generación automática de tu diploma de superación.</p>
+        
+        <h4>3. Legitimación del Tratamiento</h4>
+        <p>La base jurídica para el tratamiento es el consentimiento del alumno que se presta de forma explícita antes de iniciar el curso formativo al marcar la casilla correspondiente.</p>
+        
+        <h4>4. Conservación y Seguridad</h4>
+        <p>Los datos se guardarán de forma totalmente confidencial y segura mientras el curso de formación esté disponible en la plataforma y sean necesarios para justificar su superación ante auditorías externas.</p>
+        
+        <h4>5. Tus Derechos</h4>
+        <p>Tienes derecho a acceder, rectificar, limitar y suprimir tus datos de carácter personal en cualquier momento poniéndose en contacto con el administrador del LMS o enviando un correo al canal oficial de Kizuna Global.</p>
+      `;
+    } else if (type === "eula") {
+      title = "Acuerdo de Licencia de Usuario Final (EULA)";
+      html = `
+        <h4>1. Licencia de Uso Limitada</h4>
+        <p>Se te otorga una licencia limitada, revocable, no exclusiva e intransferible para ver el material interactivo didáctico únicamente con propósitos educativos de carácter interno.</p>
+        
+        <h4>2. Prohibición de Ingeniería Inversa y Extracción</h4>
+        <p>Queda estrictamente prohibido realizar cualquier tipo de copia, descompilación, extracción de base de datos de slides, o distribución comercial del código fuente o activos multimedia de esta aplicación interactiva.</p>
+        
+        <h4>3. Exclusión de Garantía</h4>
+        <p>Esta aplicación interactiva del curso se proporciona "TAL CUAL" sin garantías de rendimiento, idoneidad comercial o ausencia de errores. El estudiante asume la responsabilidad exclusiva de aplicar los conceptos presentados.</p>
+      `;
+    }
+    
+    this.legalModalTitle.textContent = title;
+    this.legalModalBody.innerHTML = html;
+    this.legalModal.style.display = "flex";
+  },
+
+  resetProgress() {
+    if (confirm("¿Estás seguro de que deseas reiniciar todo tu progreso del curso? Esto borrará el historial de diapositivas leídas, respuestas de los cuestionarios y datos de registro, devolviéndote a la pantalla de bienvenida.")) {
+      this.isResetting = true;
+      
+      // Clear SCORM variables
+      ScormWrapper.setValue("cmi.core.suspend_data", "");
+      ScormWrapper.setValue("cmi.core.lesson_location", "0");
+      ScormWrapper.setValue("cmi.core.lesson_status", "incomplete");
+      ScormWrapper.commit();
+      
+      // Clear local storage for Mock SCORM testing
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith("mock_scorm_")) {
+          localStorage.removeItem(key);
+        }
+      }
+      
+      // Reload page to start fresh onboarding
+      window.location.reload();
+    }
+  },
+
+  toggleTimerBypass() {
+    this.timerBypassed = !this.timerBypassed;
+    
+    if (this.timerBypassed) {
+      this.btnBypassTimer.classList.add("active");
+      this.btnBypassTimer.innerHTML = `<span>⏱️ Tiempo Bypass</span>`;
+      
+      // Cancel active timer immediately
+      if (this.currentTimer) {
+        clearInterval(this.currentTimer);
+        this.currentTimer = null;
+      }
+      this.secondsRemaining = 0;
+      this.timerIndicator.style.display = "none";
+      this.btnNext.disabled = false;
+      this.timerProgressLine.style.width = "100%";
+    } else {
+      this.btnBypassTimer.classList.remove("active");
+      this.btnBypassTimer.innerHTML = `<span>⏱️ Desactivar Tiempo</span>`;
+      
+      // Reload current slide to restore timer restrictions if not completed
+      const isCompleted = this.completedSlides.has(this.currentSlideIndex);
+      if (!isCompleted) {
+        this.showSlide(this.currentSlideIndex);
+      }
+    }
+  },
+
+  toggleSidebar(open) {
+    if (open) {
+      this.sidebar.classList.add("open");
+      this.sidebarBackdrop.classList.add("active");
+    } else {
+      this.sidebar.classList.remove("open");
+      this.sidebarBackdrop.classList.remove("active");
+    }
+  },
+
+  loadLMSData() {
+    // 1. Get slide bookmark
+    const location = ScormWrapper.getValue("cmi.core.lesson_location");
+    if (location && !isNaN(parseInt(location))) {
+      this.currentSlideIndex = parseInt(location);
+      if (this.currentSlideIndex < 0 || this.currentSlideIndex >= COURSE_DATA.slides.length) {
+        this.currentSlideIndex = 0;
+      }
+    } else {
+      this.currentSlideIndex = 0;
+    }
+    
+    this.highestVisitedIndex = this.currentSlideIndex;
+
+    // 2. Get suspend data (completed slides, quiz scores, answers, onboarding)
+    const suspendDataStr = ScormWrapper.getValue("cmi.core.suspend_data");
+    if (suspendDataStr) {
+      try {
+        const suspendData = JSON.parse(suspendDataStr);
+        if (suspendData.completed) {
+          this.completedSlides = new Set(suspendData.completed);
+        }
+        if (suspendData.highestVisitedIndex) {
+          this.highestVisitedIndex = Math.max(this.highestVisitedIndex, suspendData.highestVisitedIndex);
+        }
+        if (suspendData.userAnswers) {
+          this.userAnswers = suspendData.userAnswers;
+        }
+        if (suspendData.oceanAnswers) {
+          this.oceanAnswers = suspendData.oceanAnswers;
+        }
+        if (suspendData.totalTime) {
+          this.totalAccumulatedSeconds = suspendData.totalTime;
+        }
+        if (suspendData.studentName) {
+          this.studentName = suspendData.studentName;
+        }
+        if (suspendData.consented) {
+          this.consented = suspendData.consented;
+        }
+      } catch (e) {
+        console.error("Error parsing SCORM suspend_data:", e);
+      }
+    }
+    
+    // Ensure slide 0 is always completed once viewed
+    this.completedSlides.add(0);
+  },
+
+  saveLMSData() {
+    if (this.isResetting) return;
+    
+    const elapsed = Math.floor((Date.now() - this.sessionStartTime) / 1000);
+    const accumulated = this.totalAccumulatedSeconds + elapsed;
+    
+    const suspendData = {
+      completed: Array.from(this.completedSlides),
+      highestVisitedIndex: this.highestVisitedIndex,
+      userAnswers: this.userAnswers,
+      oceanAnswers: this.oceanAnswers,
+      totalTime: accumulated,
+      studentName: this.studentName,
+      consented: this.consented
+    };
+    
+    ScormWrapper.setValue("cmi.core.suspend_data", JSON.stringify(suspendData));
+    ScormWrapper.setValue("cmi.core.lesson_location", this.currentSlideIndex);
+    
+    // Set SCORM session time
+    ScormWrapper.setValue("cmi.core.session_time", this.formatScormTime(elapsed));
+    
+    // Check if course is fully completed
+    this.checkCourseCompletion();
+    
+    ScormWrapper.commit();
+  },
+
+  checkCourseCompletion() {
+    // A course is complete if the user reached the final slide AND passed all quizzes
+    const finalSlideReached = this.completedSlides.has(COURSE_DATA.slides.length - 1);
+    
+    // Check if all quizzes are passed
+    let allQuizzesPassed = true;
+    for (let m = 1; m <= 7; m++) {
+      const scoreKey = `mock_scorm_cmi.core.score.raw`; // standard local check
+      const statusKey = `mock_scorm_cmi.core.lesson_status`;
+      // Actually we check our internal score or LMS status
+      // In this SPA, we track completion state of feedback slides
+      const feedbackSlide = COURSE_DATA.slides.find(s => s.module_id === m && s.type === 'quiz_feedback');
+      if (feedbackSlide && !this.completedSlides.has(feedbackSlide.id)) {
+        allQuizzesPassed = false;
+        break;
+      }
+    }
+    
+    if (finalSlideReached && allQuizzesPassed) {
+      ScormWrapper.setValue("cmi.core.lesson_status", "passed");
+    } else {
+      ScormWrapper.setValue("cmi.core.lesson_status", "incomplete");
+    }
+  },
+
+  renderModulesSidebar() {
+    this.modulesList.innerHTML = "";
+    
+    // Determine the active module
+    const currentSlide = COURSE_DATA.slides[this.currentSlideIndex];
+    const activeModuleId = currentSlide ? currentSlide.module_id : 0;
+    
+    COURSE_DATA.modules.forEach(mod => {
+      // A module is locked if it is not the active module AND some preceding module is not fully completed
+      let isLocked = false;
+      if (mod.id !== activeModuleId) {
+        const precedingModules = COURSE_DATA.modules.filter(m => m.id < mod.id);
+        const hasUncompletedPreceding = precedingModules.some(pm => {
+          const pmSlides = COURSE_DATA.slides.filter(s => s.module_id === pm.id);
+          return !pmSlides.every(s => this.completedSlides.has(s.id));
+        });
+        isLocked = hasUncompletedPreceding;
+      }
+      const isActive = mod.id === activeModuleId;
+      
+      // Check if module is completed (all content slides in this module are completed, and if it has a quiz, the feedback slide is completed)
+      const moduleSlides = COURSE_DATA.slides.filter(s => s.module_id === mod.id);
+      const isCompleted = moduleSlides.every(s => this.completedSlides.has(s.id));
+
+      const item = document.createElement("div");
+      item.className = `module-item ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''} ${isCompleted ? 'completed' : ''}`;
+      
+      let icon = "🔒";
+      if (!isLocked) {
+        icon = isCompleted ? "✓" : "○";
+      }
+      if (isActive) {
+        icon = "▶";
+      }
+
+      item.innerHTML = `
+        <div class="module-icon-container">
+          <span class="module-icon">${icon}</span>
+        </div>
+        <div class="module-info">
+          <div class="module-num">Módulo ${mod.id}</div>
+          <div class="module-title-text">${mod.title}</div>
+        </div>
+      `;
+
+      if (!isLocked) {
+        item.addEventListener("click", () => {
+          this.toggleSidebar(false);
+          // Navigate to the first slide of this module
+          const firstSlideOfModule = COURSE_DATA.slides.find(s => s.module_id === mod.id);
+          if (firstSlideOfModule) {
+            this.showSlide(firstSlideOfModule.id);
+          }
+        });
+      }
+
+      this.modulesList.appendChild(item);
+    });
+    
+    // Update general progress bar
+    // Let's count slides that are of content type to calculate percent, or just total completed
+    const percent = Math.round((this.completedSlides.size / COURSE_DATA.slides.length) * 100);
+    this.progressPercentText.textContent = `${percent}%`;
+    this.progressBar.style.width = `${percent}%`;
+  },
+
+  showSlide(index) {
+    if (index < 0 || index >= COURSE_DATA.slides.length) return;
+    
+    // Clear any active timer
+    if (this.currentTimer) {
+      clearInterval(this.currentTimer);
+      this.currentTimer = null;
+    }
+    
+    this.currentSlideIndex = index;
+    this.highestVisitedIndex = Math.max(this.highestVisitedIndex, index);
+    
+    const slide = COURSE_DATA.slides[index];
+    const isCompleted = this.completedSlides.has(index);
+
+    // Toggle display of main content container and quiz container
+    const isQuiz = (slide.type === 'quiz_question' || slide.type === 'quiz_feedback');
+    this.contentContainer.style.display = isQuiz ? "none" : "flex";
+    let quizContainer = document.getElementById("quiz-container");
+    if (quizContainer) {
+      quizContainer.style.display = isQuiz ? "block" : "none";
+    }
+    
+    // Update Header
+    this.headerModuleTitle.textContent = `MÓDULO ${slide.module_id}: ${slide.module_title}`;
+    this.headerSlideTitle.textContent = slide.title || "Contenido";
+    this.slideCounter.textContent = `${index + 1} / ${COURSE_DATA.slides.length}`;
+    
+    // Update active class in sidebar
+    this.renderModulesSidebar();
+    
+    // Render content depending on Slide type
+    this.isQuizActive = (slide.type === 'quiz_question');
+    
+    if (slide.type === 'quiz_question') {
+      this.renderQuizQuestion(slide);
+    } else if (slide.type === 'quiz_feedback') {
+      this.renderQuizFeedback(slide);
+    } else if (slide.type === 'final') {
+      this.renderFinalSlide(slide);
+    } else if (slide.type === 'image') {
+      this.renderImageSlide(slide);
+    } else {
+      this.renderContentSlide(slide);
+    }
+    
+    // Reset timer line
+    this.timerProgressLine.style.width = "0%";
+    
+    // Handle Navigation buttons state and Timer
+    if (this.isQuizActive) {
+      // Sidebar is hidden when quiz is active to prevent navigating away
+      this.sidebar.style.pointerEvents = "none";
+      this.sidebar.style.opacity = "0.3";
+      this.btnPrev.style.display = "none";
+      this.menuToggle.style.display = "none";
+    } else {
+      this.sidebar.style.pointerEvents = "all";
+      this.sidebar.style.opacity = "1";
+      this.btnPrev.style.display = "flex";
+      this.menuToggle.style.display = "";
+      
+      // First slide cannot go back
+      this.btnPrev.disabled = (index === 0);
+    }
+    
+    // Enforce slide timer
+    if (isCompleted || this.timerBypassed) {
+      this.secondsRemaining = 0;
+      this.timerIndicator.style.display = "none";
+      this.btnNext.disabled = false;
+      this.timerProgressLine.style.width = "100%";
+      
+      if (slide.type === 'quiz_question') {
+        // In a question that is already completed (passed quiz), we allow advancing immediately
+        const nextBtnText = this.isLastQuestionOfQuiz(slide) ? "Enviar Respuestas" : "Siguiente Pregunta";
+        this.btnNext.innerHTML = `<span>${nextBtnText}</span> ▶`;
+      } else {
+        this.btnNext.innerHTML = `<span>Siguiente</span> ▶`;
+      }
+    } else {
+      this.secondsRemaining = slide.time;
+      
+      if (this.secondsRemaining > 0) {
+        this.btnNext.disabled = true;
+        this.timerIndicator.style.display = "flex";
+        this.timerText.textContent = `${this.secondsRemaining}s`;
+        
+        // Show next button text as active type
+        const nextBtnText = (slide.type === 'quiz_question') ? 
+          (this.isLastQuestionOfQuiz(slide) ? "Enviar Respuestas" : "Siguiente Pregunta") : "Siguiente";
+        this.btnNext.innerHTML = `<span>${nextBtnText}</span> ▶`;
+        
+        const totalDuration = this.secondsRemaining;
+        this.currentTimer = setInterval(() => {
+          if (this.timerBypassed) {
+            clearInterval(this.currentTimer);
+            this.currentTimer = null;
+            this.secondsRemaining = 0;
+            this.timerIndicator.style.display = "none";
+            this.btnNext.disabled = false;
+            this.timerProgressLine.style.width = "100%";
+            return;
+          }
+          this.secondsRemaining--;
+          if (this.secondsRemaining <= 0) {
+            clearInterval(this.currentTimer);
+            this.currentTimer = null;
+            this.timerIndicator.style.display = "none";
+            this.btnNext.disabled = false;
+            this.timerProgressLine.style.width = "100%";
+            this.completedSlides.add(index);
+            this.saveLMSData();
+          } else {
+            this.timerText.textContent = `${this.secondsRemaining}s`;
+            const pct = ((totalDuration - this.secondsRemaining) / totalDuration) * 100;
+            this.timerProgressLine.style.width = `${pct}%`;
+          }
+        }, 1000);
+      } else {
+        this.timerIndicator.style.display = "none";
+        this.btnNext.disabled = false;
+        this.timerProgressLine.style.width = "100%";
+        this.completedSlides.add(index);
+        this.saveLMSData();
+        
+        const nextBtnText = (slide.type === 'quiz_question') ? 
+          (this.isLastQuestionOfQuiz(slide) ? "Enviar Respuestas" : "Siguiente Pregunta") : "Siguiente";
+        this.btnNext.innerHTML = `<span>${nextBtnText}</span> ▶`;
+      }
+    }
+  },
+
+  renderContentSlide(slide) {
+    // Show cards
+    this.slideScreenCard.style.display = "flex";
+    this.slideExtendedCard.style.display = "block";
+    
+    // Set titles
+    this.visualTitle.textContent = slide.visual_title || slide.title || "Prevención de Riesgos Digitales";
+    
+    // Check if it's the Resumen Ejecutivo slide (Matriz Legal) in Module 0
+    if (slide.title.includes("Resumen Ejecutivo") || slide.title.includes("Matriz Legal")) {
+      this.renderLegalMatrix(slide);
+      this.renderExtendedText(slide.extended_text);
+      return;
+    }
+    
+    // Check if it's the Autoevaluación slides in Module 2
+    if (slide.slide_num_str.includes("Diapositiva 18") || slide.slide_num_str.includes("Diapositiva 19") || slide.slide_num_str.includes("Diapositiva 20")) {
+      this.renderOceanAutoevaluacion(slide);
+      this.renderExtendedText(slide.extended_text);
+      return;
+    }
+
+    // Default formatting: scan text for specialized layout markers
+    let html = "";
+    
+    // 1. Definition detection
+    const isDefinition = slide.title.toLowerCase().includes("definición") || 
+                         slide.title.toLowerCase().includes("glosario") || 
+                         slide.text_on_screen.some(line => line.includes("Definición:") || line.includes("Definición legal:"));
+                          
+    if (isDefinition) {
+      html += `<div class="slide-definition-layout">`;
+      
+      let defText = "";
+      
+      slide.text_on_screen.forEach(line => {
+        const trimmed = line.trim();
+        if (trimmed.startsWith("•") || trimmed.startsWith("-")) {
+          const cleanLine = trimmed.replace(/^[•-]\s*/, "");
+          const parts = cleanLine.split(":");
+          if (parts.length >= 2 && parts[0].length < 60) {
+            const cleanTitle = parts[0].trim();
+            const cleanText = parts.slice(1).join(":").trim();
+            html += `
+              <div class="definition-box">
+                <div class="definition-title">${cleanTitle}</div>
+                <div class="definition-text">${cleanText}</div>
+              </div>
+            `;
+          } else {
+            defText += cleanLine + " ";
+          }
+        } else {
+          defText += trimmed + " ";
+        }
+      });
+      
+      if (defText.trim()) {
+        html += `
+          <div class="definition-box">
+            <div class="definition-text">${defText.trim()}</div>
+          </div>
+        `;
+      }
+      
+      html += `</div>`;
+    } else {
+      // 2. Concept Cards Grid or warning box detection
+      let inCardGrid = false;
+      
+      // Pre-check if there is any bullet that should be rendered as a card
+      const useCardsForBullets = slide.text_on_screen.some(line => {
+        const trimmed = line.trim();
+        if (trimmed.startsWith("•") || trimmed.startsWith("-")) {
+          const cleanLine = trimmed.replace(/^[•-]\s*/, "");
+          const parts = cleanLine.split(":");
+          return parts.length >= 2 && parts[0].length < 60;
+        }
+        return false;
+      });
+      
+      slide.text_on_screen.forEach(line => {
+        if (!line.strip) line = String(line);
+        const trimmed = line.trim();
+        if (!trimmed) return;
+        
+        // Detect Warning or Danger Box
+        if (trimmed.toLowerCase().includes("advertencia:") || trimmed.toLowerCase().includes("riesgo:") || trimmed.toLowerCase().includes("peligro:")) {
+          if (inCardGrid) {
+            html += `</div>`;
+            inCardGrid = false;
+          }
+          const title = trimmed.split(":")[0];
+          const text = trimmed.split(":").slice(1).join(":");
+          html += `
+            <div class="warning-box">
+              <span class="warning-icon">⚠️</span>
+              <div class="warning-content">
+                <div class="warning-title">${title}</div>
+                <div class="warning-text">${text}</div>
+              </div>
+            </div>
+          `;
+          return;
+        }
+        
+        if (trimmed.toLowerCase().includes("obligatorio:") || trimmed.toLowerCase().includes("prohibido:")) {
+          if (inCardGrid) {
+            html += `</div>`;
+            inCardGrid = false;
+          }
+          const title = trimmed.split(":")[0];
+          const text = trimmed.split(":").slice(1).join(":");
+          html += `
+            <div class="danger-box">
+              <span class="danger-icon">❌</span>
+              <div class="danger-content">
+                <div class="danger-title">${title}</div>
+                <div class="danger-text">${text}</div>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        // Card detection (bullet line with title: description format)
+        if (trimmed.startsWith("•") || trimmed.startsWith("-")) {
+          const cleanLine = trimmed.replace(/^[•-]\s*/, "");
+          
+          if (useCardsForBullets) {
+            if (!inCardGrid) {
+              if (html) html += `<div class="cards-grid">`;
+              else html = `<div class="cards-grid">`;
+              inCardGrid = true;
+            }
+            
+            const parts = cleanLine.split(":");
+            if (parts.length >= 2 && parts[0].length < 60) {
+              const cleanTitle = parts[0].trim();
+              const cleanText = parts.slice(1).join(":").trim();
+              html += `
+                <div class="concept-card">
+                  <div class="concept-card-title">
+                    <div class="concept-card-title-dot"></div>
+                    <span>${cleanTitle}</span>
+                  </div>
+                  <div class="concept-card-text">${cleanText}</div>
+                </div>
+              `;
+            } else {
+              // Bullet in a grid with no title or title too long: render as card with only text and a dot
+              html += `
+                <div class="concept-card">
+                  <div class="concept-card-title" style="margin-bottom: 0;">
+                    <div class="concept-card-title-dot"></div>
+                  </div>
+                  <div class="concept-card-text" style="margin-top: 8px;">${cleanLine}</div>
+                </div>
+              `;
+            }
+          } else {
+            // Standard bullet list item — no cards on this slide
+            if (inCardGrid) {
+              html += `</div>`;
+              inCardGrid = false;
+            }
+            html += `<p class="slide-bullet-item">• ${cleanLine}</p>`;
+          }
+        } else {
+          if (inCardGrid) {
+            html += `</div>`;
+            inCardGrid = false;
+          }
+          // Non-bullet lines: detect contextual sub-headers vs regular paragraphs
+          if (trimmed.endsWith(':') && trimmed.length < 60) {
+            html += `<p class="slide-context-header">${trimmed}</p>`;
+          } else {
+            html += `<p class="slide-plain-text">${trimmed}</p>`;
+          }
+        }
+      });
+      
+      if (inCardGrid) {
+        html += `</div>`;
+      }
+    }
+    
+    // Add Image placeholder if there's any description
+    if (slide.image_desc) {
+      const cleanImgDesc = slide.image_desc ? slide.image_desc.replace(/\[REVELAR\]/gi, "").trim() : "";
+      html += `
+        <div class="image-placeholder">
+          <div class="image-placeholder-icon">📷</div>
+          <div class="image-placeholder-path">images/slide_${slide.id}.jpg</div>
+          <div class="image-placeholder-desc"><b>Ilustración sugerida:</b> ${cleanImgDesc}</div>
+          <img src="images/slide_${slide.id}.jpg" alt="${slide.title}" style="display:none; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" 
+               onerror="this.style.display='none';" 
+               onload="this.style.display='block'; this.previousElementSibling.style.display='none'; this.previousElementSibling.previousElementSibling.style.display='none'; this.previousElementSibling.previousElementSibling.previousElementSibling.style.display='none';">
+        </div>
+      `;
+    }
+    
+    this.screenTextContent.innerHTML = html;
+    
+    // Render Extended text
+    this.renderExtendedText(slide.extended_text);
+  },
+
+  renderImageSlide(slide) {
+    // Show cards
+    this.slideScreenCard.style.display = "flex";
+    this.slideExtendedCard.style.display = "block";
+    
+    // Set titles
+    this.visualTitle.textContent = slide.visual_title || slide.title || "Ilustración de Ciberseguridad";
+    
+    const imgPath = `images/${slide.image_file}`;
+    const cleanImgDesc = slide.image_desc ? slide.image_desc.replace(/\[REVELAR\]/gi, "").trim() : "";
+    
+    let html = `
+      <div class="slide-image-layout">
+        <div class="image-slide-frame">
+          <img src="${imgPath}" alt="${slide.title}" class="image-slide-img"
+               onload="this.style.display='block'; document.getElementById('image-fallback-${slide.id}').style.display='none';"
+               onerror="this.style.display='none'; document.getElementById('image-fallback-${slide.id}').style.display='flex';">
+          <div id="image-fallback-${slide.id}" class="image-slide-fallback">
+            <div class="image-fallback-icon">🖼️</div>
+            <div class="image-fallback-path">${imgPath}</div>
+            <div class="image-fallback-desc">
+              <span class="image-fallback-label">Ilustración Normativa Requerida:</span>
+              ${cleanImgDesc}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    this.screenTextContent.innerHTML = html;
+    
+    // Render Extended text
+    this.renderExtendedText(slide.extended_text);
+  },
+
+  renderExtendedText(extendedLines) {
+    if (extendedLines && extendedLines.length > 0) {
+      this.slideExtendedCard.style.display = "block";
+      
+      let textHtml = "";
+      extendedLines.forEach(line => {
+        let cleanLine = line.trim();
+        // Strip leading or surrounding quotes
+        if (cleanLine.startsWith('"') && cleanLine.endsWith('"')) {
+          cleanLine = cleanLine.substring(1, cleanLine.length - 1);
+        } else if (cleanLine.startsWith('"')) {
+          cleanLine = cleanLine.substring(1);
+        }
+        if (cleanLine) {
+          textHtml += `<p class="extended-paragraph">${cleanLine}</p>`;
+        }
+      });
+      this.extendedTextContent.innerHTML = textHtml;
+    } else {
+      this.slideExtendedCard.style.display = "none";
+    }
+  },
+
+  renderLegalMatrix(slide) {
+    // The visual table data
+    const rows = [
+      { ambito: "Identidad y Firma", normativa: "eIDAS 2.0, RD-ley 6/2023, Código Penal" },
+      { ambito: "Seguridad e IA", normativa: "NIS2, AI Act, ISO 27001, CRA" },
+      { ambito: "Privacidad y Datos", normativa: "RGPD, LOPDGDD, ENS" },
+      { ambito: "Entorno Laboral", normativa: "Ley 10/2021, Ley 31/1995 (PRL), Ley 2/2023" },
+      { ambito: "Salud Mental y Ética", normativa: "LOPDGDD, AI Act, PRL" },
+      { ambito: "Gestión de Crisis y Brechas", normativa: "RGPD, NIS2, ENS" }
+    ];
+    
+    let html = `
+      <p style="margin-bottom: 16px;">Consolidado de obligaciones legales y normativas aplicables a la Prevención de Riesgos Digitales:</p>
+      <div class="table-container">
+        <table class="responsive-table">
+          <thead>
+            <tr>
+              <th>Ámbito de Aplicación</th>
+              <th>Normativa Principal y Estándares</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+    
+    rows.forEach(r => {
+      html += `
+        <tr>
+          <td><b>${r.ambito}</b></td>
+          <td>${r.normativa}</td>
+        </tr>
+      `;
+    });
+    
+    html += `
+          </tbody>
+        </table>
+      </div>
+    `;
+    
+    this.screenTextContent.innerHTML = html;
+  },
+
+  renderOceanAutoevaluacion(slide) {
+    let blockStart = 0;
+    let blockCount = 5;
+    
+    if (slide.slide_num_str.includes("Diapositiva 18")) {
+      blockStart = 0; // A & B
+      blockCount = 2;
+    } else if (slide.slide_num_str.includes("Diapositiva 19")) {
+      blockStart = 2; // C & D
+      blockCount = 2;
+    } else if (slide.slide_num_str.includes("Diapositiva 20")) {
+      blockStart = 4; // E & results
+      blockCount = 1;
+    }
+    
+    let html = `<div class="ocean-interactive-container">`;
+    
+    const blocks = ['A', 'B', 'C', 'D', 'E'];
+    const blockLabels = {
+      'A': 'BLOQUE A: Amabilidad / Empatía (El Confiado)',
+      'B': 'BLOQUE B: Baja Responsabilidad / Impulsividad (El Despistado)',
+      'C': 'BLOQUE C: Neuroticismo / Sensibilidad al Estrés (El Reactivo)',
+      'D': 'BLOQUE D: Apertura a la Experiencia / Curiosidad (El Curioso)',
+      'E': 'BLOQUE E: Extraversión / Sociabilidad (El Sociable)'
+    };
+    
+    for (let b = blockStart; b < blockStart + blockCount; b++) {
+      const blockChar = blocks[b];
+      html += `
+        <h3 style="font-family: 'Outfit', sans-serif; color: var(--primary-hover); margin: 20px 0 10px 0; font-size: 1.15rem; font-weight: 700;">
+          ${blockLabels[blockChar]}
+        </h3>
+      `;
+      
+      const qList = this.oceanQuestions.filter(q => q.block === blockChar);
+      qList.forEach(q => {
+        const currentAnswer = this.oceanAnswers[q.id];
+        html += `
+          <div class="ocean-question-card">
+            <div class="ocean-question-text">${q.text}</div>
+            <div class="ocean-btn-group">
+              <button class="ocean-btn ${currentAnswer === 'SI' ? 'selected-si' : ''}" onclick="CourseController.answerOcean('${q.id}', 'SI')">SÍ</button>
+              <button class="ocean-btn ${currentAnswer === 'NO' ? 'selected-no' : ''}" onclick="CourseController.answerOcean('${q.id}', 'NO')">NO</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+    
+    // If it is the last slide of autoevaluación, render results!
+    if (slide.slide_num_str.includes("Diapositiva 20")) {
+      // Check if all answered
+      const answeredCount = Object.keys(this.oceanAnswers).length;
+      if (answeredCount === this.oceanQuestions.length) {
+        // Calculate profile
+        const score = { A: 0, B: 0, C: 0, D: 0, E: 0 };
+        this.oceanQuestions.forEach(q => {
+          if (this.oceanAnswers[q.id] === 'SI') {
+            score[q.block]++;
+          }
+        });
+        
+        // Find profiles where the user answered "SI" 2 or more times
+        const profileNames = {
+          'A': { name: 'Perfil Complaciente (El Confiado)' },
+          'B': { name: 'Perfil Impulsivo (El Despistado)' },
+          'C': { name: 'Perfil Ansioso (El Reactivo)' },
+          'D': { name: 'Perfil Temerario (El Curioso)' },
+          'E': { name: 'Perfil Expuesto (El Sociable)' }
+        };
+        
+        const susceptibleBlocks = ['A', 'B', 'C', 'D', 'E'].filter(b => score[b] >= 2);
+        
+        if (susceptibleBlocks.length > 0) {
+          html += `
+            <div class="ocean-results-box" style="text-align: center; padding: 24px; border: 1px solid var(--primary); background: rgba(124, 58, 237, 0.05); border-radius: 12px; margin-top: 20px;">
+              <div class="ocean-profile-title" style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 12px;">📊 Tu Diagnóstico de Perfiles de Riesgo</div>
+              <p class="ocean-profile-desc" style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 16px;">
+                Tus respuestas revelan que eres especialmente susceptible a los siguientes perfiles de riesgo digital (has respondido "SÍ" a 2 o más indicadores en sus respectivos bloques):
+              </p>
+              <div style="display: flex; flex-direction: column; gap: 10px; margin: 15px auto; max-width: 450px; text-align: left;">
+          `;
+          susceptibleBlocks.forEach(b => {
+            html += `
+                <div class="concept-card" style="padding: 12px 18px; border: 1px solid rgba(239, 68, 68, 0.25); background: rgba(239, 68, 68, 0.03); display: flex; align-items: center; gap: 12px;">
+                  <span style="font-size: 1.25rem;">⚠️</span>
+                  <div>
+                    <strong style="color: #fff; font-size: 0.95rem;">${profileNames[b].name}</strong>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Requiere especial atención y aplicación de su Regla de Oro.</div>
+                  </div>
+                </div>
+            `;
+          });
+          html += `
+              </div>
+              <p class="ocean-profile-desc" style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 15px;">
+                A continuación, haz clic en "Siguiente" para continuar de forma ordenada y profundizar en el análisis de cada perfil.
+              </p>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="ocean-results-box" style="text-align: center; padding: 24px; border: 1px solid var(--success); background: rgba(16, 185, 129, 0.05); border-radius: 12px; margin-top: 20px;">
+              <div class="ocean-profile-title" style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--success); margin-bottom: 12px;">🎉 Hábitos Digitales Prudentes</div>
+              <p class="ocean-profile-desc" style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 16px;">
+                ¡Excelente! No muestras una alta susceptibilidad (2 o más respuestas "SÍ" por bloque) a ninguno de los perfiles específicos de riesgo digital. 
+              </p>
+              <p class="ocean-profile-desc" style="font-size: 0.9rem; color: var(--text-secondary);">
+                No obstante, te aconsejamos pulsar "Siguiente" y leer detenidamente cada perfil de la A a la E para consolidar tus hábitos ciberresilientes y conocer las debilidades humanas más frecuentes.
+              </p>
+            </div>
+          `;
+        }
+      } else {
+        html += `
+          <div class="ocean-results-box" style="background-color: rgba(255, 255, 255, 0.02); border-color: var(--card-border);">
+            <div class="ocean-profile-title" style="color: var(--text-secondary);">Autoevaluación incompleta</div>
+            <p class="ocean-profile-desc">
+              Por favor, responde SÍ o NO a todas las 15 afirmaciones en las diapositivas 18, 19 y 20 para conocer tu perfil de riesgo.
+            </p>
+          </div>
+        `;
+      }
+    }
+    
+    html += `</div>`;
+    this.screenTextContent.innerHTML = html;
+  },
+
+  answerOcean(qId, val) {
+    this.oceanAnswers[qId] = val;
+    this.saveLMSData();
+    // Re-render
+    const slide = COURSE_DATA.slides[this.currentSlideIndex];
+    this.renderOceanAutoevaluacion(slide);
+  },
+
+  isLastQuestionOfQuiz(slide) {
+    const modQuestions = COURSE_DATA.slides.filter(s => s.module_id === slide.module_id && s.type === 'quiz_question');
+    const lastQuestion = modQuestions[modQuestions.length - 1];
+    return lastQuestion && lastQuestion.id === slide.id;
+  },
+
+  renderQuizQuestion(slide) {
+    this.slideScreenCard.style.display = "none";
+    this.slideExtendedCard.style.display = "none";
+    
+    // Search or create quiz container
+    let quizContainer = document.getElementById("quiz-container");
+    if (!quizContainer) {
+      quizContainer = document.createElement("div");
+      quizContainer.id = "quiz-container";
+      this.slideViewport.appendChild(quizContainer);
+    }
+    quizContainer.style.display = "block";
+    
+    // Find current question position in the module quiz
+    const modQuestions = COURSE_DATA.slides.filter(s => s.module_id === slide.module_id && s.type === 'quiz_question');
+    const questionIndex = modQuestions.findIndex(q => q.id === slide.id);
+    
+    const selectedAnswer = this.userAnswers[slide.id];
+    
+    let optionsHtml = "";
+    slide.options.forEach(opt => {
+      optionsHtml += `
+        <div class="quiz-option-item ${selectedAnswer === opt.id ? 'selected' : ''}" onclick="CourseController.selectAnswer(${slide.id}, '${opt.id}')">
+          <div class="quiz-option-radio">
+            <div class="quiz-option-radio-inner"></div>
+          </div>
+          <span class="quiz-option-letter">[${opt.id}]</span>
+          <span class="quiz-option-text">${opt.text}</span>
+        </div>
+      `;
+    });
+    
+    quizContainer.innerHTML = `
+      <div class="quiz-viewport-container">
+        <div class="quiz-question-card">
+          <div class="quiz-question-num">Pregunta ${questionIndex + 1} de ${modQuestions.length}</div>
+          <h3 class="quiz-question-title">${slide.question_text}</h3>
+          <div class="quiz-options-list">
+            ${optionsHtml}
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  selectAnswer(slideId, optionId) {
+    // If the slide is already completed (quiz passed), don't allow modifying answers
+    if (this.completedSlides.has(this.currentSlideIndex)) return;
+
+    this.userAnswers[slideId] = optionId;
+    this.saveLMSData();
+    
+    // Re-render question
+    const slide = COURSE_DATA.slides[this.currentSlideIndex];
+    this.renderQuizQuestion(slide);
+    
+    // Check if slide timer has run out
+    if (this.secondsRemaining <= 0) {
+      this.btnNext.disabled = false;
+    }
+  },
+
+  renderQuizFeedback(slide) {
+    // Show results card inside a custom container
+    this.slideScreenCard.style.display = "none";
+    this.slideExtendedCard.style.display = "none";
+    
+    let quizContainer = document.getElementById("quiz-container");
+    if (!quizContainer) {
+      quizContainer = document.createElement("div");
+      quizContainer.id = "quiz-container";
+      this.slideViewport.appendChild(quizContainer);
+    }
+    quizContainer.style.display = "block";
+    
+    // Determine score for this module
+    const modQuestions = COURSE_DATA.slides.filter(s => s.module_id === slide.module_id && s.type === 'quiz_question');
+    let correctCount = 0;
+    
+    modQuestions.forEach(q => {
+      if (this.userAnswers[q.id] === q.correct_answer) {
+        correctCount++;
+      }
+    });
+    
+    const pct = Math.round((correctCount / modQuestions.length) * 100);
+    const passed = pct >= 80;
+    
+    let feedbackContent = "";
+    
+    if (passed) {
+      feedbackContent += `
+        <div class="quiz-results-card">
+          <div class="results-icon pass">✓</div>
+          <div class="results-status-title" style="color: var(--success);">¡Evaluación Superada!</div>
+          <div class="results-score-badge pass">${pct}%</div>
+          <p class="results-desc">
+            Enhorabuena. Has alcanzado el criterio mínimo del 80% requerido para este bloque. Hemos reportado tu progreso al sistema.
+          </p>
+        </div>
+        
+        <h3 style="font-family: 'Outfit', sans-serif; margin: 24px 0 16px 0; color: #fff;">Corrección y Justificación de Respuestas:</h3>
+      `;
+      
+      modQuestions.forEach((q, idx) => {
+        const userAnswer = this.userAnswers[q.id];
+        const isCorrect = userAnswer === q.correct_answer;
+        
+        feedbackContent += `
+          <div class="concept-card" style="margin-bottom: 12px; border-left: 4px solid ${isCorrect ? 'var(--success)' : 'var(--danger)'};">
+            <div class="concept-card-title">
+              <span style="color: ${isCorrect ? 'var(--success)' : 'var(--danger)'};">${isCorrect ? '✓' : '✗'} Pregunta ${idx + 1}: ${isCorrect ? 'Correcta' : 'Incorrecta'}</span>
+            </div>
+            <p style="font-size: 0.95rem; margin-bottom: 8px;"><b>Pregunta:</b> ${q.question_text}</p>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">
+              <b>Tu respuesta:</b> [${userAnswer}] - ${q.options.find(o => o.id === userAnswer)?.text || 'No respondida'}
+            </p>
+            <p style="font-size: 0.9rem; color: var(--primary-hover);">
+              <b>Resplicación legal:</b> ${q.feedback || 'Sin explicación disponible.'}
+            </p>
+          </div>
+        `;
+      });
+      
+      // Make sure the feedback slide itself is completed
+      this.completedSlides.add(slide.id);
+      this.saveLMSData();
+    } else {
+      feedbackContent += `
+        <div class="quiz-results-card">
+          <div class="results-icon fail">✗</div>
+          <div class="results-status-title" style="color: var(--danger);">Evaluación No Superada</div>
+          <div class="results-score-badge fail">${pct}%</div>
+          <p class="results-desc">
+            Lo sentimos. Has obtenido un ${pct}%, inferior al mínimo exigido del 80%. Para continuar con el curso, debes reintentar la evaluación y superar las preguntas.
+          </p>
+          <button class="btn-nav btn-primary-action" style="margin-top: 12px;" onclick="CourseController.retryQuiz(${slide.module_id})">
+            Reintentar Test
+          </button>
+        </div>
+      `;
+      
+      // Lock navigation so they cannot advance
+      this.btnNext.disabled = true;
+    }
+    
+    quizContainer.innerHTML = `<div class="quiz-viewport-container">${feedbackContent}</div>`;
+  },
+
+  retryQuiz(moduleId) {
+    // Clear user answers for this module
+    const modQuestions = COURSE_DATA.slides.filter(s => s.module_id === moduleId && s.type === 'quiz_question');
+    modQuestions.forEach(q => {
+      delete this.userAnswers[q.id];
+      // Reset completed status for question slides so they enforce 30s timer again on retry
+      this.completedSlides.delete(q.id);
+    });
+    
+    this.saveLMSData();
+    
+    // Go to first question of the quiz
+    const firstQ = modQuestions[0];
+    if (firstQ) {
+      this.showSlide(firstQ.id);
+    }
+  },
+
+  goToNextSlide() {
+    const slide = COURSE_DATA.slides[this.currentSlideIndex];
+    
+    if (slide.type === 'quiz_question') {
+      const nextBtnText = this.isLastQuestionOfQuiz(slide) ? "Enviar Respuestas" : "Siguiente Pregunta";
+      if (nextBtnText === "Enviar Respuestas") {
+        // Evaluate quiz and go to feedback slide
+        const feedbackSlide = COURSE_DATA.slides.find(s => s.module_id === slide.module_id && s.type === 'quiz_feedback');
+        
+        // Calculate score to report to SCORM immediately
+        const modQuestions = COURSE_DATA.slides.filter(s => s.module_id === slide.module_id && s.type === 'quiz_question');
+        let correct = 0;
+        modQuestions.forEach(q => {
+          if (this.userAnswers[q.id] === q.correct_answer) {
+            correct++;
+          }
+        });
+        const score = Math.round((correct / modQuestions.length) * 100);
+        ScormWrapper.setValue("cmi.core.score.raw", score);
+        
+        // Mark all quiz question slides as completed
+        modQuestions.forEach(q => {
+          this.completedSlides.add(q.id);
+        });
+        
+        if (score >= 80) {
+          // Send passed status
+          ScormWrapper.setValue("cmi.core.lesson_status", "completed");
+        }
+        
+        this.saveLMSData();
+        
+        if (feedbackSlide) {
+          this.showSlide(feedbackSlide.id);
+        }
+      } else {
+        // Go to next question slide
+        this.showSlide(this.currentSlideIndex + 1);
+      }
+    } else {
+      // Content / feedback / start -> normal progression
+      if (this.currentSlideIndex < COURSE_DATA.slides.length - 1) {
+        // Make sure quiz container is hidden
+        const quizContainer = document.getElementById("quiz-container");
+        if (quizContainer) quizContainer.style.display = "none";
+        
+        this.showSlide(this.currentSlideIndex + 1);
+      }
+    }
+  },
+
+  goToPrevSlide() {
+    // Normal back navigation
+    if (this.currentSlideIndex > 0) {
+      const quizContainer = document.getElementById("quiz-container");
+      if (quizContainer) quizContainer.style.display = "none";
+      
+      this.showSlide(this.currentSlideIndex - 1);
+    }
+  },
+
+  renderFinalSlide(slide) {
+    this.slideScreenCard.style.display = "flex";
+    this.slideExtendedCard.style.display = "none";
+    
+    this.visualTitle.textContent = slide.title || "Curso Completado";
+    
+    // Calculate total correct questions and score
+    const quizQuestions = COURSE_DATA.slides.filter(s => s.type === 'quiz_question');
+    let correct = 0;
+    quizQuestions.forEach(q => {
+      if (this.userAnswers[q.id] === q.correct_answer) {
+        correct++;
+      }
+    });
+    const avgScore = quizQuestions.length > 0 ? Math.round((correct / quizQuestions.length) * 100) : 100;
+    
+    // Calculate accumulated active time
+    const elapsed = Math.floor((Date.now() - this.sessionStartTime) / 1000);
+    const totalSecs = this.totalAccumulatedSeconds + elapsed;
+    
+    // Get student name
+    const studentName = this.studentName || ScormWrapper.getValue("cmi.core.student_name") || "Francisco Pérez García";
+    
+    // Update Print area content
+    document.getElementById("cert-student-name").textContent = studentName;
+    document.getElementById("cert-score").textContent = `${avgScore}%`;
+    document.getElementById("cert-time").textContent = this.formatScormTime(totalSecs);
+    document.getElementById("cert-date").textContent = new Date().toLocaleDateString('es-ES');
+    document.getElementById("cert-scorm-id").textContent = `PRD-SCORM-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+
+    let html = `
+      <div style="text-align: center; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 20px;">
+        <div style="font-size: 4rem; color: var(--success); text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);">🎓</div>
+        <p style="font-size: 1.15rem; color: var(--text-primary); max-width: 600px; line-height: 1.6;">
+          ¡Enhorabuena, <b>${studentName}</b>! Has finalizado satisfactoriamente todas las lecciones y evaluaciones del <b>Plan de Resiliencia Digital (PRD)</b>.
+        </p>
+        
+        <div style="display: flex; gap: 20px; margin: 10px 0; flex-wrap: wrap; justify-content: center;">
+          <div class="concept-card" style="padding: 16px 24px; text-align: center; min-width: 150px;">
+            <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Aciertos Totales</div>
+            <div style="font-size: 1.75rem; font-weight: 700; color: var(--primary-hover); margin-top: 4px;">${correct} / ${quizQuestions.length}</div>
+          </div>
+          <div class="concept-card" style="padding: 16px 24px; text-align: center; min-width: 150px;">
+            <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Nota Media</div>
+            <div style="font-size: 1.75rem; font-weight: 700; color: var(--success); margin-top: 4px;">${avgScore}%</div>
+          </div>
+          <div class="concept-card" style="padding: 16px 24px; text-align: center; min-width: 150px;">
+            <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase;">Tiempo Invertido</div>
+            <div style="font-size: 1.75rem; font-weight: 700; color: var(--primary-hover); margin-top: 4px;">${this.formatScormTime(totalSecs)}</div>
+          </div>
+        </div>
+        
+        <div class="concept-card" style="max-width: 650px; text-align: left; padding: 24px; border: 1px solid rgba(124, 58, 237, 0.2); background-color: rgba(124, 58, 237, 0.03);">
+          <div style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">
+            <span>📜</span> Diploma de Certificación
+          </div>
+          <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
+            Puedes descargar tu diploma de superación firmado digitalmente en formato PDF para justificar el cumplimiento del plan normativo ante auditorías internas o externas.
+          </p>
+          <button class="btn-nav btn-primary-action" style="margin: 0 auto;" onclick="window.print()">
+            🖨️ Descargar Certificado / Imprimir PDF
+          </button>
+        </div>
+        
+        <div style="font-size: 0.8rem; color: var(--text-secondary); opacity: 0.6; margin-top: 15px;">
+          © 2026 Francisco Jose Casino Cembellín de Kizuna Global Initiatives Socials
+        </div>
+      </div>
+    `;
+    
+    this.screenTextContent.innerHTML = html;
+  },
+
+  formatScormTime(totalSeconds) {
+    const hrs = Math.floor(totalSeconds / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+    const pad = (num) => String(num).padStart(2, '0');
+    return `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+  },
+
+  formatDurationString(totalSeconds) {
+    const hrs = Math.floor(totalSeconds / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+    
+    let parts = [];
+    if (hrs > 0) parts.push(`${hrs} hora${hrs > 1 ? 's' : ''}`);
+    if (mins > 0) parts.push(`${mins} minuto${mins > 1 ? 's' : ''}`);
+    if (secs > 0 || parts.length === 0) parts.push(`${secs} segundo${secs > 1 ? 's' : ''}`);
+    
+    return parts.join(', ');
+  }
+};
+
+window.addEventListener("beforeunload", () => {
+  CourseController.saveLMSData();
+});
+
+// Initialize Course on page load
+window.addEventListener("DOMContentLoaded", () => {
+  CourseController.init();
+});
