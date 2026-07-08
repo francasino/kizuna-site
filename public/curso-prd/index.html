@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prevención de Riesgos Digitales (PRD)</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Neon Glowing Orbs Background -->
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <!-- Sidebar backdrop for mobile view -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+    <!-- Left Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <h1>Plan de Resiliencia Digital</h1>
+        <div class="course-subtitle">Prevención de Riesgos (PRD)</div>
+      </div>
+      <nav class="modules-list" id="modules-list">
+        <!-- Rendered dynamically by course.js -->
+      </nav>
+      <div class="sidebar-footer">
+        <div class="progress-info">
+          <span>Progreso General</span>
+          <span id="progress-percent">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="progress-bar" class="progress-bar"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-area">
+      <!-- Course Header -->
+      <header class="course-header">
+        <div style="display: flex; align-items: center;">
+          <button id="menu-toggle" class="menu-toggle" aria-label="Abrir Menú">☰</button>
+          <div class="header-meta">
+            <div id="header-module-title" class="header-module-title">MÓDULO 0</div>
+            <div id="header-slide-title" class="header-slide-title">Cargando curso...</div>
+          </div>
+        </div>
+        <div class="slide-counter" id="slide-counter">1 / 100</div>
+      </header>
+
+      <!-- Slide Viewport -->
+      <div class="slide-viewport" id="slide-viewport">
+        <div class="content-container" id="content-container">
+          
+          <!-- Slide Screen Card (Upper visual area) -->
+          <article id="slide-screen-card" class="slide-screen-card">
+            <div class="visual-title-container">
+              <h2 id="visual-title">Bienvenidos: Prevención de Riesgos Digitales</h2>
+            </div>
+            <div class="screen-text-content" id="screen-text-content">
+              <!-- Rendered dynamically -->
+            </div>
+          </article>
+
+          <!-- Slide Extended Card (Lower reading area) -->
+          <article id="slide-extended-card" class="slide-extended-card">
+            <div class="extended-header">
+              <span class="extended-header-icon">📖</span>
+              <span>Lectura Obligatoria / Guion Docente</span>
+            </div>
+            <div class="extended-text-content" id="extended-text-content">
+              <!-- Rendered dynamically -->
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- Navigation Control Bar -->
+      <footer class="nav-bar">
+        <!-- Top neon line indicator for screen timer -->
+        <div id="timer-progress-line" class="timer-progress-line"></div>
+        
+        <div class="nav-controls-row">
+          <button id="btn-prev" class="btn-nav" disabled>
+            ◀ <span>Atrás</span>
+          </button>
+          
+          <div class="nav-middle-buttons">
+            <button id="btn-bypass-timer" class="btn-nav btn-bypass" title="Desactivar temporizador para modo de pruebas">
+              <span>⏱️ Desactivar Tiempo</span>
+            </button>
+            <button id="btn-reset-progress" class="btn-nav btn-reset" title="Reiniciar todo el progreso y volver al inicio">
+              <span>🔄 Reiniciar Progreso</span>
+            </button>
+          </div>
+          
+          <div class="nav-buttons-group">
+            <div id="timer-indicator" class="timer-indicator">
+              <span class="timer-icon">⏳</span>
+              <span id="timer-text">00s</span>
+            </div>
+            <button id="btn-next" class="btn-nav btn-primary-action" disabled>
+              <span>Siguiente</span> ▶
+            </button>
+          </div>
+        </div>
+
+        <!-- Copyright Notice in Navigation Bar -->
+        <div class="nav-copyright">
+          © 2026 Francisco Jose Casino Cembellín de KIZUNA GLOBAL INICIATIVES SOCIALS
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Printable Certificate Area -->
+  <div id="certificate-print-area" class="certificate-print-area">
+    <div style="font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; color: #7C3AED; margin-bottom: 20px; font-weight: 700;">Diploma de Aprovechamiento</div>
+    <div style="font-size: 1.1rem; color: #555; margin-bottom: 20px;">Se certifica que</div>
+    <div id="cert-student-name" style="font-size: 2.5rem; font-weight: 800; color: #111; margin-bottom: 20px; font-family: 'Outfit', sans-serif;"></div>
+    <div style="font-size: 1.1rem; color: #555; max-width: 600px; line-height: 1.6; margin-bottom: 30px;">
+      Ha cursado y superado con éxito la acción formativa de:
+      <br>
+      <b style="font-size: 1.5rem; color: #111; display: block; margin-top: 10px;">PREVENCIÓN DE RIESGOS DIGITALES (PRD)</b>
+    </div>
+    <div style="display: flex; justify-content: center; gap: 40px; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 20px 0; width: 100%; max-width: 600px; margin: 0 auto 30px auto;">
+      <div>
+        <div style="font-size: 0.8rem; color: #666; text-transform: uppercase; font-weight: 600;">Nota Media</div>
+        <div id="cert-score" style="font-size: 1.5rem; font-weight: 700; color: #7C3AED; margin-top: 4px;"></div>
+      </div>
+      <div>
+        <div style="font-size: 0.8rem; color: #666; text-transform: uppercase; font-weight: 600;">Tiempo Invertido</div>
+        <div id="cert-time" style="font-size: 1.5rem; font-weight: 700; color: #7C3AED; margin-top: 4px;"></div>
+      </div>
+      <div>
+        <div style="font-size: 0.8rem; color: #666; text-transform: uppercase; font-weight: 600;">Fecha de Emisión</div>
+        <div id="cert-date" style="font-size: 1.5rem; font-weight: 700; color: #7C3AED; margin-top: 4px;"></div>
+      </div>
+    </div>
+    <div style="margin-top: 40px; font-size: 0.85rem; color: #777;">
+      Código de Verificación SCORM 1.2: <span id="cert-scorm-id"></span>
+    </div>
+    <div style="margin-top: 30px; font-size: 0.8rem; color: #888; font-weight: 500;">
+      © 2026 Francisco Jose Casino Cembellín de Kizuna Global Initiatives Socials
+    </div>
+  </div>
+
+  <!-- Onboarding Legal & Name Overlay -->
+  <div id="onboarding-overlay" class="onboarding-overlay">
+    <!-- Screen 1: Legal Consents -->
+    <div id="onboarding-screen-1" class="onboarding-card">
+      <div class="onboarding-logo-container">
+        <img src="https://kizunaglobal.org/assets/kizuna-logo-BMMln3ee.png" alt="Kizuna Global" class="onboarding-logo">
+      </div>
+      <h2>Consentimiento y Propiedad Intelectual</h2>
+      <p class="onboarding-subtitle">Para poder iniciar esta acción formativa y cumplir con la normativa legal de protección de datos, debes leer y aceptar los siguientes términos:</p>
+      
+      <div class="legal-text-box">
+        <h4>Propiedad Intelectual y Restricción de Uso</h4>
+        <p>"El acceso a este curso otorga una licencia personal, intransferible y no exclusiva. Queda estrictamente prohibida la reproducción, distribución, comunicación pública, transformación o grabación (incluyendo capturas de pantalla o software de grabación de pantalla) total o parcial del contenido sin autorización previa, expresa y por escrito de los titulares de los derechos."</p>
+        
+        <h4>Exención de Responsabilidad (Disclaimer Legal)</h4>
+        <p>"El contenido de este curso, incluidas las referencias a normativas y marcos legales, se proporciona con fines estrictamente informativos y educativos. En ningún caso constituye asesoramiento legal, técnico, jurídico o profesional. Los autores y la entidad organizadora no se hacen responsables de las decisiones tomadas o de los daños y perjuicios derivados de la aplicación de los conocimientos adquiridos en este curso."</p>
+        
+        <h4>Cancelación de Acceso</h4>
+        <p>"La organización se reserva el derecho de suspender o cancelar inmediatamente el acceso al curso a cualquier usuario que sea detectado compartiendo sus credenciales de acceso o distribuyendo el material protegido, sin derecho a reembolso y reservándose el derecho a iniciar acciones legales."</p>
+      </div>
+
+      <div class="consent-checkboxes">
+        <label class="consent-checkbox-label">
+          <input type="checkbox" id="chk-terms">
+          <span>He leído y acepto los <a href="#" id="link-terms">Términos y Condiciones</a>.</span>
+        </label>
+        <label class="consent-checkbox-label">
+          <input type="checkbox" id="chk-privacy">
+          <span>He leído y acepto la <a href="#" id="link-privacy">Política de Privacidad (RGPD)</a>.</span>
+        </label>
+        <label class="consent-checkbox-label">
+          <input type="checkbox" id="chk-eula">
+          <span>He leído y acepto el <a href="#" id="link-eula">Acuerdo de Licencia (EULA)</a>.</span>
+        </label>
+      </div>
+      
+      <button id="btn-onboarding-next-1" class="btn-onboarding" disabled>Siguiente</button>
+    </div>
+
+    <!-- Screen 2: User Name Input -->
+    <div id="onboarding-screen-2" class="onboarding-card" style="display: none;">
+      <div class="onboarding-logo-container">
+        <img src="https://kizunaglobal.org/assets/kizuna-logo-BMMln3ee.png" alt="Kizuna Global" class="onboarding-logo">
+      </div>
+      <h2>Tu Nombre de Alumno</h2>
+      <p class="onboarding-subtitle">Por favor, introduce tu nombre completo tal como debe aparecer en tu diploma oficial de superación del curso.</p>
+      
+      <div class="name-input-container">
+        <input type="text" id="input-student-name" placeholder="Nombre y Apellidos" class="student-name-input">
+      </div>
+      
+      <div style="display: flex; gap: 15px; margin-top: 25px; width: 100%;">
+        <button id="btn-onboarding-back" class="btn-onboarding btn-secondary-onboarding" style="flex: 1;">Atrás</button>
+        <button id="btn-onboarding-start" class="btn-onboarding" style="flex: 2;" disabled>Comenzar Curso</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legal Modal Dialog -->
+  <div id="legal-modal" class="legal-modal">
+    <div class="legal-modal-content">
+      <div class="legal-modal-header">
+        <h3 id="legal-modal-title">Título del Documento</h3>
+        <button id="btn-close-legal-modal" class="btn-close-modal">&times;</button>
+      </div>
+      <div class="legal-modal-body" id="legal-modal-body">
+        <!-- Content will be injected dynamically by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/scorm-wrapper.js"></script>
+  <script src="js/slides-data.js"></script>
+  <script src="js/course.js"></script>
+</body>
+</html>

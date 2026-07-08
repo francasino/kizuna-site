@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="PRD_Curso_SCORM12" version="1.0"
+          xmlns="http://www.cnr.it/ia/ims/imscp_v1p1"
+          xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_v1p2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.cnr.it/ia/ims/imscp_v1p1 imscp_v1p1.xsd
+                              http://www.adlnet.org/xsd/adlcp_v1p2 adlcp_v1p2.xsd">
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>1.2</schemaversion>
+  </metadata>
+  <organizations default="org_prd_course">
+    <organization identifier="org_prd_course">
+      <title>Prevención de Riesgos Digitales (PRD)</title>
+      <item identifier="item_prd_sco" identifierref="res_prd_sco">
+        <title>Prevención de Riesgos Digitales (PRD)</title>
+      </item>
+    </organization>
+  </organizations>
+  <resources>
+    <resource identifier="res_prd_sco" type="webcontent" adlcp:scormtype="sco" href="index.html">
+      <file href="index.html"/>
+      <file href="css/style.css"/>
+      <file href="js/scorm-wrapper.js"/>
+      <file href="js/slides-data.js"/>
+      <file href="js/course.js"/>
+    </resource>
+  </resources>
+</manifest>
