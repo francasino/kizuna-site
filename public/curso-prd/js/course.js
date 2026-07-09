@@ -304,6 +304,10 @@ const CourseController = {
       this.timerIndicator.style.display = "none";
       this.btnNext.disabled = false;
       this.timerProgressLine.style.width = "100%";
+
+      if (typeof this.onTimerFinished === 'function') {
+        this.onTimerFinished();
+      }
     } else {
       this.btnBypassTimer.classList.remove("active");
       this.btnBypassTimer.innerHTML = `<span>⏱️ Desactivar Tiempo</span>`;
@@ -503,6 +507,10 @@ const CourseController = {
       this.currentTimer = null;
     }
 
+    // Clear custom mindfulness hooks
+    this.onTimerTick = null;
+    this.onTimerFinished = null;
+
     // Clear any active quiz typewriter animations
     this.clearQuizAnimations();
 
@@ -606,6 +614,10 @@ const CourseController = {
             this.timerIndicator.style.display = "none";
             this.btnNext.disabled = false;
             this.timerProgressLine.style.width = "100%";
+
+            if (typeof this.onTimerFinished === 'function') {
+              this.onTimerFinished();
+            }
             return;
           }
           this.secondsRemaining--;
@@ -614,6 +626,11 @@ const CourseController = {
             this.currentTimer = null;
             this.timerIndicator.style.display = "none";
             this.btnNext.disabled = false;
+
+            if (typeof this.onTimerFinished === 'function') {
+              this.onTimerFinished();
+            }
+
             this.timerProgressLine.style.width = "100%";
             this.completedSlides.add(index);
             this.saveLMSData();
@@ -621,6 +638,10 @@ const CourseController = {
             this.timerText.textContent = `${this.secondsRemaining}s`;
             const pct = ((totalDuration - this.secondsRemaining) / totalDuration) * 100;
             this.timerProgressLine.style.width = `${pct}%`;
+
+            if (typeof this.onTimerTick === 'function') {
+              this.onTimerTick(this.secondsRemaining, totalDuration);
+            }
           }
         }, 1000);
       } else {
@@ -638,6 +659,19 @@ const CourseController = {
   },
 
   renderContentSlide(slide) {
+    if (slide.layout === 'mindfulness') {
+      this.renderMindfulness(slide);
+      return;
+    }
+    if (slide.layout === 'ransomware_sort') {
+      this.renderRansomware(slide);
+      return;
+    }
+    if (slide.layout === 'phishing_sort') {
+      this.renderPhishing(slide);
+      return;
+    }
+
     // Show cards
     this.slideScreenCard.style.display = "flex";
     this.slideExtendedCard.style.display = "block";
@@ -695,12 +729,13 @@ const CourseController = {
 
       if (slide.image_desc) {
         const cleanImgDesc = slide.image_desc.replace(/\[REVELAR\]/gi, "").trim();
+        const imgSrc = slide.image_file ? `images/${slide.image_file}` : `images/slide_${slide.id}.jpg`;
         finalHtml += `
           <div class="image-placeholder">
             <div class="image-placeholder-icon">📷</div>
-            <div class="image-placeholder-path">images/slide_${slide.id}.jpg</div>
+            <div class="image-placeholder-path">${imgSrc}</div>
             <div class="image-placeholder-desc"><b>Ilustración sugerida:</b> ${cleanImgDesc}</div>
-            <img src="images/slide_${slide.id}.jpg" alt="${slide.title}" style="display:none; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" 
+            <img src="${imgSrc}" alt="${slide.title}" style="display:none; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" 
                  onerror="this.style.display='none';" 
                  onload="this.style.display='block'; this.previousElementSibling.style.display='none'; this.previousElementSibling.previousElementSibling.style.display='none'; this.previousElementSibling.previousElementSibling.previousElementSibling.style.display='none';">
           </div>
@@ -907,12 +942,13 @@ const CourseController = {
     // Add Image placeholder if there's any description
     if (slide.image_desc) {
       const cleanImgDesc = slide.image_desc ? slide.image_desc.replace(/\[REVELAR\]/gi, "").trim() : "";
+      const imgSrc = slide.image_file ? `images/${slide.image_file}` : `images/slide_${slide.id}.jpg`;
       html += `
         <div class="image-placeholder">
           <div class="image-placeholder-icon">📷</div>
-          <div class="image-placeholder-path">images/slide_${slide.id}.jpg</div>
+          <div class="image-placeholder-path">${imgSrc}</div>
           <div class="image-placeholder-desc"><b>Ilustración sugerida:</b> ${cleanImgDesc}</div>
-          <img src="images/slide_${slide.id}.jpg" alt="${slide.title}" style="display:none; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" 
+          <img src="${imgSrc}" alt="${slide.title}" style="display:none; width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" 
                onerror="this.style.display='none';" 
                onload="this.style.display='block'; this.previousElementSibling.style.display='none'; this.previousElementSibling.previousElementSibling.style.display='none'; this.previousElementSibling.previousElementSibling.previousElementSibling.style.display='none';">
         </div>
@@ -981,6 +1017,409 @@ const CourseController = {
     } else {
       this.slideExtendedCard.style.display = "none";
     }
+  },
+
+  renderMindfulness(slide) {
+    this.slideScreenCard.style.display = "flex";
+    this.slideExtendedCard.style.display = "block";
+    this.visualTitle.textContent = slide.visual_title || slide.title || "Mindfulness";
+
+    const isCompleted = this.completedSlides.has(this.currentSlideIndex);
+    const slideDuration = slide.time || 20;
+
+    let html = `
+      <div class="mindfulness-layout">
+        <div class="mindfulness-timer-col">
+          <div class="breathing-circle-wrapper">
+            <div class="breathing-ring pulse-breathing"></div>
+            <div class="breathing-circle">
+              <span id="mindfulness-counter">${slideDuration}</span>
+            </div>
+          </div>
+          <div id="breathing-status" class="breathing-status">Sincroniza tu respiración...</div>
+        </div>
+        <div class="mindfulness-input-col">
+          <div class="mindfulness-input-card">
+            <h4>Tus Vulnerabilidades Físicas</h4>
+            <p class="mindfulness-desc">Escribe al menos 2 vulnerabilidades físicas o malas prácticas que cometas en tu día a día (mínimo 15 caracteres):</p>
+            <textarea id="mindfulness-textarea" placeholder="Escribe aquí tus reflexiones... (Ej. Dejo post-its con contraseñas bajo el teclado y a veces me levanto sin bloquear la sesión con Win+L)"></textarea>
+            <div id="mindfulness-validation-msg" class="validation-msg">Debes escribir al menos 15 caracteres.</div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    this.screenTextContent.innerHTML = html;
+    this.renderExtendedText(slide.extended_text);
+
+    const textarea = document.getElementById("mindfulness-textarea");
+    const validationMsg = document.getElementById("mindfulness-validation-msg");
+    const counterDisplay = document.getElementById("mindfulness-counter");
+    const breathingRing = document.querySelector(".breathing-ring");
+    const statusText = document.getElementById("breathing-status");
+
+    if (this.userAnswers[slide.id]) {
+      textarea.value = this.userAnswers[slide.id];
+      validationMsg.style.display = "none";
+    }
+
+    this.onTimerTick = (remaining, total) => {
+      counterDisplay.textContent = remaining;
+      const cycle = (total - remaining) % 16;
+      if (cycle < 4) {
+        statusText.textContent = "Inhala profundamente...";
+        breathingRing.style.transform = "scale(1.25)";
+        breathingRing.style.background = "rgba(40, 167, 69, 0.4)";
+      } else if (cycle < 8) {
+        statusText.textContent = "Retén el aire...";
+        breathingRing.style.transform = "scale(1.25)";
+        breathingRing.style.background = "rgba(0, 123, 255, 0.4)";
+      } else if (cycle < 12) {
+        statusText.textContent = "Exhala lentamente...";
+        breathingRing.style.transform = "scale(1.0)";
+        breathingRing.style.background = "rgba(40, 167, 69, 0.4)";
+      } else {
+        statusText.textContent = "Espera antes de inhalar...";
+        breathingRing.style.transform = "scale(1.0)";
+        breathingRing.style.background = "rgba(0, 123, 255, 0.4)";
+      }
+    };
+
+    this.onTimerFinished = () => {
+      counterDisplay.textContent = "0";
+      statusText.textContent = "¡Tiempo completado! Puedes continuar.";
+      breathingRing.classList.remove("pulse-breathing");
+      breathingRing.style.transform = "scale(1.0)";
+      breathingRing.style.background = "rgba(40, 167, 69, 0.2)";
+      this.checkMindfulnessValidity();
+    };
+
+    textarea.addEventListener("input", () => {
+      const text = textarea.value.trim();
+      this.userAnswers[slide.id] = text;
+      this.saveLMSData();
+
+      if (text.length >= 15) {
+        validationMsg.style.color = "#28a745";
+        validationMsg.textContent = "¡Vulnerabilidades registrada correctamente!";
+        validationMsg.style.display = "block";
+      } else {
+        validationMsg.style.color = "var(--primary-hover)";
+        validationMsg.textContent = "Debes escribir al menos 15 caracteres.";
+        validationMsg.style.display = "block";
+      }
+      this.checkMindfulnessValidity();
+    });
+
+    this.checkMindfulnessValidity();
+  },
+
+  checkMindfulnessValidity() {
+    const slide = COURSE_DATA.slides[this.currentSlideIndex];
+    if (slide && slide.layout === 'mindfulness') {
+      const textarea = document.getElementById("mindfulness-textarea");
+      const hasText = textarea && textarea.value.trim().length >= 15;
+      const isTimerDone = this.secondsRemaining <= 0 || this.completedSlides.has(this.currentSlideIndex);
+      this.btnNext.disabled = !(hasText && isTimerDone);
+    }
+  },
+
+  renderRansomware(slide) {
+    this.slideScreenCard.style.display = "flex";
+    this.slideExtendedCard.style.display = "block";
+    this.visualTitle.textContent = slide.visual_title || slide.title || "Simulacro de Ransomware";
+
+    const isCompleted = this.completedSlides.has(this.currentSlideIndex);
+
+    let html = `
+      <div class="ransomware-layout">
+        <div class="terminal-frame">
+          <div class="terminal-header">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="terminal-title">ALERTA DE SEGURIDAD - SISTEMA BAJO ATAQUE</span>
+          </div>
+          <div id="ransomware-terminal-body" class="terminal-body">
+            <p class="blink-red">[ALERTA RANSOMWARE] ARCHIVOS CIFRADOS DETECTADOS</p>
+            <p>Se ha iniciado un secuestro masivo de datos en segundo plano...</p>
+            <p>Extensión: .locked</p>
+            <p class="warning-text">¡PELIGRO! La infección se propagará por la red local si no actúas inmediatamente.</p>
+            <div id="terminal-instructions">
+              <p class="highlight-yellow">DESAFÍO: Ordena el protocolo de reacción de 4 pasos para mitigar el ataque.</p>
+              <p>Haz clic en las tarjetas de abajo en el orden correcto (del 1 al 4) para desactivar la alarma.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="ransomware-cards-grid">
+    `;
+
+    const cardsData = [
+      {
+        step: 2,
+        text: "Desconectar redes (primero RJ45, si es solo wifi intentar hacerlo con botones hardware)",
+        desc: "Aísla el ordenador físicamente para evitar que el ransomware se propague al resto de equipos de la empresa."
+      },
+      {
+        step: 3,
+        text: "Evitar apagar el PC y no tocar nada ni interactuar",
+        desc: "Apagar el PC borra la memoria RAM, destruyendo las evidencias y las claves criptográficas."
+      },
+      {
+        step: 1,
+        text: "Calma y reflexión",
+        desc: "El pánico nos lleva a cometer errores, como intentar solucionarlo solos o usar IAs públicas que exponen datos."
+      },
+      {
+        step: 4,
+        text: "Activar protocolos y comunicar",
+        desc: "Informa de inmediato a soporte de IT usando un canal alternativo y seguro, nunca el equipo infectado."
+      }
+    ];
+
+    cardsData.forEach(c => {
+      html += `
+        <div class="flip-card ransomware-card" data-step="${c.step}">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="flip-title" style="font-size: 0.95rem; text-align: center; color: var(--text-primary); font-weight: normal; margin-bottom: 0;">
+                ${c.text}
+              </div>
+              <div class="flip-hint" style="margin-top: 12px;">❓ Hacer Clic</div>
+            </div>
+            <div class="flip-card-back" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px;">
+              <div style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin-bottom: 8px;">Paso ${c.step}</div>
+              <div class="flip-desc" style="font-size: 0.85rem;">${c.desc}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+
+    this.screenTextContent.innerHTML = html;
+    this.renderExtendedText(slide.extended_text);
+
+    // Disable Next button initially unless completed
+    if (!isCompleted) {
+      this.btnNext.disabled = true;
+    }
+
+    this.onTimerFinished = () => {
+      if (nextStepToClick <= 4) {
+        this.btnNext.disabled = true;
+      } else {
+        this.btnNext.disabled = false;
+      }
+    };
+
+    let nextStepToClick = 1;
+
+    const cards = document.querySelectorAll(".ransomware-card");
+    const terminalBody = document.getElementById("ransomware-terminal-body");
+
+    if (isCompleted) {
+      nextStepToClick = 5;
+      cards.forEach(card => card.classList.add("flipped"));
+      terminalBody.classList.add("success-state");
+      terminalBody.innerHTML = `
+        <p class="success-title">[PROTOCOLO COMPLETADO CON ÉXITO - AMENAZA CONTENIDA]</p>
+        <p>Has desactivado el ransomware y aislado la máquina local de la red a tiempo.</p>
+        <p>Procedimiento auditado y validado de forma satisfactoria.</p>
+      `;
+    }
+
+    cards.forEach(card => {
+      card.addEventListener("click", () => {
+        if (nextStepToClick > 4) return; // already completed
+
+        const step = parseInt(card.getAttribute("data-step"));
+
+        if (card.classList.contains("flipped")) return;
+
+        if (step === nextStepToClick) {
+          card.classList.add("flipped");
+          nextStepToClick++;
+
+          if (nextStepToClick > 4) {
+            // Success!
+            terminalBody.classList.add("success-state");
+            terminalBody.innerHTML = `
+              <p class="success-title">[PROTOCOLO COMPLETADO CON ÉXITO - AMENAZA CONTENIDA]</p>
+              <p>Has desactivado el ransomware y aislado la máquina local de la red a tiempo.</p>
+              <p>Procedimiento auditado y validado de forma satisfactoria.</p>
+            `;
+            this.btnNext.disabled = false;
+            this.completedSlides.add(this.currentSlideIndex);
+            this.saveLMSData();
+          }
+        } else {
+          // Wiggle animation on error
+          card.classList.add("wiggle-error");
+          setTimeout(() => {
+            card.classList.remove("wiggle-error");
+          }, 500);
+        }
+      });
+    });
+  },
+
+  renderPhishing(slide) {
+    this.slideScreenCard.style.display = "flex";
+    this.slideExtendedCard.style.display = "block";
+    this.visualTitle.textContent = slide.visual_title || slide.title || "Simulacro de Phishing";
+
+    const isCompleted = this.completedSlides.has(this.currentSlideIndex);
+
+    let html = `
+      <div class="phishing-layout">
+        <div class="email-frame">
+          <div class="email-header">
+            <div class="email-meta-row">
+              <span class="meta-label">De:</span>
+              <span class="meta-value email-sender-warning">soporte@admin.miempresa.com <span class="warning-badge">⚠️ Externo</span></span>
+            </div>
+            <div class="email-meta-row">
+              <span class="meta-label">Para:</span>
+              <span class="meta-value">empleado@miempresa.com</span>
+            </div>
+            <div class="email-meta-row">
+              <span class="meta-label">Asunto:</span>
+              <span class="meta-value email-subject-urgent">¡URGENTE! Cambio de política de contraseñas de seguridad</span>
+            </div>
+          </div>
+          <div id="phishing-email-body" class="email-body">
+            <p>Estimado empleado,</p>
+            <p>Se ha detectado un acceso no autorizado a tu cuenta corporativa. De acuerdo con nuestra política de seguridad, es <strong>obligatorio</strong> que verifiques tus credenciales en las próximas 24 horas.</p>
+            <p class="highlight-urgency">De lo contrario, tu cuenta será suspendida de forma permanente de acuerdo con las normativas corporativas.</p>
+            <div class="email-cta-container">
+              <span class="email-cta-btn">Actualizar Credenciales</span>
+              <span class="tooltip-url">Enlace real: http://miempresa.seguridad-verificar.com/login</span>
+            </div>
+            <p>Atentamente,<br>Departamento de Soporte IT y Seguridad</p>
+          </div>
+        </div>
+        
+        <div class="phishing-cards-grid">
+    `;
+
+    const cardsData = [
+      {
+        step: 1,
+        text: "Leer atentamente y mantener la calma",
+        desc: "El remitente sospechoso (@admin.miempresa.com) y la urgencia son tácticas típicas de ingeniería social."
+      },
+      {
+        step: 3,
+        text: "Revisar con el ratón links sospechosos o url escondidas tras el texto",
+        desc: "Posar el ratón revela que el enlace apunta a un dominio externo no oficial (seguridad-verificar.com)."
+      },
+      {
+        step: 4,
+        text: "Comunicar correo sospechoso y contactar con la persona o personas afectadas si hay posible suplantacion",
+        desc: "Envía el correo al departamento de seguridad y avisa a los compañeros para evitar que caigan en la trampa."
+      },
+      {
+        step: 2,
+        text: "Revisar si el correo tiene rasgos de phishing como urgencia, represalias, o adjuntos etc.",
+        desc: "La amenaza de suspender la cuenta y la urgencia de 24 horas son señales de alarma evidentes."
+      }
+    ];
+
+    cardsData.forEach(c => {
+      html += `
+        <div class="flip-card phishing-card" data-step="${c.step}">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="flip-title" style="font-size: 0.95rem; text-align: center; color: var(--text-primary); font-weight: normal; margin-bottom: 0;">
+                ${c.text}
+              </div>
+              <div class="flip-hint" style="margin-top: 12px;">❓ Hacer Clic</div>
+            </div>
+            <div class="flip-card-back" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px;">
+              <div style="font-size: 1.2rem; font-weight: 700; color: #28a745; margin-bottom: 8px;">Paso ${c.step}</div>
+              <div class="flip-desc" style="font-size: 0.85rem;">${c.desc}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+
+    this.screenTextContent.innerHTML = html;
+    this.renderExtendedText(slide.extended_text);
+
+    // Disable Next button initially unless completed
+    if (!isCompleted) {
+      this.btnNext.disabled = true;
+    }
+
+    this.onTimerFinished = () => {
+      if (nextStepToClick <= 4) {
+        this.btnNext.disabled = true;
+      } else {
+        this.btnNext.disabled = false;
+      }
+    };
+
+    let nextStepToClick = 1;
+
+    const cards = document.querySelectorAll(".phishing-card");
+    const emailBody = document.getElementById("phishing-email-body");
+
+    if (isCompleted) {
+      nextStepToClick = 5;
+      cards.forEach(card => card.classList.add("flipped"));
+      emailBody.classList.add("success-state");
+      emailBody.innerHTML = `
+        <p class="success-title">[SIMULACRO COMPLETADO - AMENAZA CONTENIDA]</p>
+        <p>Has detectado correctamente el correo phishing y notificado al departamento de seguridad.</p>
+        <p>¡Excelente trabajo! Has protegido tu identidad y los accesos de la organización.</p>
+      `;
+    }
+
+    cards.forEach(card => {
+      card.addEventListener("click", () => {
+        if (nextStepToClick > 4) return; // already completed
+
+        const step = parseInt(card.getAttribute("data-step"));
+
+        if (card.classList.contains("flipped")) return;
+
+        if (step === nextStepToClick) {
+          card.classList.add("flipped");
+          nextStepToClick++;
+
+          if (nextStepToClick > 4) {
+            // Success!
+            emailBody.classList.add("success-state");
+            emailBody.innerHTML = `
+              <p class="success-title">[SIMULACRO COMPLETADO - AMENAZA CONTENIDA]</p>
+              <p>Has detectado correctamente el correo phishing y notificado al departamento de seguridad.</p>
+              <p>¡Excelente trabajo! Has protegido tu identidad y los accesos de la organización.</p>
+            `;
+            this.btnNext.disabled = false;
+            this.completedSlides.add(this.currentSlideIndex);
+            this.saveLMSData();
+          }
+        } else {
+          // Wiggle animation on error
+          card.classList.add("wiggle-error");
+          setTimeout(() => {
+            card.classList.remove("wiggle-error");
+          }, 500);
+        }
+      });
+    });
   },
 
   renderLegalMatrix(slide) {
