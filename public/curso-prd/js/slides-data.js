@@ -906,32 +906,6 @@ const COURSE_DATA = {
     },
     {
       "module_id": 2,
-      "slide_num_str": "Diapositiva 25B",
-      "title": "Reto Práctico - Correo Sospechoso Detectado",
-      "visual_title": "Reto Práctico: Correo Sospechoso Detectado",
-      "text_on_screen": [
-        "• ¡ALERTA! Has recibido un correo electrónico sospechoso en tu bandeja corporativa.",
-        "• Ordena los 4 pasos del protocolo de reacción haciendo clic en las tarjetas en la secuencia correcta (1 -> 2 -> 3 -> 4) para desactivar la alarma.",
-        "• Las tarjetas se muestran desordenadas (1, 3, 4, 2):",
-        "• [1] Leer atentamente y mantener la calma.",
-        "• [3] Revisar con el ratón links sospechosos o url escondidas tras el texto.",
-        "• [4] Comunicar correo sospechoso y contactar con la persona o personas afectadas si hay posible suplantacion.",
-        "• [2] Revisar si el correo tiene rasgos de phishing como urgencia, represalias, o adjuntos etc."
-      ],
-      "extended_text": [
-        "\"Los ciberdelincuentes utilizan correos electrónicos que imitan el dominio de tu empresa (como admin.miempresa.com) y añaden un pretexto urgente para que actúes de forma impulsiva. Este simulacro interactivo entrena tu mente para aplicar el protocolo correcto de 4 pasos: primero, leer atentamente y mantener la calma (sin hacer clic impulsivamente); segundo, analizar los rasgos típicos del phishing (urgencia, amenazas de represalias, archivos adjuntos innecesarios); tercero, pasar el cursor por encima de los enlaces para verificar la URL oculta (revelando dominios falsos como seguridad-verificar.com); y cuarto, notificar la incidencia a seguridad y avisar a los compañeros que podrían ser suplantados.\""
-      ],
-      "image_desc": null,
-      "image_file": null,
-      "type": "content",
-      "is_range": false,
-      "layout": "phishing_sort",
-      "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 45,
-      "id": 34
-    },
-    {
-      "module_id": 2,
       "slide_num_str": "Diapositiva 26",
       "title": "Anatomía de un Ataque (La \"Cyber Kill Chain\")",
       "visual_title": "Entiende las etapas clave de un ataque (Cyber Kill Chain)",
@@ -954,7 +928,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 35
+      "id": 34
     },
     {
       "module_id": 2,
@@ -978,7 +952,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 36
+      "id": 35
     },
     {
       "module_id": 2,
@@ -996,7 +970,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 30,
-      "id": 37
+      "id": 36
     },
     {
       "module_id": 2,
@@ -1018,6 +992,32 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
+      "id": 37
+    },
+    {
+      "module_id": 2,
+      "slide_num_str": "Diapositiva 25B",
+      "title": "Reto Práctico - Correo Sospechoso Detectado",
+      "visual_title": "Reto Práctico: Correo Sospechoso Detectado",
+      "text_on_screen": [
+        "• ¡ALERTA! Has recibido un correo electrónico sospechoso en tu bandeja corporativa.",
+        "• Ordena los 4 pasos del protocolo de reacción haciendo clic en las tarjetas en la secuencia correcta (1 -> 2 -> 3 -> 4) para desactivar la alarma.",
+        "• Las tarjetas se muestran desordenadas (1, 3, 4, 2):",
+        "• [1] Leer atentamente y mantener la calma.",
+        "• [3] Revisar con el ratón links sospechosos o url escondidas tras el texto.",
+        "• [4] Comunicar correo sospechoso y contactar con la persona o personas afectadas si hay posible suplantacion.",
+        "• [2] Revisar si el correo tiene rasgos de phishing como urgencia, represalias, o adjuntos etc."
+      ],
+      "extended_text": [
+        "\"Los ciberdelincuentes utilizan correos electrónicos que imitan el dominio de tu empresa (como admin.miempresa.com) y añaden un pretexto urgente para que actúes de forma impulsiva. Este simulacro interactivo entrena tu mente para aplicar el protocolo correcto de 4 pasos: primero, leer atentamente y mantener la calma (sin hacer clic impulsivamente); segundo, analizar los rasgos típicos del phishing (urgencia, amenazas de represalias, archivos adjuntos innecesarios); tercero, pasar el cursor por encima de los enlaces para verificar la URL oculta (revelando dominios falsos como seguridad-verificar.com); y cuarto, notificar la incidencia a seguridad y avisar a los compañeros que podrían ser suplantados.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "phishing_sort",
+      "module_title": "Psicología del Ataque y Shadow AI",
+      "time": 45,
       "id": 38
     },
     {
