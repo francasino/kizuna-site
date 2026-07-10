@@ -671,6 +671,26 @@ const CourseController = {
       this.renderPhishing(slide);
       return;
     }
+    if (slide.layout === 'module_intro') {
+      this.renderModuleIntro(slide);
+      return;
+    }
+    if (slide.layout === 'gdpr_sort') {
+      this.renderGDPRSort(slide);
+      return;
+    }
+    if (slide.layout === 'gdpr_olvido') {
+      this.renderGDPROlvido(slide);
+      return;
+    }
+    if (slide.layout === 'vulnerability_triaje') {
+      this.renderVulnerabilityTriaje(slide);
+      return;
+    }
+    if (slide.layout === 'timeline_72h') {
+      this.renderTimeline72h(slide);
+      return;
+    }
 
     // Show cards
     this.slideScreenCard.style.display = "flex";
@@ -2246,6 +2266,582 @@ const CourseController = {
         }
       });
     });
+  },
+
+  bindFlipCardsEvents(slideId) {
+    // handled inline via onclick
+  },
+
+  // ============================================================
+  // MODULE INTRO COVER SLIDE
+  // ============================================================
+
+  renderModuleIntro(slide) {
+    this.slideScreenCard.style.display = "flex";
+    this.slideExtendedCard.style.display = "none"; // hide extended panel for cleaner look
+
+    const moduleIcons = [
+      '🛡️', '🪪', '🧠', '📊', '🏠', '🚨', '❤️', '🔍'
+    ];
+    const icon = moduleIcons[slide.module_id] || '📘';
+    const moduleTitle = slide.module_title || '';
+    const subtitle = slide.text_on_screen && slide.text_on_screen.length > 1
+      ? slide.text_on_screen[1].replace(/^[•\-]\s*/, '')
+      : '';
+
+    const moduleColors = [
+      'rgba(99,102,241,0.6)', 'rgba(6,182,212,0.6)', 'rgba(139,92,246,0.6)',
+      'rgba(245,158,11,0.6)', 'rgba(16,185,129,0.6)', 'rgba(239,68,68,0.6)',
+      'rgba(236,72,153,0.6)', 'rgba(59,130,246,0.6)'
+    ];
+    const glowColor = moduleColors[slide.module_id] || 'rgba(124,58,237,0.5)';
+
+    this.visualTitle.textContent = "";
+    this.screenTextContent.innerHTML = `
+      <div class="module-intro-layout">
+        <div class="module-intro-badge">✦ Módulo ${slide.module_id}</div>
+        <div class="module-intro-icon" style="filter: drop-shadow(0 0 20px ${glowColor});">${icon}</div>
+        <div class="module-intro-divider"></div>
+        <div class="module-intro-title">${moduleTitle}</div>
+        ${subtitle ? `<div class="module-intro-subtitle">${subtitle}</div>` : ''}
+      </div>
+    `;
+
+    // Module intro is instantly completable
+    this.completedSlides.add(this.currentSlideIndex);
+    this.saveLMSData();
+    this.btnNext.disabled = false;
+    this.timerIndicator.style.display = 'none';
+    this.timerProgressLine.style.width = '100%';
+    this.btnNext.innerHTML = `<span>Comenzar Módulo</span> ▶`;
+  },
+
+  // ============================================================
+  // GDPR SORT EXERCISE
+  // ============================================================
+
+  renderGDPRSort(slide) {
+    this.slideScreenCard.style.display = "flex";
+    this.slideExtendedCard.style.display = "block";
+    this.visualTitle.textContent = slide.visual_title || slide.title || "El Clasificador de la Privacidad";
+
+    const isCompleted = this.completedSlides.has(this.currentSlideIndex);
+
+    const items = [
+      { value: "Dirección IP de acceso corporativo",       correct: "basic",   feedback: "✓ Correcto. Una dirección IP identifica indirectamente a un usuario en red: es dato personal básico (RGPD)." },
+      { value: "Baja médica por depresión de un empleado",  correct: "special", feedback: "✓ Correcto. Los datos de salud son Categoría Especial bajo Art. 9 RGPD. Requieren cifrado y protocolos estrictos." },
+      { value: "Foto de grupo de la cena de Navidad",       correct: "basic",   feedback: "✓ Correcto. Una fotografía que permite identificar a personas es dato personal básico (RGPD Art. 4.1)." },
+      { value: "Afiliación sindical de la plantilla",       correct: "special", feedback: "✓ Correcto. La afiliación sindical es Categoría Especial (Art. 9 RGPD). Está prohibida su difusión sin base legal." },
+      { value: "Edad de usuario: '14 años'",                correct: "minor",   feedback: "✓ Correcto. Datos de menores de 14 años requieren consentimiento parental. Alta protección legal." },
+      { value: "Estadísticas de ventas sin nombres (k-anonimizadas)", correct: "anon", feedback: "✓ Correcto. Si la anonimización cumple estándares matemáticos, el dato sale del ámbito del RGPD." },
+      { value: "Huella dactilar del control de acceso",     correct: "special", feedback: "✓ Correcto. Los datos biométricos son Categoría Especial (Art. 9). Requieren EIPD previa." },
+    ];
+
+    const categoryLabels = {
+      basic:   "📋 Dato Personal Básico",
+      special: "⚠️ Categoría Especial / Riesgo Crítico",
+      minor:   "🔒 Alta Protección / Menor de Edad",
+      anon:    "✅ Dato Anonimizado (Fuera de RGPD)"
+    };
+
+    let currentItem = 0;
+    let results = [];
+
+    const buildUI = () => {
+      const item = items[currentItem];
+      const dotsHtml = items.map((_, i) => `<span class="gdpr-dot ${results[i] === true ? 'correct' : results[i] === false ? 'incorrect' : ''}"></span>`).join('');
+
+      this.screenTextContent.innerHTML = `
+        <div class="gdpr-sort-layout">
+          <div class="gdpr-sort-card-display">
+            <div class="data-label">Clasifica este dato</div>
+            <div class="data-value">${item.value}</div>
+          </div>
+          <div class="gdpr-sort-progress">
+            <div class="gdpr-sort-progress-dots">${dotsHtml}</div>
+            <span>${currentItem + 1} / ${items.length}</span>
+          </div>
+          <div class="gdpr-sort-buttons">
+            <button class="gdpr-sort-btn btn-basic" data-cat="basic">${categoryLabels.basic}</button>
+            <button class="gdpr-sort-btn btn-special" data-cat="special">${categoryLabels.special}</button>
+            <button class="gdpr-sort-btn btn-minor" data-cat="minor">${categoryLabels.minor}</button>
+            <button class="gdpr-sort-btn btn-anon" data-cat="anon">${categoryLabels.anon}</button>
+          </div>
+          <div id="gdpr-sort-feedback" class="gdpr-feedback-bar" style="display:none;"></div>
+        </div>
+      `;
+      this.renderExtendedText(slide.extended_text);
+
+      document.querySelectorAll('.gdpr-sort-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const cat = btn.getAttribute('data-cat');
+          const isCorrect = (cat === item.correct);
+          results[currentItem] = isCorrect;
+
+          const feedback = document.getElementById('gdpr-sort-feedback');
+          feedback.style.display = 'block';
+          feedback.className = `gdpr-feedback-bar ${isCorrect ? 'correct' : 'incorrect'}`;
+          feedback.textContent = isCorrect ? item.feedback : `✗ Incorrecto. La categoría correcta es: ${categoryLabels[item.correct]}.`;
+
+          document.querySelectorAll('.gdpr-sort-btn').forEach(b => b.disabled = true);
+          btn.classList.add(isCorrect ? 'selected-correct' : 'selected-wrong');
+
+          setTimeout(() => {
+            currentItem++;
+            if (currentItem >= items.length) {
+              // All done
+              this.completedSlides.add(this.currentSlideIndex);
+              this.saveLMSData();
+              this.btnNext.disabled = false;
+              const allCorrect = results.filter(Boolean).length;
+              this.screenTextContent.innerHTML = `
+                <div class="gdpr-sort-layout">
+                  <div class="gdpr-sort-card-display" style="background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.4);">
+                    <div class="data-label">Ejercicio completado</div>
+                    <div class="data-value" style="color:#34d399;">✓ ${allCorrect} / ${items.length} correctas</div>
+                  </div>
+                  <div class="gdpr-feedback-bar correct">
+                    ¡Bien hecho! Reconocer el nivel de sensibilidad de cada dato es la primera línea de defensa legal. La clasificación correcta determina qué medidas técnicas y organizativas debes aplicar para cumplir el RGPD.
+                  </div>
+                </div>
+              `;
+              this.renderExtendedText(slide.extended_text);
+            } else {
+              buildUI();
+            }
+          }, 1600);
+        });
+      });
+    };
+
+    if (isCompleted) {
+      this.screenTextContent.innerHTML = `
+        <div class="gdpr-sort-layout">
+          <div class="gdpr-sort-card-display" style="background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.4);">
+            <div class="data-label">Ejercicio completado</div>
+            <div class="data-value" style="color:#34d399;">✓ Clasificador de Privacidad superado</div>
+          </div>
+          <div class="gdpr-feedback-bar correct">Has clasificado correctamente los tipos de dato según el RGPD. ¡Excelente trabajo!</div>
+        </div>
+      `;
+      this.renderExtendedText(slide.extended_text);
+      this.btnNext.disabled = false;
+    } else {
+      this.btnNext.disabled = true;
+      buildUI();
+    }
+  },
+
+  // ============================================================
+  // GDPR OLVIDO EXERCISE
+  // ============================================================
+
+  renderGDPROlvido(slide) {
+    this.slideScreenCard.style.display = "flex";
+    this.slideExtendedCard.style.display = "block";
+    this.visualTitle.textContent = slide.visual_title || slide.title || "El Dilema del Derecho al Olvido";
+
+    const isCompleted = this.completedSlides.has(this.currentSlideIndex);
+
+    const records = [
+      {
+        id: 'crm',
+        icon: '📧',
+        name: 'Ficha de Marketing CRM',
+        law: 'Sin obligación legal de conservación. El cliente tiene derecho a la supresión.',
+        correctAction: 'delete',
+        correctYears: 0,
+        failMsg: 'Mantener el perfil de marketing sin base legal tras la oposición viola el Art. 17 RGPD.',
+        okMsg: '✓ Correcto. El perfil de marketing puede borrarse. No hay obligación legal de conservarlo.'
+      },
+      {
+        id: 'invoice',
+        icon: '🧾',
+        name: 'Facturas de compras (últimos 3 años)',
+        law: 'Ley General Tributaria: retención mínima 4 años.',
+        correctAction: 'keep',
+        correctYears: 4,
+        failMsg: 'Borrar facturas incumple la obligación tributaria. Sanción de Hacienda y destrucción de pruebas.',
+        okMsg: '✓ Correcto. Las facturas deben conservarse 4 años por mandato de la Ley General Tributaria.'
+      },
+      {
+        id: 'contract',
+        icon: '📝',
+        name: 'Contrato de compra firmado (hace 1 año)',
+        law: 'Normativa laboral y mercantil: retención mínima 4 años.',
+        correctAction: 'keep',
+        correctYears: 4,
+        failMsg: 'Destruir el contrato antes del plazo legal elimina evidencias jurídicas necesarias.',
+        okMsg: '✓ Correcto. El contrato debe conservarse 4 años por obligación mercantil.'
+      }
+    ];
+
+    const recordState = {};
+    records.forEach(r => { recordState[r.id] = { action: null, years: 0 }; });
+
+    const buildUI = (showResult = false, resultMsg = '', resultOk = false) => {
+      let recordsHtml = records.map(r => `
+        <div class="olvido-record" id="record-${r.id}">
+          <div class="olvido-record-header">
+            <span class="olvido-record-icon">${r.icon}</span>
+            <div class="olvido-record-info">
+              <div class="olvido-record-name">${r.name}</div>
+              <div class="olvido-record-law">${r.law}</div>
+            </div>
+          </div>
+          <div class="olvido-record-controls">
+            <div class="olvido-action-btns">
+              <button class="olvido-action-btn ${recordState[r.id].action === 'delete' ? 'active-delete' : ''}" data-record="${r.id}" data-action="delete">🗑️ BORRAR</button>
+              <button class="olvido-action-btn ${recordState[r.id].action === 'keep' ? 'active-keep' : ''}" data-record="${r.id}" data-action="keep">🔒 CONSERVAR</button>
+            </div>
+            <div class="olvido-slider-group">
+              <span class="olvido-slider-label">Retención:</span>
+              <input type="range" class="olvido-slider" id="slider-${r.id}" min="0" max="10" step="1" value="${recordState[r.id].years}" ${recordState[r.id].action !== 'keep' ? 'disabled' : ''}>
+              <span class="olvido-slider-value" id="sliderval-${r.id}">${recordState[r.id].years} años</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      this.screenTextContent.innerHTML = `
+        <div class="gdpr-olvido-layout">
+          <div class="olvido-client-request">
+            <span class="alert-icon">😤</span>
+            <p>"<strong>¡EXIJO que borren TODOS mis datos inmediatamente!</strong> Tengo derecho al olvido bajo el RGPD. Si no lo hacen ahora mismo, pondré una denuncia en la AEPD."</p>
+          </div>
+          <div class="olvido-records-grid">${recordsHtml}</div>
+          <div id="olvido-result" class="olvido-result-panel ${showResult ? (resultOk ? 'success' : 'fail') : ''}">${showResult ? resultMsg : ''}</div>
+          <button class="olvido-evaluate-btn" id="olvido-evaluate">🔍 Enviar Decisión al DPO</button>
+        </div>
+      `;
+      this.renderExtendedText(slide.extended_text);
+
+      // Bind action buttons
+      document.querySelectorAll('.olvido-action-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const recId = btn.getAttribute('data-record');
+          const action = btn.getAttribute('data-action');
+          recordState[recId].action = action;
+          const slider = document.getElementById(`slider-${recId}`);
+          if (action === 'keep') {
+            slider.disabled = false;
+          } else {
+            slider.disabled = true;
+            recordState[recId].years = 0;
+            slider.value = 0;
+            document.getElementById(`sliderval-${recId}`).textContent = '0 años';
+          }
+          buildUI();
+        });
+      });
+
+      // Bind sliders
+      records.forEach(r => {
+        const slider = document.getElementById(`slider-${r.id}`);
+        if (slider) {
+          slider.addEventListener('input', () => {
+            recordState[r.id].years = parseInt(slider.value);
+            document.getElementById(`sliderval-${r.id}`).textContent = `${slider.value} años`;
+          });
+        }
+      });
+
+      // Bind evaluate button
+      document.getElementById('olvido-evaluate').addEventListener('click', () => {
+        let allCorrect = true;
+        let errorMessages = [];
+        let okMessages = [];
+
+        records.forEach(r => {
+          const state = recordState[r.id];
+          const actionOk = state.action === r.correctAction;
+          const yearsOk = r.correctAction === 'delete' || Math.abs(state.years - r.correctYears) <= 0;
+
+          if (!actionOk || !yearsOk) {
+            allCorrect = false;
+            errorMessages.push(`❌ ${r.name}: ${r.failMsg}`);
+          } else {
+            okMessages.push(r.okMsg);
+          }
+        });
+
+        if (allCorrect) {
+          this.completedSlides.add(this.currentSlideIndex);
+          this.saveLMSData();
+          this.btnNext.disabled = false;
+          const msg = `✅ ¡Excelente decisión legal! Has respetado el balance correcto entre el Derecho al Olvido y las obligaciones de conservación tributarias y mercantiles. Esta es exactamente la evaluación que debe realizar el DPO ante una petición ARSOPOL.<br><br>` + okMessages.join('<br>');
+          buildUI(true, msg, true);
+        } else {
+          const msg = errorMessages.join('<br><br>') + '<br><br>⚠️ Revisa tus decisiones e inténtalo de nuevo.';
+          buildUI(true, msg, false);
+        }
+      });
+    };
+
+    if (isCompleted) {
+      this.screenTextContent.innerHTML = `
+        <div class="gdpr-olvido-layout">
+          <div class="olvido-result-panel success">✅ Ejercicio superado. Has demostrado que comprendes el balance legal correcto entre el Derecho al Olvido y las obligaciones de conservación de datos.</div>
+        </div>
+      `;
+      this.renderExtendedText(slide.extended_text);
+      this.btnNext.disabled = false;
+    } else {
+      this.btnNext.disabled = true;
+      buildUI();
+    }
+  },
+
+  // ============================================================
+  // VULNERABILITY TRIAJE EXERCISE
+  // ============================================================
+
+  renderVulnerabilityTriaje(slide) {
+    this.slideScreenCard.style.display = "flex";
+    this.slideExtendedCard.style.display = "block";
+    this.visualTitle.textContent = slide.visual_title || slide.title || "Triador de Incidentes";
+
+    const isCompleted = this.completedSlides.has(this.currentSlideIndex);
+
+    const scenarios = [
+      {
+        id: 's1',
+        text: 'Tu empresa recibe un aviso del proveedor de software: existe un "fallo" de configuración en su servidor. Nadie ha podido acceder a través de él aún y no hay datos comprometidos.',
+        correctType: 'vuln',
+        correctImpact: 2, // Alto (0=Bajo,1=Medio,2=Alto,3=Crítico)
+        correctNotify: [],
+        typeFeedback: 'Vulnerabilidad — La grieta existe pero no ha sido explotada. No hay fuga confirmada.',
+        impactFeedback: 'Impacto Alto — Requiere parcheo urgente pero sin notificación a autoridades externas.',
+        notifyFeedback: 'Sin notificaciones externas. Se resuelve internamente mediante triaje y parcheo.'
+      },
+      {
+        id: 's2',
+        text: 'Un cliente te avisa de que sus datos bancarios y contraseñas han aparecido publicados en un foro de la Dark Web. Verificas que provienen de vuestro servidor.',
+        correctType: 'breach',
+        correctImpact: 3, // Crítico
+        correctNotify: ['aepd', 'users'],
+        typeFeedback: 'Brecha de Datos — Información confidencial ha sido sustraída y expuesta públicamente.',
+        impactFeedback: 'Impacto Crítico — Datos bancarios y contraseñas en la Dark Web. Máxima alerta.',
+        notifyFeedback: 'Notificación obligatoria a la AEPD (Art. 33 RGPD) y a los usuarios afectados (Art. 34 RGPD).'
+      },
+      {
+        id: 's3',
+        text: 'Trabajáis para una administración pública. Detectáis que una carpeta de documentos de ciudadanos ha sido accedida sin autorización por un usuario interno que tomó capturas de pantalla.',
+        correctType: 'breach',
+        correctImpact: 2, // Alto
+        correctNotify: ['aepd', 'ccn'],
+        typeFeedback: 'Brecha de Datos — El acceso no autorizado y la extracción (capturas) constituyen una brecha consumada.',
+        impactFeedback: 'Impacto Alto — Datos de ciudadanos comprometidos en un entorno ENS.',
+        notifyFeedback: 'Obligatorio notificar a la AEPD y al CCN-CERT (por ser datos del sector público bajo el ENS).'
+      }
+    ];
+
+    const impactLabels = ['Bajo', 'Medio', 'Alto', 'Crítico'];
+    const scenarioState = {};
+    scenarios.forEach(s => {
+      scenarioState[s.id] = { type: null, impact: 1, notify: { aepd: false, users: false, ccn: false } };
+    });
+
+    const buildUI = (showResult = false, resultOk = false, resultItems = []) => {
+      const scenariosHtml = scenarios.map((s, idx) => {
+        const st = scenarioState[s.id];
+        return `
+          <div class="vt-scenario" id="scenario-${s.id}">
+            <div class="vt-scenario-header">
+              <div class="vt-scenario-num">${idx + 1}</div>
+              <div class="vt-scenario-text">${s.text}</div>
+            </div>
+            <div class="vt-controls">
+              <div class="vt-type-row">
+                <button class="vt-type-btn ${st.type === 'vuln' ? 'active-vuln' : ''}" data-scenario="${s.id}" data-type="vuln">⚠️ Vulnerabilidad</button>
+                <button class="vt-type-btn ${st.type === 'breach' ? 'active-breach' : ''}" data-scenario="${s.id}" data-type="breach">🚨 Brecha de Datos</button>
+              </div>
+              <div class="vt-impact-row">
+                <span class="vt-impact-label">Impacto:</span>
+                <input type="range" class="vt-impact-slider" data-scenario="${s.id}" min="0" max="3" step="1" value="${st.impact}">
+                <span class="vt-impact-value" id="impact-val-${s.id}">${impactLabels[st.impact]}</span>
+              </div>
+              <div class="vt-notify-row">
+                <label class="vt-notify-toggle ${st.notify.aepd ? 'active' : ''}">
+                  <input type="checkbox" data-scenario="${s.id}" data-notify="aepd" ${st.notify.aepd ? 'checked' : ''}> 🏛️ Notificar AEPD
+                </label>
+                <label class="vt-notify-toggle ${st.notify.users ? 'active' : ''}">
+                  <input type="checkbox" data-scenario="${s.id}" data-notify="users" ${st.notify.users ? 'checked' : ''}> 👥 Avisar Afectados
+                </label>
+                <label class="vt-notify-toggle ${st.notify.ccn ? 'active' : ''}">
+                  <input type="checkbox" data-scenario="${s.id}" data-notify="ccn" ${st.notify.ccn ? 'checked' : ''}> 🛡️ CCN-CERT (ENS)
+                </label>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const resultItemsHtml = resultItems.map(ri => `<div class="vt-result-item">${ri}</div>`).join('');
+
+      this.screenTextContent.innerHTML = `
+        <div class="vt-layout">
+          ${scenariosHtml}
+          <div id="vt-result" class="vt-result-panel ${showResult ? (resultOk ? 'success' : 'fail') : ''}">${resultItemsHtml}</div>
+          <button class="vt-evaluate-btn" id="vt-evaluate">🔎 Evaluar mi Triaje</button>
+        </div>
+      `;
+      this.renderExtendedText(slide.extended_text);
+
+      // Type buttons
+      document.querySelectorAll('.vt-type-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const sid = btn.getAttribute('data-scenario');
+          scenarioState[sid].type = btn.getAttribute('data-type');
+          buildUI();
+        });
+      });
+
+      // Impact sliders
+      document.querySelectorAll('.vt-impact-slider').forEach(slider => {
+        slider.addEventListener('input', () => {
+          const sid = slider.getAttribute('data-scenario');
+          const val = parseInt(slider.value);
+          scenarioState[sid].impact = val;
+          document.getElementById(`impact-val-${sid}`).textContent = impactLabels[val];
+        });
+      });
+
+      // Notify checkboxes
+      document.querySelectorAll('.vt-notify-toggle input[type=checkbox]').forEach(chk => {
+        chk.addEventListener('change', () => {
+          const sid = chk.getAttribute('data-scenario');
+          const notify = chk.getAttribute('data-notify');
+          scenarioState[sid].notify[notify] = chk.checked;
+          const lbl = chk.closest('.vt-notify-toggle');
+          if (lbl) lbl.classList.toggle('active', chk.checked);
+        });
+      });
+
+      // Evaluate
+      document.getElementById('vt-evaluate').addEventListener('click', () => {
+        let allOk = true;
+        const items = [];
+
+        scenarios.forEach((s, idx) => {
+          const st = scenarioState[s.id];
+          const typeOk = st.type === s.correctType;
+          const impactOk = st.impact === s.correctImpact;
+          const notifyOk = s.correctNotify.every(k => st.notify[k]) &&
+            Object.keys(st.notify).filter(k => st.notify[k]).every(k => s.correctNotify.includes(k));
+
+          const prefix = (typeOk && impactOk && notifyOk) ? '✅' : '❌';
+          if (!typeOk || !impactOk || !notifyOk) allOk = false;
+
+          items.push(`<strong>${prefix} Escenario ${idx + 1}:</strong><br>
+            Tipo: ${typeOk ? '✓' : '✗'} ${s.typeFeedback}<br>
+            Impacto: ${impactOk ? '✓' : '✗'} ${s.impactFeedback}<br>
+            Notificaciones: ${notifyOk ? '✓' : '✗'} ${s.notifyFeedback}`);
+        });
+
+        if (allOk) {
+          this.completedSlides.add(this.currentSlideIndex);
+          this.saveLMSData();
+          this.btnNext.disabled = false;
+        }
+        buildUI(true, allOk, items);
+      });
+    };
+
+    if (isCompleted) {
+      this.screenTextContent.innerHTML = `
+        <div class="vt-layout">
+          <div class="vt-result-panel success">
+            <div class="vt-result-item">✅ Ejercicio superado. Has demostrado que sabes distinguir entre vulnerabilidades y brechas de datos, evaluar su impacto y activar las notificaciones legales correctas.</div>
+          </div>
+        </div>
+      `;
+      this.renderExtendedText(slide.extended_text);
+      this.btnNext.disabled = false;
+    } else {
+      this.btnNext.disabled = true;
+      buildUI();
+    }
+  },
+
+  // ============================================================
+  // TIMELINE 72H EXERCISE
+  // ============================================================
+
+  renderTimeline72h(slide) {
+    this.slideScreenCard.style.display = "flex";
+    this.slideExtendedCard.style.display = "block";
+    this.visualTitle.textContent = slide.visual_title || slide.title || "La Cuenta Atrás de las 72 Horas";
+
+    const isCompleted = this.completedSlides.has(this.currentSlideIndex);
+
+    const actions = [
+      { step: 3, icon: '📄', text: 'Redacción del Informe de Brecha' },
+      { step: 1, icon: '🔌', text: 'Contención: Aislar sistemas comprometidos' },
+      { step: 5, icon: '👥', text: 'Aviso directo a los usuarios afectados' },
+      { step: 2, icon: '🔍', text: 'Triaje y Clasificación del Impacto (DPO)' },
+      { step: 4, icon: '🏛️', text: 'Notificación a la AEPD (Sede Electrónica)' },
+    ];
+
+    let nextStepToClick = 1;
+
+    const buildUI = () => {
+      const cardsHtml = actions.map(a => `
+        <div class="tl-card ${isCompleted ? 'flipped' : ''}" data-step="${a.step}">
+          <div class="tl-card-step">${isCompleted ? `✓ Paso ${a.step}` : `Paso ${a.step}`}</div>
+          <div class="tl-card-icon">${a.icon}</div>
+          <div class="tl-card-text">${a.text}</div>
+        </div>
+      `).join('');
+
+      this.screenTextContent.innerHTML = `
+        <div class="timeline-72h-layout">
+          <div class="tl-clock-header">
+            <div class="tl-clock-display">72:00</div>
+            <div class="tl-clock-info">
+              <div class="tl-clock-title">Cronómetro Legal — Art. 33 RGPD</div>
+              <div class="tl-clock-subtitle">El plazo no se detiene en fines de semana ni festivos</div>
+            </div>
+          </div>
+          <div class="tl-instruction">⚡ Haz clic en las acciones en el orden correcto (del paso 1 al 5). Si el orden es incorrecto, la tarjeta vibrará.</div>
+          <div class="tl-cards-grid">${cardsHtml}</div>
+          <div class="tl-success-panel ${isCompleted ? 'visible' : ''}" id="tl-success">
+            <div class="tl-success-title">✅ ¡Protocolo ejecutado correctamente!</div>
+            Has ordenado las 5 acciones legales críticas en la secuencia correcta dentro de las 72 horas del Art. 33 del RGPD. Tu organización cumple con la ley y evita multas de hasta 10 millones de euros.
+          </div>
+        </div>
+      `;
+      this.renderExtendedText(slide.extended_text);
+
+      if (!isCompleted) {
+        document.querySelectorAll('.tl-card').forEach(card => {
+          card.addEventListener('click', () => {
+            if (card.classList.contains('flipped')) return;
+            const step = parseInt(card.getAttribute('data-step'));
+
+            if (step === nextStepToClick) {
+              card.classList.add('flipped');
+              card.querySelector('.tl-card-step').textContent = `✓ Paso ${step}`;
+              card.querySelector('.tl-card-step').style.display = 'block';
+              nextStepToClick++;
+
+              if (nextStepToClick > 5) {
+                document.getElementById('tl-success').classList.add('visible');
+                this.completedSlides.add(this.currentSlideIndex);
+                this.saveLMSData();
+                this.btnNext.disabled = false;
+              }
+            } else {
+              card.classList.add('error-wiggle');
+              setTimeout(() => card.classList.remove('error-wiggle'), 450);
+            }
+          });
+        });
+      }
+    };
+
+    if (!isCompleted) this.btnNext.disabled = true;
+    buildUI();
   },
 
   buildFlipCardsMarkup(items, slideId) {

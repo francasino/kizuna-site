@@ -36,6 +36,27 @@ const COURSE_DATA = {
   "slides": [
     {
       "module_id": 0,
+      "slide_num_str": "Diapositiva 0A",
+      "title": "Portada del Módulo 0",
+      "visual_title": "Bienvenida al Programa",
+      "text_on_screen": [
+        "• Módulo 0: Introducción, Metodología y Aval Normativo",
+        "• Empieza aquí tu formación en Prevención de Riesgos Digitales"
+      ],
+      "extended_text": [
+        "\"Antes de comenzar, este bloque introductorio te explicará la metodología del curso, el mapa de módulos, el aval normativo del programa y el glosario de conceptos clave que usaremos a lo largo del camino.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "module_intro",
+      "module_title": "Introducción, Metodología y Aval Normativo",
+      "time": 60,
+      "id": 0
+    },
+    {
+      "module_id": 0,
       "slide_num_str": "Diapositiva 1",
       "title": "Bienvenida y Objetivos del Curso",
       "visual_title": "Bienvenidos: Prevención de Riesgos Digitales (PRD)",
@@ -56,7 +77,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Introducción, Metodología y Aval Normativo",
       "time": 60,
-      "id": 0
+      "id": 1
     },
     {
       "module_id": 0,
@@ -79,7 +100,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Introducción, Metodología y Aval Normativo",
       "time": 60,
-      "id": 1
+      "id": 2
     },
     {
       "module_id": 0,
@@ -105,7 +126,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Introducción, Metodología y Aval Normativo",
       "time": 60,
-      "id": 2
+      "id": 3
     },
     {
       "module_id": 0,
@@ -135,7 +156,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Introducción, Metodología y Aval Normativo",
       "time": 60,
-      "id": 3
+      "id": 4
     },
     {
       "module_id": 0,
@@ -158,7 +179,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Introducción, Metodología y Aval Normativo",
       "time": 60,
-      "id": 4
+      "id": 5
     },
     {
       "module_id": 0,
@@ -183,7 +204,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Introducción, Metodología y Aval Normativo",
       "time": 60,
-      "id": 5
+      "id": 6
     },
     {
       "module_id": 0,
@@ -205,7 +226,7 @@ const COURSE_DATA = {
       "layout": "flipcards",
       "module_title": "Introducción, Metodología y Aval Normativo",
       "time": 60,
-      "id": 6
+      "id": 7
     },
     {
       "module_id": 0,
@@ -227,7 +248,7 @@ const COURSE_DATA = {
       "layout": "flipcards",
       "module_title": "Introducción, Metodología y Aval Normativo",
       "time": 60,
-      "id": 7
+      "id": 8
     },
     {
       "module_id": 0,
@@ -249,7 +270,7 @@ const COURSE_DATA = {
       "layout": "flipcards",
       "module_title": "Introducción, Metodología y Aval Normativo",
       "time": 60,
-      "id": 8
+      "id": 9
     },
     {
       "module_id": 0,
@@ -271,7 +292,28 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Introducción, Metodología y Aval Normativo",
       "time": 60,
-      "id": 9
+      "id": 10
+    },
+    {
+      "module_id": 1,
+      "slide_num_str": "Diapositiva 1A",
+      "title": "Portada del Módulo 1",
+      "visual_title": "Identidad Digital y Validez Jurídica",
+      "text_on_screen": [
+        "• Módulo 1: Identidad Digital y Validez Jurídica",
+        "• El fin de la contraseña compartida y el peso legal de tu firma digital"
+      ],
+      "extended_text": [
+        "\"En este módulo aprenderás por qué tu identidad digital es tu firma legal en el mundo corporativo, qué implica el estándar eIDAS 2.0 y por qué compartir credenciales puede acarrearte responsabilidades penales. También conocerás la MFA, tu escudo más efectivo.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "module_intro",
+      "module_title": "Identidad Digital y Validez Jurídica",
+      "time": 60,
+      "id": 11
     },
     {
       "module_id": 1,
@@ -295,7 +337,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Identidad Digital y Validez Jurídica",
       "time": 60,
-      "id": 10
+      "id": 12
     },
     {
       "module_id": 1,
@@ -319,7 +361,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Identidad Digital y Validez Jurídica",
       "time": 60,
-      "id": 11
+      "id": 13
     },
     {
       "module_id": 1,
@@ -343,7 +385,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Identidad Digital y Validez Jurídica",
       "time": 60,
-      "id": 12
+      "id": 14
     },
     {
       "module_id": 1,
@@ -368,7 +410,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Identidad Digital y Validez Jurídica",
       "time": 60,
-      "id": 13
+      "id": 15
     },
     {
       "module_id": 1,
@@ -392,7 +434,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Identidad Digital y Validez Jurídica",
       "time": 60,
-      "id": 14
+      "id": 16
     },
     {
       "module_id": 1,
@@ -417,7 +459,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Identidad Digital y Validez Jurídica",
       "time": 60,
-      "id": 15
+      "id": 17
     },
     {
       "module_id": 1,
@@ -458,7 +500,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "C",
       "feedback": "La identidad digital es intransferible. El principio de \"no repudio\" implica que no puedes negar legalmente una acción registrada con tus credenciales. Ceder tu firma te expone a responsabilidades civiles y penales. •",
-      "id": 16
+      "id": 18
     },
     {
       "module_id": 1,
@@ -503,7 +545,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "El MFA Bombing es una técnica psicológica de los atacantes. Si recibes alertas de aprobación que no has generado, significa que el atacante ya tiene tu contraseña, pero el MFA le está bloqueando. Reportarlo es vital. •",
-      "id": 17
+      "id": 19
     },
     {
       "module_id": 1,
@@ -543,7 +585,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "C",
       "feedback": "La justicia digital no requiere firmas físicas para darse por notificada. El acceso al buzón genera un acuse de recibo técnico con presunción de veracidad absoluta que activa el reloj judicial. •",
-      "id": 18
+      "id": 20
     },
     {
       "module_id": 1,
@@ -583,7 +625,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "La Ley 2/2023 obliga a empresas con características particulares a disponer de canales de \"Whistleblowing\". Denunciar negligencias graves de forma anónima es un derecho protegido que evita brechas de seguridad masivas y exime de responsabilidad a quien informa. \"Felicidades por completar el Módulo 1. Has comprendido que tu identidad digital es el equivalente jurídico a tu firma física, con todas sus implicaciones penales y administrativas. Dominar el uso de los factores de autenticación (MFA) y conocer tus derechos de reporte bajo la Ley 2/2023 son los primeros pasos para blindar tu puesto de trabajo. A continuación, en el Módulo 2, exploraremos cómo los cibercriminales intentan saltarse todas estas barreras tecnológicas hackeando directamente tu mente.\"",
-      "id": 19
+      "id": 21
     },
     {
       "module_id": 1,
@@ -606,7 +648,28 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Identidad Digital y Validez Jurídica",
       "time": 0,
-      "id": 20
+      "id": 22
+    },
+    {
+      "module_id": 2,
+      "slide_num_str": "Diapositiva 2A",
+      "title": "Portada del Módulo 2",
+      "visual_title": "Psicología del Ataque y Shadow AI",
+      "text_on_screen": [
+        "• Módulo 2: Psicología del Ataque y Shadow AI",
+        "• Cómo hackean tu mente y el peligro de las IAs públicas"
+      ],
+      "extended_text": [
+        "\"Los cibercriminales no solo atacan máquinas; atacan mentes. En este módulo descubrirás los perfiles psicológicos del Modelo OCEAN, cómo tus propios rasgos de personalidad pueden convertirte en un vector de ataque, y el grave riesgo que supone el Shadow AI para la confidencialidad de la empresa.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "module_intro",
+      "module_title": "Psicología del Ataque y Shadow AI",
+      "time": 60,
+      "id": 23
     },
     {
       "module_id": 2,
@@ -631,7 +694,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 21
+      "id": 24
     },
     {
       "module_id": 2,
@@ -654,7 +717,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 22
+      "id": 25
     },
     {
       "module_id": 2,
@@ -677,7 +740,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 23
+      "id": 26
     },
     {
       "module_id": 2,
@@ -700,7 +763,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 24
+      "id": 27
     },
     {
       "module_id": 2,
@@ -723,7 +786,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 25
+      "id": 28
     },
     {
       "module_id": 2,
@@ -746,7 +809,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 26
+      "id": 29
     },
     {
       "module_id": 2,
@@ -769,7 +832,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 27
+      "id": 30
     },
     {
       "module_id": 2,
@@ -792,7 +855,7 @@ const COURSE_DATA = {
       "layout": "ocean_diagnosis",
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 28
+      "id": 31
     },
     {
       "module_id": 2,
@@ -814,7 +877,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 45,
-      "id": 29
+      "id": 32
     },
     {
       "module_id": 2,
@@ -836,7 +899,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 45,
-      "id": 30
+      "id": 33
     },
     {
       "module_id": 2,
@@ -858,7 +921,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 45,
-      "id": 31
+      "id": 34
     },
     {
       "module_id": 2,
@@ -880,7 +943,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 45,
-      "id": 32
+      "id": 35
     },
     {
       "module_id": 2,
@@ -902,7 +965,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 45,
-      "id": 33
+      "id": 36
     },
     {
       "module_id": 2,
@@ -928,7 +991,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 34
+      "id": 37
     },
     {
       "module_id": 2,
@@ -952,7 +1015,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 35
+      "id": 38
     },
     {
       "module_id": 2,
@@ -970,7 +1033,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 30,
-      "id": 36
+      "id": 39
     },
     {
       "module_id": 2,
@@ -992,7 +1055,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 37
+      "id": 40
     },
     {
       "module_id": 2,
@@ -1018,7 +1081,7 @@ const COURSE_DATA = {
       "layout": "phishing_sort",
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 45,
-      "id": 38
+      "id": 41
     },
     {
       "module_id": 2,
@@ -1041,7 +1104,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 39
+      "id": 42
     },
     {
       "module_id": 2,
@@ -1059,7 +1122,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 30,
-      "id": 40
+      "id": 43
     },
     {
       "module_id": 2,
@@ -1085,7 +1148,7 @@ const COURSE_DATA = {
       "layout": "flipcards",
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 60,
-      "id": 41
+      "id": 44
     },
     {
       "module_id": 2,
@@ -1123,7 +1186,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "Con la existencia de los Deepfakes, la vista y el oído ya no son suficientes para garantizar la identidad. Colgar y utilizar un canal de verificación independiente es la única forma de desarmar este ataque de ingeniería social. •",
-      "id": 42
+      "id": 45
     },
     {
       "module_id": 2,
@@ -1161,7 +1224,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "Al introducir datos en una IA pública (Shadow AI), la información pasa a los servidores de un tercero. Esto supone una exposición directa de la confidencialidad y una violación del Reglamento General de Protección de Datos (RGPD). •",
-      "id": 43
+      "id": 46
     },
     {
       "module_id": 2,
@@ -1199,7 +1262,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "No podemos evitar que nos investiguen o nos envíen correos engañosos, pero la fase de Explotación requiere nuestra participación. Aplicar una pausa consciente antes de actuar rompe la cadena del ciberataque y detiene la amenaza. •",
-      "id": 44
+      "id": 47
     },
     {
       "module_id": 2,
@@ -1228,7 +1291,7 @@ const COURSE_DATA = {
       "image_desc": null,
       "correct_answer": "B",
       "feedback": "El AI Act dicta que los usuarios corporativos deben estar capacitados (Alfabetizados) para comprender las consecuencias legales y operativas de ceder datos empresariales a algoritmos de terceros no controlados. •",
-      "id": 45
+      "id": 48
     },
     {
       "module_id": 2,
@@ -1257,7 +1320,7 @@ const COURSE_DATA = {
       "image_desc": null,
       "correct_answer": "B",
       "feedback": "El modelo OCEAN demuestra que los atacantes abusan de la reactividad ante el estrés. Si tu perfil es ansioso, tu regla de oro es recordar que el protocolo de seguridad siempre está por encima de la jerarquía o el sentido de urgencia.",
-      "id": 46
+      "id": 49
     },
     {
       "module_id": 2,
@@ -1279,7 +1342,28 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
       "time": 0,
-      "id": 47
+      "id": 50
+    },
+    {
+      "module_id": 3,
+      "slide_num_str": "Diapositiva 3A",
+      "title": "Portada del Módulo 3",
+      "visual_title": "Protección de Datos 360",
+      "text_on_screen": [
+        "• Módulo 3: Protección de Datos 360",
+        "• RGPD, LOPDGDD y los Derechos ARSOPOL explicados con casos reales"
+      ],
+      "extended_text": [
+        "\"Este módulo aborda el núcleo legal de la privacidad de datos. Aprenderás qué es un dato personal bajo el RGPD, cómo clasificarlo por nivel de riesgo, cuáles son tus deberes como custodio de datos y los poderosos derechos que el ciudadano puede ejercer contra tu empresa. Incluye dos simulacros interactivos.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "module_intro",
+      "module_title": "Protección de Datos 360",
+      "time": 60,
+      "id": 51
     },
     {
       "module_id": 3,
@@ -1302,7 +1386,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Protección de Datos 360",
       "time": 60,
-      "id": 48
+      "id": 52
     },
     {
       "module_id": 3,
@@ -1326,7 +1410,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Protección de Datos 360",
       "time": 60,
-      "id": 49
+      "id": 53
     },
     {
       "module_id": 3,
@@ -1350,7 +1434,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Protección de Datos 360",
       "time": 60,
-      "id": 50
+      "id": 54
     },
     {
       "module_id": 3,
@@ -1373,7 +1457,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Protección de Datos 360",
       "time": 60,
-      "id": 51
+      "id": 55
     },
     {
       "module_id": 3,
@@ -1396,7 +1480,29 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Protección de Datos 360",
       "time": 60,
-      "id": 52
+      "id": 56
+    },
+    {
+      "module_id": 3,
+      "slide_num_str": "Diapositiva 40B",
+      "title": "Simulacro Interactivo - El Clasificador de la Privacidad",
+      "visual_title": "El Clasificador RGPD: ¿Qué tipo de dato es este?",
+      "text_on_screen": [
+        "• Ejercicio: Clasifica cada tipo de dato en la categoría legal correcta según el RGPD y la LOPDGDD.",
+        "• Objetivo: Practicar la identificación rápida del nivel de protección legal que requiere cada dato.",
+        "• Interacción: Lee el dato que aparece y pulsa el botón de la categoría correcta."
+      ],
+      "extended_text": [
+        "\"Reconocer el nivel de sensibilidad de un dato es la primera línea de defensa legal. Si clasifica erróneamente datos de salud como básicos, puede incurrir en sanciones de hasta 20 millones de euros bajo el RGPD. Este ejercicio entrena tu capacidad de triaje de datos en situaciones reales de tu puesto de trabajo.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "gdpr_sort",
+      "module_title": "Protección de Datos 360",
+      "time": 60,
+      "id": 57
     },
     {
       "module_id": 3,
@@ -1421,7 +1527,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Protección de Datos 360",
       "time": 60,
-      "id": 53
+      "id": 58
     },
     {
       "module_id": 3,
@@ -1444,7 +1550,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Protección de Datos 360",
       "time": 60,
-      "id": 54
+      "id": 59
     },
     {
       "module_id": 3,
@@ -1468,7 +1574,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Protección de Datos 360",
       "time": 60,
-      "id": 55
+      "id": 60
     },
     {
       "module_id": 3,
@@ -1492,7 +1598,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Protección de Datos 360",
       "time": 60,
-      "id": 56
+      "id": 61
     },
     {
       "module_id": 3,
@@ -1515,7 +1621,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Protección de Datos 360",
       "time": 60,
-      "id": 57
+      "id": 62
     },
     {
       "module_id": 3,
@@ -1539,7 +1645,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Protección de Datos 360",
       "time": 60,
-      "id": 58
+      "id": 63
     },
     {
       "module_id": 3,
@@ -1557,7 +1663,29 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Protección de Datos 360",
       "time": 30,
-      "id": 59
+      "id": 64
+    },
+    {
+      "module_id": 3,
+      "slide_num_str": "Diapositiva 46C",
+      "title": "Simulacro Interactivo - El Dilema del Derecho al Olvido",
+      "visual_title": "El Dilema: Borrar o Conservar",
+      "text_on_screen": [
+        "• Escenario: Un cliente furioso llama exigiendo que elimines todos sus datos de inmediato amparándose en el RGPD.",
+        "• Tu misión: Para cada registro en la base de datos, decide si debes BORRAR o BLOQUEAR/CONSERVAR y ajusta los años de retención legal obligatoria.",
+        "• Regla de oro: Nunca ejecutes una supresión sin consultar al DPO. Las obligaciones fiscales y laborales prevalecen sobre el derecho al olvido."
+      ],
+      "extended_text": [
+        "\"El Derecho al Olvido (Art. 17 RGPD) no es absoluto. Existen obligaciones legales tributarias (4 años), laborales (4 años) y de prevención de blanqueo (10 años) que el ciudadano no puede cancelar unilateralmente. El DPO evalúa caso por caso qué datos pueden borrarse y cuáles deben bloquearse para cumplimiento legal. Este ejercicio entrena la toma de decisiones correcta bajo presión.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "gdpr_olvido",
+      "module_title": "Protección de Datos 360",
+      "time": 60,
+      "id": 65
     },
     {
       "module_id": 3,
@@ -1581,7 +1709,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Protección de Datos 360",
       "time": 60,
-      "id": 60
+      "id": 66
     },
     {
       "module_id": 3,
@@ -1624,7 +1752,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "El concepto legal de \"dato personal\" es increíblemente expansivo. Incluye cualquier traza digital o física que permita aislar la identidad de un sujeto, ya sea de forma directa o indirecta mediante cruce de bases de datos. •",
-      "id": 61
+      "id": 67
     },
     {
       "module_id": 3,
@@ -1667,7 +1795,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "C",
       "feedback": "El deber de confidencialidad es de carácter perpetuo. El fin del contrato laboral no extingue la obligación de mantener en secreto la información sensible aprendida durante el desempeño del puesto. •",
-      "id": 62
+      "id": 68
     },
     {
       "module_id": 3,
@@ -1710,7 +1838,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "C",
       "feedback": "El ciudadano está ejerciendo su derecho de Supresión (Derecho al Olvido) perteneciente a las siglas ARSOPOL. Un empleado jamás debe borrar registros unilateralmente, ya que la empresa puede tener obligaciones fiscales o legales que exijan la conservación bloqueada de esos datos. El DPO es quien debe auditar y ejecutar la petición. •",
-      "id": 63
+      "id": 69
     },
     {
       "module_id": 3,
@@ -1739,7 +1867,7 @@ const COURSE_DATA = {
       "image_desc": null,
       "correct_answer": "B",
       "feedback": "Delegar decisiones con impacto legal o vital íntegramente a una máquina atenta contra los derechos garantizados en el marco regulatorio europeo (AI Act y Art. 22 del RGPD). La supervisión y la explicabilidad humana son obligatorias. •",
-      "id": 64
+      "id": 70
     },
     {
       "module_id": 3,
@@ -1768,7 +1896,7 @@ const COURSE_DATA = {
       "image_desc": null,
       "correct_answer": "B",
       "feedback": "La extracción incontrolada (Shadow IT) destruye la Integridad y Confidencialidad de los datos. Bajo el ENS y la Ley 2/2023, reportar de forma segura la vulneración de los protocolos por parte de cualquier miembro de la empresa es un mecanismo legal protegido de responsabilidad proactiva. \"Felicidades por completar el Módulo 3. Has asimilado la carga teórica y legal más densa de todo el programa de Prevención de Riesgos Digitales. Comprender la naturaleza del dato, su nivel de riesgo y los derechos inalienables del ciudadano te convierte en un operador seguro y diligente. Con las bases legales blindadas, en el próximo módulo trasladaremos todos estos conocimientos al entorno físico y doméstico, abordando los grandes riesgos que supone el Teletrabajo y el trabajo en modelo híbrido.\"",
-      "id": 65
+      "id": 71
     },
     {
       "module_id": 3,
@@ -1792,7 +1920,28 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Protección de Datos 360",
       "time": 0,
-      "id": 66
+      "id": 72
+    },
+    {
+      "module_id": 4,
+      "slide_num_str": "Diapositiva 4A",
+      "title": "Portada del Módulo 4",
+      "visual_title": "Seguridad en el Entorno Híbrido",
+      "text_on_screen": [
+        "• Módulo 4: Seguridad en el Entorno Híbrido",
+        "• El teletrabajo y cómo proteger tu red doméstica como si fuera la red corporativa"
+      ],
+      "extended_text": [
+        "\"El perímetro de la empresa ya no existe. En este módulo aprenderás a gestionar la seguridad en el teletrabajo, a segmentar tu red doméstica, a usar la VPN correctamente y a evitar que el Shadow IT y los dispositivos IoT de tu hogar se conviertan en la puerta trasera de la organización.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "module_intro",
+      "module_title": "Seguridad en el Entorno Híbrido",
+      "time": 60,
+      "id": 73
     },
     {
       "module_id": 4,
@@ -1817,7 +1966,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Seguridad en el Entorno Híbrido",
       "time": 60,
-      "id": 67
+      "id": 74
     },
     {
       "module_id": 4,
@@ -1842,7 +1991,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Seguridad en el Entorno Híbrido",
       "time": 60,
-      "id": 68
+      "id": 75
     },
     {
       "module_id": 4,
@@ -1860,7 +2009,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Seguridad en el Entorno Híbrido",
       "time": 30,
-      "id": 69
+      "id": 76
     },
     {
       "module_id": 4,
@@ -1882,7 +2031,7 @@ const COURSE_DATA = {
       "layout": "mindfulness",
       "module_title": "Seguridad en el Entorno Híbrido",
       "time": 20,
-      "id": 70
+      "id": 77
     },
     {
       "module_id": 4,
@@ -1906,7 +2055,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Seguridad en el Entorno Híbrido",
       "time": 60,
-      "id": 71
+      "id": 78
     },
     {
       "module_id": 4,
@@ -1924,7 +2073,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Seguridad en el Entorno Híbrido",
       "time": 30,
-      "id": 72
+      "id": 79
     },
     {
       "module_id": 4,
@@ -1949,7 +2098,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Seguridad en el Entorno Híbrido",
       "time": 60,
-      "id": 73
+      "id": 80
     },
     {
       "module_id": 4,
@@ -1972,7 +2121,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Seguridad en el Entorno Híbrido",
       "time": 60,
-      "id": 74
+      "id": 81
     },
     {
       "module_id": 4,
@@ -1995,7 +2144,7 @@ const COURSE_DATA = {
       "layout": "flipcards",
       "module_title": "Seguridad en el Entorno Híbrido",
       "time": 60,
-      "id": 75
+      "id": 82
     },
     {
       "module_id": 4,
@@ -2013,7 +2162,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Seguridad en el Entorno Híbrido",
       "time": 30,
-      "id": 76
+      "id": 83
     },
     {
       "module_id": 4,
@@ -2035,7 +2184,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Seguridad en el Entorno Híbrido",
       "time": 60,
-      "id": 77
+      "id": 84
     },
     {
       "module_id": 4,
@@ -2078,7 +2227,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "C",
       "feedback": "La política de mesa limpia y pantalla bloqueada es obligatoria en cualquier entorno. Un equipo desbloqueado en un lugar público es una brecha de seguridad crítica en potencia. El atajo de bloqueo rápido (Win+L) debe ser un acto reflejo. •",
-      "id": 78
+      "id": 85
     },
     {
       "module_id": 4,
@@ -2121,7 +2270,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "La VPN no mejora la velocidad, sino la seguridad. Su función es cifrar los datos que viajan por redes no seguras (como el Wi-Fi de tu casa o el de un hotel), impidiendo que ciberdelincuentes puedan leer o manipular la información corporativa en tránsito. •",
-      "id": 79
+      "id": 86
     },
     {
       "module_id": 4,
@@ -2164,7 +2313,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "C",
       "feedback": "El Shadow IT ocurre cuando los empleados utilizan software no auditado (como conversores de archivos online o IAs gratuitas) para trabajar. Esto destruye la trazabilidad de los datos y viola flagrantemente el RGPD y las políticas de la empresa. •",
-      "id": 80
+      "id": 87
     },
     {
       "module_id": 4,
@@ -2202,7 +2351,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "La Ley de Trabajo a Distancia y el ENS son claros. El equipo es de uso exclusivamente profesional y personal; permitir que familiares o visitas interactúen con el equipo o visualicen la pantalla expone a la organización a severas brechas por negligencia humana. •",
-      "id": 81
+      "id": 88
     },
     {
       "module_id": 4,
@@ -2240,7 +2389,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "Los dispositivos IoT (Internet of Things) suelen tener medidas de seguridad casi nulas y los asistentes de voz graban audio ambiental. Aislar el equipo corporativo de estas amenazas en tu red doméstica mediante segmentación de Wi-Fi impide que los atacantes usen tus electrodomésticos como puente hacia tu empresa. \"Enhorabuena por completar el Módulo 4. Has asimilado la importancia vital de extender el perímetro de seguridad corporativa hasta tu propio domicilio. La gestión de las redes domésticas, la segmentación del IoT y el rechazo a prácticas como el Shadow IT garantizan que la eficiencia del teletrabajo no comprometa la integridad de la organización. A continuación, nos adentraremos en qué hacer exactamente cuando, a pesar de toda la prevención, se produce un incidente.\"",
-      "id": 82
+      "id": 89
     },
     {
       "module_id": 4,
@@ -2264,7 +2413,28 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Seguridad en el Entorno Híbrido",
       "time": 0,
-      "id": 83
+      "id": 90
+    },
+    {
+      "module_id": 5,
+      "slide_num_str": "Diapositiva 5A",
+      "title": "Portada del Módulo 5",
+      "visual_title": "Protocolo de Respuesta ante Incidentes",
+      "text_on_screen": [
+        "• Módulo 5: Protocolo de Respuesta ante Incidentes",
+        "• La Regla de Oro y qué hacer en los primeros 5 minutos de un ataque"
+      ],
+      "extended_text": [
+        "\"El riesgo cero no existe. En este módulo aprenderás a reconocer los síntomas de un ciberataque en tiempo real, a ejecutar el protocolo de reacción de 4 pasos (calma, aislamiento, no apagar, comunicar) y a comprender la importancia de preservar la cadena de custodia digital para la investigación forense posterior.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "module_intro",
+      "module_title": "Protocolo de Respuesta ante Incidentes",
+      "time": 60,
+      "id": 91
     },
     {
       "module_id": 5,
@@ -2288,7 +2458,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Protocolo de Respuesta ante Incidentes",
       "time": 60,
-      "id": 84
+      "id": 92
     },
     {
       "module_id": 5,
@@ -2313,7 +2483,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Protocolo de Respuesta ante Incidentes",
       "time": 60,
-      "id": 85
+      "id": 93
     },
     {
       "module_id": 5,
@@ -2339,7 +2509,7 @@ const COURSE_DATA = {
       "layout": "ransomware_sort",
       "module_title": "Protocolo de Respuesta ante Incidentes",
       "time": 60,
-      "id": 86
+      "id": 94
     },
     {
       "module_id": 5,
@@ -2362,7 +2532,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Protocolo de Respuesta ante Incidentes",
       "time": 60,
-      "id": 87
+      "id": 95
     },
     {
       "module_id": 5,
@@ -2384,7 +2554,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Protocolo de Respuesta ante Incidentes",
       "time": 60,
-      "id": 88
+      "id": 96
     },
     {
       "module_id": 5,
@@ -2402,7 +2572,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Protocolo de Respuesta ante Incidentes",
       "time": 30,
-      "id": 89
+      "id": 97
     },
     {
       "module_id": 5,
@@ -2425,7 +2595,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Protocolo de Respuesta ante Incidentes",
       "time": 60,
-      "id": 90
+      "id": 98
     },
     {
       "module_id": 5,
@@ -2443,7 +2613,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Protocolo de Respuesta ante Incidentes",
       "time": 30,
-      "id": 91
+      "id": 99
     },
     {
       "module_id": 5,
@@ -2467,7 +2637,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Protocolo de Respuesta ante Incidentes",
       "time": 60,
-      "id": 92
+      "id": 100
     },
     {
       "module_id": 5,
@@ -2490,7 +2660,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Protocolo de Respuesta ante Incidentes",
       "time": 60,
-      "id": 93
+      "id": 101
     },
     {
       "module_id": 5,
@@ -2533,7 +2703,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "C",
       "feedback": "Desconectar la red es el paso vital. Al quitar el cable o el Wi-Fi, actúas como un cortafuegos físico, impidiendo que el malware se propague por los servidores o envíe datos al exterior. Nunca uses Shadow AI en crisis. •",
-      "id": 94
+      "id": 102
     },
     {
       "module_id": 5,
@@ -2576,7 +2746,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "La memoria RAM es volátil y desaparece al cortar la corriente. Los peritos forenses necesitan el equipo encendido para extraer el rastro del malware y encontrar las claves criptográficas para recuperar los datos. •",
-      "id": 95
+      "id": 103
     },
     {
       "module_id": 5,
@@ -2619,7 +2789,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "A",
       "feedback": "La manipulación del equipo por personal no experto destruye la Cadena de Custodia. Si la evidencia se adultera, un juez la desestimará, impidiendo que la empresa pueda defenderse legalmente. •",
-      "id": 96
+      "id": 104
     },
     {
       "module_id": 5,
@@ -2657,7 +2827,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "C",
       "feedback": "La ocultación deliberada de una brecha agrava exponencialmente la responsabilidad penal de la empresa. La Ley 2/2023 (Whistleblowing) te otorga protección absoluta para denunciar internamente a quienes ordenen ocultar incidentes. •",
-      "id": 97
+      "id": 105
     },
     {
       "module_id": 5,
@@ -2700,7 +2870,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "C",
       "feedback": "La Ingeniería Social está diseñada para engañar al cerebro. La \"Cultura de No Culpa\" fomenta la transparencia; si cometes un error, lo verdaderamente importante y valiente es reportarlo al instante sin temor a represalias.",
-      "id": 98
+      "id": 106
     },
     {
       "module_id": 5,
@@ -2722,7 +2892,28 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Protocolo de Respuesta ante Incidentes",
       "time": 0,
-      "id": 99
+      "id": 107
+    },
+    {
+      "module_id": 6,
+      "slide_num_str": "Diapositiva 6A",
+      "title": "Portada del Módulo 6",
+      "visual_title": "Salud Mental y Ética Digital",
+      "text_on_screen": [
+        "• Módulo 6: Salud Mental y Ética Digital",
+        "• Desconexión digital, tecnoestrés y la cultura de 'No Culpa'"
+      ],
+      "extended_text": [
+        "\"La ciberseguridad tiene una dimensión humana frecuentemente olvidada. En este módulo exploraremos el tecnoestrés, el síndrome de fatiga digital y los riesgos psicosociales de la hiperconectividad. También aprenderás por qué una cultura organizativa de 'No Culpa' es la estrategia de seguridad más efectiva para que los empleados reporten incidentes sin miedo.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "module_intro",
+      "module_title": "Salud Mental y Ética Digital",
+      "time": 60,
+      "id": 108
     },
     {
       "module_id": 6,
@@ -2746,7 +2937,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Salud Mental y Ética Digital",
       "time": 60,
-      "id": 100
+      "id": 109
     },
     {
       "module_id": 6,
@@ -2764,7 +2955,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Salud Mental y Ética Digital",
       "time": 30,
-      "id": 101
+      "id": 110
     },
     {
       "module_id": 6,
@@ -2788,7 +2979,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Salud Mental y Ética Digital",
       "time": 60,
-      "id": 102
+      "id": 111
     },
     {
       "module_id": 6,
@@ -2812,7 +3003,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Salud Mental y Ética Digital",
       "time": 60,
-      "id": 103
+      "id": 112
     },
     {
       "module_id": 6,
@@ -2835,7 +3026,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Salud Mental y Ética Digital",
       "time": 60,
-      "id": 104
+      "id": 113
     },
     {
       "module_id": 6,
@@ -2859,7 +3050,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Salud Mental y Ética Digital",
       "time": 60,
-      "id": 105
+      "id": 114
     },
     {
       "module_id": 6,
@@ -2877,7 +3068,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Salud Mental y Ética Digital",
       "time": 30,
-      "id": 106
+      "id": 115
     },
     {
       "module_id": 6,
@@ -2900,7 +3091,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Salud Mental y Ética Digital",
       "time": 60,
-      "id": 107
+      "id": 116
     },
     {
       "module_id": 6,
@@ -2923,7 +3114,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Salud Mental y Ética Digital",
       "time": 60,
-      "id": 108
+      "id": 117
     },
     {
       "module_id": 6,
@@ -2961,7 +3152,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "A",
       "feedback": "El Art. 88 garantiza que el cierre de jornada marca el fin de la disponibilidad, protegiendo al empleado de la carga mental excesiva. •",
-      "id": 109
+      "id": 118
     },
     {
       "module_id": 6,
@@ -2999,7 +3190,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "C",
       "feedback": "La desensibilización por recibir demasiadas alertas hace que ignoremos los mensajes críticos, facilitando la entrada de amenazas en el sistema. •",
-      "id": 110
+      "id": 119
     },
     {
       "module_id": 6,
@@ -3037,7 +3228,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "C",
       "feedback": "El bienestar psicosocial está regulado por ley. La Ley 2/2023 ampara al empleado para reportar de forma segura y sin temor a represalias las malas praxis de mandos intermedios que violen la desconexión digital obligatoria. •",
-      "id": 111
+      "id": 120
     },
     {
       "module_id": 6,
@@ -3075,7 +3266,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "A",
       "feedback": "Un cerebro agotado no puede procesar los detalles sutiles de un engaño o un Phishing. El descanso es la principal barrera cognitiva. •",
-      "id": 112
+      "id": 121
     },
     {
       "module_id": 6,
@@ -3113,7 +3304,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "C",
       "feedback": "La desconexión es sagrada. Las únicas excepciones que justifican romper el descanso son los eventos de fuerza mayor, como un ciberataque inminente que ponga en riesgo la supervivencia de la empresa.",
-      "id": 113
+      "id": 122
     },
     {
       "module_id": 6,
@@ -3135,7 +3326,28 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Salud Mental y Ética Digital",
       "time": 0,
-      "id": 114
+      "id": 123
+    },
+    {
+      "module_id": 7,
+      "slide_num_str": "Diapositiva 7A",
+      "title": "Portada del Módulo 7",
+      "visual_title": "Gestión de Vulnerabilidades y Brechas",
+      "text_on_screen": [
+        "• Módulo 7: Gestión de Vulnerabilidades y Brechas",
+        "• El límite operativo, el protocolo de las 72 horas y la gestión legal de la crisis"
+      ],
+      "extended_text": [
+        "\"Ningún sistema es 100% invulnerable. En este módulo aprenderás a distinguir entre vulnerabilidad y brecha de datos, cómo priorizar amenazas en el límite operativo, qué hacer legalmente en las 72 horas críticas tras una brecha y a qué agencias nacionales debes notificar. Incluye dos simulacros interactivos.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "module_intro",
+      "module_title": "Gestión de Vulnerabilidades y Brechas",
+      "time": 60,
+      "id": 124
     },
     {
       "module_id": 7,
@@ -3158,7 +3370,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 60,
-      "id": 115
+      "id": 125
     },
     {
       "module_id": 7,
@@ -3182,7 +3394,29 @@ const COURSE_DATA = {
       "layout": "flipcards",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 60,
-      "id": 116
+      "id": 126
+    },
+    {
+      "module_id": 7,
+      "slide_num_str": "Diapositiva 97B",
+      "title": "Simulacro Interactivo - ¿Vulnerabilidad o Brecha?",
+      "visual_title": "Triador de Incidentes: ¿Vulnerabilidad o Brecha de Datos?",
+      "text_on_screen": [
+        "• Ejercicio: Para cada incidente de seguridad, clasifícalo, evalúa su impacto y activa las notificaciones legales correctas.",
+        "• Objetivo: Aplicar la distinción legal entre vulnerabilidad y brecha, y decidir a quién notificar en cada caso.",
+        "• Interacción: Usa los botones, sliders e interruptores para cada uno de los 3 escenarios y pulsa Evaluar cuando hayas completado los tres."
+      ],
+      "extended_text": [
+        "\"El coste de confundir una vulnerabilidad con una brecha puede ser catastrófico en ambas direcciones: no notificar una brecha real supone multas de hasta 10M€ por incumplimiento del Art. 33 RGPD, mientras que declarar una vulnerabilidad menor como brecha genera alarma innecesaria y daño reputacional. Este ejercicio entrena el criterio de triaje legal que necesitas para proteger a tu organización.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "vulnerability_triaje",
+      "module_title": "Gestión de Vulnerabilidades y Brechas",
+      "time": 60,
+      "id": 127
     },
     {
       "module_id": 7,
@@ -3206,7 +3440,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 60,
-      "id": 117
+      "id": 128
     },
     {
       "module_id": 7,
@@ -3230,7 +3464,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 60,
-      "id": 118
+      "id": 129
     },
     {
       "module_id": 7,
@@ -3248,7 +3482,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 30,
-      "id": 119
+      "id": 130
     },
     {
       "module_id": 7,
@@ -3272,7 +3506,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 60,
-      "id": 120
+      "id": 131
     },
     {
       "module_id": 7,
@@ -3290,7 +3524,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 30,
-      "id": 121
+      "id": 132
     },
     {
       "module_id": 7,
@@ -3308,7 +3542,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 30,
-      "id": 122
+      "id": 133
     },
     {
       "module_id": 7,
@@ -3331,7 +3565,29 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 60,
-      "id": 123
+      "id": 134
+    },
+    {
+      "module_id": 7,
+      "slide_num_str": "Diapositiva 101B",
+      "title": "Simulacro Interactivo - La Cuenta Atrás de las 72 Horas",
+      "visual_title": "El Protocolo Legal: Ordena las 72 Horas Críticas",
+      "text_on_screen": [
+        "• Escenario: Se ha confirmado una brecha de datos. El cronómetro legal del Art. 33 RGPD acaba de empezar.",
+        "• Tu misión: Ordena las 5 acciones legales críticas en la secuencia correcta haciendo clic en ellas del paso 1 al 5.",
+        "• Atención: Si la notificación a la AEPD llega después de las 72 horas, la multa es automática."
+      ],
+      "extended_text": [
+        "\"El Art. 33 del RGPD y la LOPDGDD son taxativos: el reloj de 72 horas empieza cuando cualquier empleado de la empresa tiene constancia del incidente, no cuando lo confirma el departamento técnico. Por ello, la cadena de acciones debe ser ejecutada con precisión y sin dilación: aislar primero, evaluar el impacto después, redactar el informe, notificar a la AEPD y, si el riesgo es alto, avisar a los afectados. Cada minuto de retraso injustificado agrava la sanción.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "timeline_72h",
+      "module_title": "Gestión de Vulnerabilidades y Brechas",
+      "time": 60,
+      "id": 135
     },
     {
       "module_id": 7,
@@ -3355,7 +3611,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 60,
-      "id": 124
+      "id": 136
     },
     {
       "module_id": 7,
@@ -3378,7 +3634,7 @@ const COURSE_DATA = {
       "layout": "accordions",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 60,
-      "id": 125
+      "id": 137
     },
     {
       "module_id": 7,
@@ -3400,7 +3656,7 @@ const COURSE_DATA = {
       "layout": "tabs",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 60,
-      "id": 126
+      "id": 138
     },
     {
       "module_id": 7,
@@ -3439,7 +3695,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "Una falla en el sistema que aún no ha sido explotada es una Vulnerabilidad. Si los atacantes la aprovechan para robar información, se convertirá en una Brecha de Datos. •",
-      "id": 127
+      "id": 139
     },
     {
       "module_id": 7,
@@ -3477,7 +3733,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "A",
       "feedback": "El RGPD y la LOPDGDD son tajantes: el reloj marca un límite de 72 horas innegociables para reportar a las autoridades una vez constatado el incidente. Ocultarlo es el camino directo a las multas millonarias. •",
-      "id": 128
+      "id": 140
     },
     {
       "module_id": 7,
@@ -3515,7 +3771,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "Ocultar una brecha de alto riesgo es la infracción más castigada. Los usuarios deben ser avisados inmediatamente para que puedan cancelar tarjetas o cambiar contraseñas. •",
-      "id": 129
+      "id": 141
     },
     {
       "module_id": 7,
@@ -3553,7 +3809,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "El AI Act prohíbe delegar el 100% de la responsabilidad de seguridad y clasificación de riesgos a una máquina autónoma. El criterio humano es imprescindible para la validación final. •",
-      "id": 130
+      "id": 142
     },
     {
       "module_id": 7,
@@ -3591,7 +3847,7 @@ const COURSE_DATA = {
       ],
       "correct_answer": "B",
       "feedback": "Faltar a las obligaciones del Esquema Nacional de Seguridad (ENS) es gravísimo. La Ley 2/2023 blinda a los empleados que levantan la mano ante ocultaciones dolosas o negligencias corporativas. \"Enhorabuena, has finalizado el Módulo 7 y con ello, todo el ciclo integral de la Prevención y Reacción frente a Riesgos Digitales. Ahora entiendes no solo cómo proteger la información en tu día a día, sino cómo el marco legal español y europeo actúa frente a las peores crisis. Recuerda: la transparencia, la rapidez y el cumplimiento de los protocolos son la mejor armadura corporativa.\"",
-      "id": 131
+      "id": 143
     },
     {
       "module_id": 7,
@@ -3615,7 +3871,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 0,
-      "id": 132
+      "id": 144
     },
     {
       "module_id": 7,
@@ -3639,7 +3895,7 @@ const COURSE_DATA = {
       "layout": null,
       "module_title": "Gestión de Vulnerabilidades y Brechas",
       "time": 0,
-      "id": 133
+      "id": 145
     }
   ]
 };
