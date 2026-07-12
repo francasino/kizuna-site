@@ -566,7 +566,6 @@ const CourseController = {
       // Sidebar is hidden when quiz is active to prevent navigating away
       this.sidebar.style.pointerEvents = "none";
       this.sidebar.style.opacity = "0.3";
-      this.btnPrev.style.display = "none";
       this.menuToggle.style.display = "none";
     } else {
       this.sidebar.style.pointerEvents = "all";
@@ -1617,7 +1616,7 @@ const CourseController = {
           </div>
           <div style="text-align:right;min-width:52px;">
             <div style="font-size:1.5rem;font-weight:800;color:${isRisk ? '#EF4444' : '#34D399'};font-family:'Outfit',sans-serif;">${score[p.block]}/3</div>
-            <div style="font-size:0.7rem;color:var(--text-secondary);">SÍ</div>
+
           </div>
         </div>
       `;
@@ -1973,7 +1972,7 @@ const CourseController = {
               <b>Tu respuesta:</b> [${userAnswer}] - ${q.options.find(o => o.id === userAnswer)?.text || 'No respondida'}
             </p>
             <p style="font-size: 0.9rem; color: var(--primary-hover);">
-              <b>Resplicación legal:</b> ${q.feedback || 'Sin explicación disponible.'}
+              <b>Aclaración:</b> ${q.feedback || 'Sin explicación disponible.'}
             </p>
           </div>
         `;
@@ -2608,7 +2607,7 @@ const CourseController = {
         id: 's1',
         text: 'Tu empresa recibe un aviso del proveedor de software: existe un "fallo" de configuración en su servidor. Nadie ha podido acceder a través de él aún y no hay datos comprometidos.',
         correctType: 'vuln',
-        correctImpact: 2, // Alto (0=Bajo,1=Medio,2=Alto,3=Crítico)
+        correctImpact: 1, // Alto (0=Moderado,1=Alto,2=Crítico)
         correctNotify: [],
         typeFeedback: 'Vulnerabilidad — La grieta existe pero no ha sido explotada. No hay fuga confirmada.',
         impactFeedback: 'Impacto Alto — Requiere parcheo urgente pero sin notificación a autoridades externas.',
@@ -2618,7 +2617,7 @@ const CourseController = {
         id: 's2',
         text: 'Un cliente te avisa de que sus datos bancarios y contraseñas han aparecido publicados en un foro de la Dark Web. Verificas que provienen de vuestro servidor.',
         correctType: 'breach',
-        correctImpact: 3, // Crítico
+        correctImpact: 2, // Crítico
         correctNotify: ['aepd', 'users'],
         typeFeedback: 'Brecha de Datos — Información confidencial ha sido sustraída y expuesta públicamente.',
         impactFeedback: 'Impacto Crítico — Datos bancarios y contraseñas en la Dark Web. Máxima alerta.',
@@ -2636,10 +2635,10 @@ const CourseController = {
       }
     ];
 
-    const impactLabels = ['Bajo', 'Medio', 'Alto', 'Crítico'];
+    const impactLabels = ['Moderado', 'Alto', 'Crítico'];
     const scenarioState = {};
     scenarios.forEach(s => {
-      scenarioState[s.id] = { type: null, impact: 1, notify: { aepd: false, users: false, ccn: false } };
+      scenarioState[s.id] = { type: null, impact: 0, notify: { aepd: false, users: false, ccn: false } };
     });
 
     const buildUI = (showResult = false, resultOk = false, resultItems = []) => {
@@ -2658,7 +2657,7 @@ const CourseController = {
               </div>
               <div class="vt-impact-row">
                 <span class="vt-impact-label">Impacto:</span>
-                <input type="range" class="vt-impact-slider" data-scenario="${s.id}" min="0" max="3" step="1" value="${st.impact}">
+                <input type="range" class="vt-impact-slider" data-scenario="${s.id}" min="0" max="2" step="1" value="${st.impact}">
                 <span class="vt-impact-value" id="impact-val-${s.id}">${impactLabels[st.impact]}</span>
               </div>
               <div class="vt-notify-row">

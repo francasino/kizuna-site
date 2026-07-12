@@ -443,7 +443,6 @@ const COURSE_DATA = {
       "visual_title": "",
       "text_on_screen": [
         "• Compliance Penal (Art. 31 bis): El comportamiento del empleado tiene consecuencias directas en la responsabilidad de la empresa.",
-        "Tu Protocolo Diario (Reglas de Oro):",
         "• Uso Exclusivo: Identidad corporativa solo para fines laborales.",
         "• No Exposición: Prohibido anotar claves físicamente o en archivos de texto.",
         "• El Canal de Denuncias (Ley 2/2023): Tienes a tu disposición un canal oficial, anónimo y seguro para reportar prácticas peligrosas sin riesgo de represalias."
