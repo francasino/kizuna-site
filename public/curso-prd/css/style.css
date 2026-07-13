@@ -399,6 +399,10 @@ body {
   margin-top: 16px;
 }
 
+.cards-grid.grid-2cols {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .concept-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -589,6 +593,12 @@ body {
   font-size: 0.9rem;
   color: var(--text-secondary);
   max-width: 500px;
+}
+
+.image-placeholder img {
+  max-height: 260px !important;
+  width: auto !important;
+  object-fit: contain !important;
 }
 
 /* 5b. Uniform Text Formatting Classes */
@@ -1988,6 +1998,10 @@ body {
   width: 100%;
 }
 
+.flip-cards-grid.grid-2cols {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .flip-card {
   background-color: transparent;
   width: 100%;
@@ -2077,6 +2091,169 @@ body {
 /* Glassmorphism details for visual elements */
 .concept-card, .warning-box, .danger-box {
   backdrop-filter: blur(8px);
+}
+
+/* ============================================================
+   SCENARIO CARDS LAYOUT (Escenarios Cotidianos)
+   ============================================================ */
+
+.scenario-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 16px 0;
+  width: 100%;
+}
+
+.scenario-card {
+  background-color: transparent;
+  width: 100%;
+  min-height: 320px;
+  perspective: 1200px;
+  cursor: pointer;
+}
+
+.scenario-card-inner {
+  position: relative;
+  width: 100%;
+  min-height: 320px;
+  text-align: center;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.scenario-card.scenario-flipped .scenario-card-inner {
+  transform: rotateY(180deg);
+}
+
+.scenario-card-front, .scenario-card-back {
+  position: absolute;
+  width: 100%;
+  min-height: 320px;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.scenario-card-front {
+  background: radial-gradient(circle at 50% 30%, rgba(22, 25, 37, 0.95), rgba(12, 14, 21, 0.98));
+  color: #fff;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.scenario-tag {
+  display: inline-block;
+  align-self: flex-start;
+  background: rgba(124, 58, 237, 0.18);
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #a78bfa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.scenario-action-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: left;
+  line-height: 1.3;
+}
+
+.scenario-action-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: left;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.scenario-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: auto;
+}
+
+.scenario-card-back {
+  background: radial-gradient(circle at center, rgba(16, 20, 32, 0.98), rgba(8, 10, 16, 0.99));
+  border-color: rgba(239, 68, 68, 0.3);
+  transform: rotateY(180deg);
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px;
+}
+
+.scenario-audit-icon {
+  font-size: 2rem;
+  line-height: 1;
+  opacity: 0;
+  animation: scenarioFadeIn 0.4s ease 0.3s forwards;
+}
+
+.scenario-audit-content {
+  text-align: left;
+  opacity: 0;
+  animation: scenarioFadeIn 0.5s ease 0.6s forwards;
+}
+
+.scenario-audit-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f87171;
+  margin-bottom: 8px;
+}
+
+.scenario-audit-text {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+@keyframes scenarioFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive: 2 columns for narrow screens */
+@media (max-width: 992px) {
+  .scenario-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .scenario-cards-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Custom Mindfulness Layout Styles */
@@ -2701,6 +2878,27 @@ body {
   color: #f87171;
 }
 
+.gdpr-retry-btn {
+  background: rgba(124,58,237,0.15);
+  border: 1px solid rgba(124,58,237,0.4);
+  color: #a78bfa;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.gdpr-retry-btn:hover {
+  background: rgba(124,58,237,0.25);
+  border-color: rgba(124,58,237,0.6);
+  transform: translateY(-2px);
+}
+
 /* ============================================================
    GDPR OLVIDO EXERCISE (El Dilema del Derecho al Olvido)
    ============================================================ */
@@ -2903,6 +3101,18 @@ body {
   flex-direction: column;
   gap: 14px;
   width: 100%;
+}
+
+.vt-instruction {
+  background: rgba(124,58,237,0.1);
+  border: 1px solid rgba(124,58,237,0.25);
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  color: #a78bfa;
+  text-align: center;
+  font-weight: 500;
 }
 
 .vt-scenario {

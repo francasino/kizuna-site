@@ -483,7 +483,7 @@ const CourseController = {
           // Navigate to the first slide of this module
           const firstSlideOfModule = COURSE_DATA.slides.find(s => s.module_id === mod.id);
           if (firstSlideOfModule) {
-            this.showSlide(firstSlideOfModule.id);
+            this.showSlide(COURSE_DATA.slides.indexOf(firstSlideOfModule));
           }
         });
       }
@@ -518,7 +518,7 @@ const CourseController = {
     this.highestVisitedIndex = Math.max(this.highestVisitedIndex, index);
 
     const slide = COURSE_DATA.slides[index];
-    const isCompleted = this.completedSlides.has(index);
+    const isCompleted = this.completedSlides.has(index) || this.completedSlides.has(slide.id);
 
     // Dynamic module theme class
     const appContainer = document.querySelector(".app-container");
@@ -631,7 +631,7 @@ const CourseController = {
             }
 
             this.timerProgressLine.style.width = "100%";
-            this.completedSlides.add(index);
+            this.completedSlides.add(slide.id);
             this.saveLMSData();
           } else {
             this.timerText.textContent = `${this.secondsRemaining}s`;
@@ -647,7 +647,7 @@ const CourseController = {
         this.timerIndicator.style.display = "none";
         this.btnNext.disabled = false;
         this.timerProgressLine.style.width = "100%";
-        this.completedSlides.add(index);
+        this.completedSlides.add(slide.id);
         this.saveLMSData();
 
         const nextBtnText = (slide.type === 'quiz_question') ?
@@ -688,6 +688,10 @@ const CourseController = {
     }
     if (slide.layout === 'timeline_72h') {
       this.renderTimeline72h(slide);
+      return;
+    }
+    if (slide.layout === 'scenario_cards') {
+      this.renderScenarioCards(slide);
       return;
     }
 
@@ -842,7 +846,7 @@ const CourseController = {
       let inCardGrid = false;
 
       // Pre-check if there is any bullet that should be rendered as a card
-      const useCardsForBullets = slide.text_on_screen.some(line => {
+      const cardLines = slide.text_on_screen.filter(line => {
         const trimmed = line.trim();
         if (trimmed.startsWith("•") || trimmed.startsWith("-")) {
           const cleanLine = trimmed.replace(/^[•-]\s*/, "");
@@ -851,6 +855,7 @@ const CourseController = {
         }
         return false;
       });
+      const useCardsForBullets = cardLines.length > 0;
 
       slide.text_on_screen.forEach(line => {
         if (!line.strip) line = String(line);
@@ -902,8 +907,9 @@ const CourseController = {
 
           if (useCardsForBullets) {
             if (!inCardGrid) {
-              if (html) html += `<div class="cards-grid">`;
-              else html = `<div class="cards-grid">`;
+              const gridClass = cardLines.length > 3 ? 'cards-grid grid-2cols' : 'cards-grid';
+              if (html) html += `<div class="${gridClass}">`;
+              else html = `<div class="${gridClass}">`;
               inCardGrid = true;
             }
 
@@ -2017,7 +2023,7 @@ const CourseController = {
     // Go to first question of the quiz
     const firstQ = modQuestions[0];
     if (firstQ) {
-      this.showSlide(firstQ.id);
+      this.showSlide(COURSE_DATA.slides.indexOf(firstQ));
     }
   },
 
@@ -2054,7 +2060,7 @@ const CourseController = {
         this.saveLMSData();
 
         if (feedbackSlide) {
-          this.showSlide(feedbackSlide.id);
+          this.showSlide(COURSE_DATA.slides.indexOf(feedbackSlide));
         }
       } else {
         // Go to next question slide
@@ -2345,6 +2351,7 @@ const CourseController = {
 
     let currentItem = 0;
     let results = [];
+    let retryFlag = false;
 
     const buildUI = () => {
       const item = items[currentItem];
@@ -2402,9 +2409,16 @@ const CourseController = {
                   <div class="gdpr-feedback-bar correct">
                     ¡Bien hecho! Reconocer el nivel de sensibilidad de cada dato es la primera línea de defensa legal. La clasificación correcta determina qué medidas técnicas y organizativas debes aplicar para cumplir el RGPD.
                   </div>
+                  <button class="gdpr-retry-btn" id="gdpr-retry">🔄 Reintentar ejercicio</button>
                 </div>
               `;
               this.renderExtendedText(slide.extended_text);
+              document.getElementById('gdpr-retry').addEventListener('click', () => {
+                retryFlag = true;
+                currentItem = 0;
+                results = [];
+                buildUI();
+              });
             } else {
               buildUI();
             }
@@ -2421,10 +2435,19 @@ const CourseController = {
             <div class="data-value" style="color:#34d399;">✓ Clasificador de Privacidad superado</div>
           </div>
           <div class="gdpr-feedback-bar correct">Has clasificado correctamente los tipos de dato según el RGPD. ¡Excelente trabajo!</div>
+          <button class="gdpr-retry-btn" id="gdpr-retry">🔄 Reintentar ejercicio</button>
         </div>
       `;
       this.renderExtendedText(slide.extended_text);
       this.btnNext.disabled = false;
+      document.getElementById('gdpr-retry').addEventListener('click', () => {
+        retryFlag = true;
+        currentItem = 0;
+        results = [];
+        this.completedSlides.delete(this.currentSlideIndex);
+        this.btnNext.disabled = true;
+        buildUI();
+      });
     } else {
       this.btnNext.disabled = true;
       buildUI();
@@ -2680,6 +2703,7 @@ const CourseController = {
 
       this.screenTextContent.innerHTML = `
         <div class="vt-layout">
+          <div class="vt-instruction">Selecciona el tipo de incidente y su gravedad deslizando el círculo.</div>
           ${scenariosHtml}
           <div id="vt-result" class="vt-result-panel ${showResult ? (resultOk ? 'success' : 'fail') : ''}">${resultItemsHtml}</div>
           <button class="vt-evaluate-btn" id="vt-evaluate">🔎 Evaluar mi Triaje</button>
@@ -2845,7 +2869,8 @@ const CourseController = {
 
   buildFlipCardsMarkup(items, slideId) {
     if (items.length === 0) return "";
-    let html = `<div class="flip-cards-grid">`;
+    const gridClass = items.length > 3 ? 'flip-cards-grid grid-2cols' : 'flip-cards-grid';
+    let html = `<div class="${gridClass}">`;
     items.forEach((item, idx) => {
       html += `
         <div class="flip-card" onclick="this.classList.toggle('flipped')">
@@ -2870,6 +2895,54 @@ const CourseController = {
 
   bindFlipCardsEvents(slideId) {
     // handled inline via onclick
+  },
+
+  renderScenarioCards(slide) {
+    this.slideScreenCard.style.display = "flex";
+    this.slideExtendedCard.style.display = "block";
+    this.visualTitle.textContent = slide.visual_title || slide.title || "Escenarios Cotidianos";
+
+    const parseCard = (line) => {
+      const parts = line.split("||");
+      return {
+        tag: parts[0] || "",
+        actionTitle: parts[1] || "",
+        actionDesc: parts[2] || "",
+        auditText: parts[3] || ""
+      };
+    };
+
+    const cards = slide.text_on_screen.map(line => parseCard(line));
+
+    let html = `
+      <div class="scenario-cards-grid">
+        ${cards.map((card, idx) => `
+          <div class="scenario-card" onclick="this.classList.toggle('scenario-flipped')">
+            <div class="scenario-card-inner">
+              <div class="scenario-card-front">
+                <div class="scenario-tag">${card.tag}</div>
+                <div class="scenario-action-title">${card.actionTitle}</div>
+                <div class="scenario-action-desc">${card.actionDesc}</div>
+                <div class="scenario-hint">
+                  <span>🔄</span>
+                  <span>Toca para ver la auditoría</span>
+                </div>
+              </div>
+              <div class="scenario-card-back">
+                <div class="scenario-audit-icon">❌</div>
+                <div class="scenario-audit-content">
+                  <div class="scenario-audit-title">Auditoría y Consecuencias</div>
+                  <div class="scenario-audit-text">${card.auditText.replace(/\n/g, '<br>')}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    this.screenTextContent.innerHTML = html;
+    this.renderExtendedText(slide.extended_text);
   }
 };
 

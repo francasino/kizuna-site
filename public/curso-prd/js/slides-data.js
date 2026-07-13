@@ -52,7 +52,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "module_intro",
       "module_title": "Introducción, Metodología y Aval Normativo",
-      "time": 60,
+      "time": 40,
       "id": 0
     },
     {
@@ -76,7 +76,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Introducción, Metodología y Aval Normativo",
-      "time": 60,
+      "time": 40,
       "id": 1
     },
     {
@@ -99,7 +99,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Introducción, Metodología y Aval Normativo",
-      "time": 60,
+      "time": 40,
       "id": 2
     },
     {
@@ -125,7 +125,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Introducción, Metodología y Aval Normativo",
-      "time": 60,
+      "time": 40,
       "id": 3
     },
     {
@@ -155,7 +155,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": null,
       "module_title": "Introducción, Metodología y Aval Normativo",
-      "time": 60,
+      "time": 40,
       "id": 4
     },
     {
@@ -178,7 +178,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Introducción, Metodología y Aval Normativo",
-      "time": 60,
+      "time": 40,
       "id": 5
     },
     {
@@ -195,7 +195,7 @@ const COURSE_DATA = {
         "• AI Act: Regulación ética para el uso de Inteligencia Artificial, asegurando la supervisión humana y la transparencia algorítmica."
       ],
       "extended_text": [
-        "\"El abanico legislativo que cubrimos con este programa es extenso. A nivel del Código Penal español, este curso demuestra que la empresa tiene controles reales para evitar delitos informáticos desde dentro. Para quienes teletrabajan, el contenido incluye instrucciones de seguridad exigidas por la Ley de Trabajo a Distancia. Además, al abordar la cultura de la 'No culpa', la desconexión digital y el tecnoestrés, nos alineamos con los requerimientos de Prevención de Riesgos Laborales. Finalmente, de cara a certificaciones de calidad internacionales, este curso las reglas básicas de seguridad de la información corporativa.\""
+        "\"El abanico legislativo que cubrimos con este programa es extenso. Este curso da herramientas para evitar delitos informáticos. Para quienes teletrabajan, el contenido incluye instrucciones de seguridad exigidas por la Ley de Trabajo a Distancia. Además, al abordar la cultura de la 'No culpa', la desconexión digital y el tecnoestrés, nos alineamos con los requerimientos de Prevención de Riesgos Laborales. Finalmente, de cara a certificaciones de calidad internacionales, este curso las reglas básicas de seguridad de la información corporativa.\""
       ],
       "image_desc": null,
       "image_file": null,
@@ -203,7 +203,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Introducción, Metodología y Aval Normativo",
-      "time": 60,
+      "time": 40,
       "id": 6
     },
     {
@@ -225,7 +225,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "flipcards",
       "module_title": "Introducción, Metodología y Aval Normativo",
-      "time": 60,
+      "time": 40,
       "id": 7
     },
     {
@@ -247,7 +247,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "flipcards",
       "module_title": "Introducción, Metodología y Aval Normativo",
-      "time": 60,
+      "time": 40,
       "id": 8
     },
     {
@@ -269,7 +269,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "flipcards",
       "module_title": "Introducción, Metodología y Aval Normativo",
-      "time": 60,
+      "time": 40,
       "id": 9
     },
     {
@@ -291,7 +291,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": null,
       "module_title": "Introducción, Metodología y Aval Normativo",
-      "time": 60,
+      "time": 40,
       "id": 10
     },
     {
@@ -312,7 +312,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "module_intro",
       "module_title": "Identidad Digital y Validez Jurídica",
-      "time": 60,
+      "time": 40,
       "id": 11
     },
     {
@@ -336,7 +336,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Identidad Digital y Validez Jurídica",
-      "time": 60,
+      "time": 40,
       "id": 12
     },
     {
@@ -360,7 +360,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": null,
       "module_title": "Identidad Digital y Validez Jurídica",
-      "time": 60,
+      "time": 40,
       "id": 13
     },
     {
@@ -384,7 +384,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Identidad Digital y Validez Jurídica",
-      "time": 60,
+      "time": 40,
       "id": 14
     },
     {
@@ -409,7 +409,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Identidad Digital y Validez Jurídica",
-      "time": 60,
+      "time": 40,
       "id": 15
     },
     {
@@ -433,7 +433,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Identidad Digital y Validez Jurídica",
-      "time": 60,
+      "time": 40,
       "id": 16
     },
     {
@@ -457,8 +457,52 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Identidad Digital y Validez Jurídica",
-      "time": 60,
+      "time": 40,
       "id": 17
+    },
+    {
+      "module_id": 1,
+      "slide_num_str": "Diapositiva 10B",
+      "title": "Escenarios Cotidianos de Riesgo (I)",
+      "visual_title": "Escenarios Cotidianos: ¿Y esto qué riesgo tiene? (I)",
+      "text_on_screen": [
+        "Credenciales y Trazabilidad||Le presté mi usuario al nuevo.||Un empleado nuevo acaba de incorporarse y el departamento de IT aún no le ha creado sus credenciales. Para que pueda ir avanzando trabajo, un compañero le facilita su usuario y contraseña temporalmente.||❌ Pérdida de Responsabilidad (No repudio).\nLas credenciales son nominales e intransferibles. Si el nuevo empleado comete un error crítico o realiza una acción ilegal, el sistema registrará que fuiste tú. La responsabilidad laboral y legal recaerá íntegramente sobre el titular de la cuenta.",
+        "MFA (Multifactor)||Aprueba el aviso por mí, que voy a una reunión.||Un trabajador deja su móvil corporativo en la mesa de un compañero y le pide: \"Estoy conectado a la VPN, pero si se cierra y te salta el aviso del MFA, dale a aprobar por mí, que no me llevo el teléfono\".||❌ Ruptura de la Identidad Física.\nEl objetivo del MFA no es solo una contraseña extra, es demostrar tu presencia física. Delegar esta herramienta destruye la auditoría de seguridad. Si se aprueba un acceso y ocurre una fuga de datos, el registro indicará que fuiste tú, siendo imposible demostrar lo contrario.",
+        "Certificados Digitales||Envié mi certificado para agilizar el trámite.||Un responsable está de vacaciones. Para no bloquear la facturación, deja su Certificado Digital instalado en un equipo compartido o envía el archivo y el PIN por chat a la persona de administración.||❌ Suplantación de Identidad (Penal).\nEl certificado digital equivale legalmente a una firma manuscrita ante notario. Cederlo voluntariamente es una negligencia gravísima. Cualquier documento o trámite firmado así tiene validez legal vinculante a tu nombre."
+      ],
+      "extended_text": [
+        "\"Cada día, en la oficina, enfrentamos decisiones que parecen inofensivas pero que tienen graves consecuencias legales y de seguridad. Revisa estos escenarios cotidianos para entender qué riesgo real esconden.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "scenario_cards",
+      "module_title": "Identidad Digital y Validez Jurídica",
+      "time": 40,
+      "id": 171
+    },
+    {
+      "module_id": 1,
+      "slide_num_str": "Diapositiva 10C",
+      "title": "Escenarios Cotidianos de Riesgo (II)",
+      "visual_title": "Escenarios Cotidianos: ¿Y esto qué riesgo tiene? (II)",
+      "text_on_screen": [
+        "Biometría e Identidad||Añadí su huella a mi portátil.||Dos personas comparten turno. Para no tener que teclear contraseñas si uno está en un descanso, registran la huella dactilar de ambos en el lector biométrico de un mismo equipo asignado a uno de ellos.||❌ Fusión de Identidades Digitales.\nLa biometría es el método más estricto de validación. Al registrar la huella de un tercero en tu perfil, permites que el sistema asuma que sus acciones son tuyas. Es una violación directa de las políticas de acceso lógico.",
+        "Uso de Sesiones Ajenas||Cerré el expediente desde su ordenador.||Un compañero se levanta a por un café dejando su equipo desbloqueado. Para ayudarle a atender una petición urgente de un cliente, te sientas en su puesto y tramitas la gestión desde su sesión.||❌ Alteración de Trazabilidad.\nOperar bajo el perfil de otro usuario destruye la cadena de custodia. Si hay un error, el sistema registrará que lo hizo el compañero ausente. La regla de oro es: si te levantas, bloqueas la pantalla.",
+        "Uso de Cuentas Genéricas||Usé el buzón de facturación para no dejar rastro.||Para modificar un dato bancario en el sistema, un empleado usa la cuenta genérica (facturacion@) en lugar de la suya nominal, buscando que nadie sepa quién hizo el cambio exactamente.||❌ Evasión de Auditoría (Shadow Identity).\nLas cuentas genéricas solo deben usarse para consulta o atención, nunca para ejecutar acciones críticas (firmar, pagar, modificar datos). Su uso para evadir la trazabilidad alerta a los sistemas de compliance financiero."
+      ],
+      "extended_text": [
+        "\"La clave está en detectar estas situaciones antes de que ocurran. Si reconoces estos patrones en tu día a día, ya estás blindando tu identidad digital y la de tu empresa.\""
+      ],
+      "image_desc": null,
+      "image_file": null,
+      "type": "content",
+      "is_range": false,
+      "layout": "scenario_cards",
+      "module_title": "Identidad Digital y Validez Jurídica",
+      "time": 40,
+      "id": 172
     },
     {
       "module_id": 1,
@@ -667,7 +711,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "module_intro",
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 23
     },
     {
@@ -692,7 +736,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 24
     },
     {
@@ -715,7 +759,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 25
     },
     {
@@ -738,7 +782,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 26
     },
     {
@@ -761,7 +805,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 27
     },
     {
@@ -784,7 +828,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 28
     },
     {
@@ -807,7 +851,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 29
     },
     {
@@ -830,7 +874,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": null,
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 30
     },
     {
@@ -853,7 +897,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "ocean_diagnosis",
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 31
     },
     {
@@ -989,7 +1033,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 37
     },
     {
@@ -1013,7 +1057,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 38
     },
     {
@@ -1053,7 +1097,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 40
     },
     {
@@ -1102,7 +1146,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 42
     },
     {
@@ -1146,7 +1190,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "flipcards",
       "module_title": "Psicología del Ataque y Shadow AI",
-      "time": 60,
+      "time": 40,
       "id": 44
     },
     {
@@ -1361,7 +1405,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "module_intro",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 51
     },
     {
@@ -1384,7 +1428,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 52
     },
     {
@@ -1408,7 +1452,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 53
     },
     {
@@ -1432,7 +1476,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 54
     },
     {
@@ -1455,7 +1499,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 55
     },
     {
@@ -1478,7 +1522,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 56
     },
     {
@@ -1500,7 +1544,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "gdpr_sort",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 57
     },
     {
@@ -1525,7 +1569,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 58
     },
     {
@@ -1548,7 +1592,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 59
     },
     {
@@ -1572,7 +1616,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 60
     },
     {
@@ -1596,7 +1640,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 61
     },
     {
@@ -1619,7 +1663,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 62
     },
     {
@@ -1643,7 +1687,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 63
     },
     {
@@ -1683,7 +1727,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "gdpr_olvido",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 65
     },
     {
@@ -1707,7 +1751,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Protección de Datos 360",
-      "time": 60,
+      "time": 40,
       "id": 66
     },
     {
@@ -1939,7 +1983,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "module_intro",
       "module_title": "Seguridad en el Entorno Híbrido",
-      "time": 60,
+      "time": 40,
       "id": 73
     },
     {
@@ -1964,7 +2008,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Seguridad en el Entorno Híbrido",
-      "time": 60,
+      "time": 40,
       "id": 74
     },
     {
@@ -1989,7 +2033,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Seguridad en el Entorno Híbrido",
-      "time": 60,
+      "time": 40,
       "id": 75
     },
     {
@@ -2053,7 +2097,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Seguridad en el Entorno Híbrido",
-      "time": 60,
+      "time": 40,
       "id": 78
     },
     {
@@ -2096,7 +2140,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Seguridad en el Entorno Híbrido",
-      "time": 60,
+      "time": 40,
       "id": 80
     },
     {
@@ -2119,7 +2163,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Seguridad en el Entorno Híbrido",
-      "time": 60,
+      "time": 40,
       "id": 81
     },
     {
@@ -2142,7 +2186,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "flipcards",
       "module_title": "Seguridad en el Entorno Híbrido",
-      "time": 60,
+      "time": 40,
       "id": 82
     },
     {
@@ -2182,7 +2226,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Seguridad en el Entorno Híbrido",
-      "time": 60,
+      "time": 40,
       "id": 84
     },
     {
@@ -2432,7 +2476,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "module_intro",
       "module_title": "Protocolo de Respuesta ante Incidentes",
-      "time": 60,
+      "time": 40,
       "id": 91
     },
     {
@@ -2456,7 +2500,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Protocolo de Respuesta ante Incidentes",
-      "time": 60,
+      "time": 40,
       "id": 92
     },
     {
@@ -2481,7 +2525,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Protocolo de Respuesta ante Incidentes",
-      "time": 60,
+      "time": 40,
       "id": 93
     },
     {
@@ -2507,7 +2551,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "ransomware_sort",
       "module_title": "Protocolo de Respuesta ante Incidentes",
-      "time": 60,
+      "time": 40,
       "id": 94
     },
     {
@@ -2530,7 +2574,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Protocolo de Respuesta ante Incidentes",
-      "time": 60,
+      "time": 40,
       "id": 95
     },
     {
@@ -2552,7 +2596,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Protocolo de Respuesta ante Incidentes",
-      "time": 60,
+      "time": 40,
       "id": 96
     },
     {
@@ -2593,7 +2637,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Protocolo de Respuesta ante Incidentes",
-      "time": 60,
+      "time": 40,
       "id": 98
     },
     {
@@ -2635,7 +2679,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Protocolo de Respuesta ante Incidentes",
-      "time": 60,
+      "time": 40,
       "id": 100
     },
     {
@@ -2658,7 +2702,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Protocolo de Respuesta ante Incidentes",
-      "time": 60,
+      "time": 40,
       "id": 101
     },
     {
@@ -2911,7 +2955,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "module_intro",
       "module_title": "Salud Mental y Ética Digital",
-      "time": 60,
+      "time": 40,
       "id": 108
     },
     {
@@ -2935,7 +2979,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Salud Mental y Ética Digital",
-      "time": 60,
+      "time": 40,
       "id": 109
     },
     {
@@ -2977,7 +3021,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Salud Mental y Ética Digital",
-      "time": 60,
+      "time": 40,
       "id": 111
     },
     {
@@ -3001,7 +3045,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Salud Mental y Ética Digital",
-      "time": 60,
+      "time": 40,
       "id": 112
     },
     {
@@ -3024,7 +3068,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Salud Mental y Ética Digital",
-      "time": 60,
+      "time": 40,
       "id": 113
     },
     {
@@ -3048,7 +3092,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Salud Mental y Ética Digital",
-      "time": 60,
+      "time": 40,
       "id": 114
     },
     {
@@ -3089,7 +3133,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Salud Mental y Ética Digital",
-      "time": 60,
+      "time": 40,
       "id": 116
     },
     {
@@ -3112,7 +3156,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Salud Mental y Ética Digital",
-      "time": 60,
+      "time": 40,
       "id": 117
     },
     {
@@ -3345,7 +3389,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "module_intro",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
-      "time": 60,
+      "time": 40,
       "id": 124
     },
     {
@@ -3368,7 +3412,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
-      "time": 60,
+      "time": 40,
       "id": 125
     },
     {
@@ -3392,7 +3436,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "flipcards",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
-      "time": 60,
+      "time": 40,
       "id": 126
     },
     {
@@ -3414,7 +3458,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "vulnerability_triaje",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
-      "time": 60,
+      "time": 40,
       "id": 127
     },
     {
@@ -3438,7 +3482,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
-      "time": 60,
+      "time": 40,
       "id": 128
     },
     {
@@ -3462,7 +3506,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
-      "time": 60,
+      "time": 40,
       "id": 129
     },
     {
@@ -3504,7 +3548,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
-      "time": 60,
+      "time": 40,
       "id": 131
     },
     {
@@ -3563,7 +3607,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
-      "time": 60,
+      "time": 40,
       "id": 134
     },
     {
@@ -3585,7 +3629,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "timeline_72h",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
-      "time": 60,
+      "time": 40,
       "id": 135
     },
     {
@@ -3609,7 +3653,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
-      "time": 60,
+      "time": 40,
       "id": 136
     },
     {
@@ -3632,7 +3676,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "accordions",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
-      "time": 60,
+      "time": 40,
       "id": 137
     },
     {
@@ -3654,7 +3698,7 @@ const COURSE_DATA = {
       "is_range": false,
       "layout": "tabs",
       "module_title": "Gestión de Vulnerabilidades y Brechas",
-      "time": 60,
+      "time": 40,
       "id": 138
     },
     {
