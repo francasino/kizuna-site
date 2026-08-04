@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
+  ChevronLeft,
   ChevronRight,
   GraduationCap,
   HeartHandshake,
@@ -47,21 +48,21 @@ const LogoMark = ({ className = "w-8 h-8" }) => (
   </svg>
 );
 
-const Section = ({ id, eyebrow, title, children, className = "bg-white/70" }) => (
+const Section = ({ id, eyebrow, title, children, className = "bg-white/[0.03] backdrop-blur-md border-b border-white/10" }) => (
   <section id={id} className={`scroll-mt-24 py-16 sm:py-24 ${className}`} aria-labelledby={`${id}-title`}>
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <p className="text-sm uppercase tracking-widest text-emerald-700/80">{eyebrow}</p>
-        <h2 id={`${id}-title`} className="mt-2 text-3xl sm:text-4xl font-semibold text-emerald-950">
+        <p className="text-xs uppercase tracking-widest text-emerald-400 font-bold">{eyebrow}</p>
+        <h2 id={`${id}-title`} className="mt-2 text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight">
           {title}
         </h2>
       </motion.div>
-      <div className="mt-8">{children}</div>
+      <div className="mt-10">{children}</div>
     </div>
   </section>
 );
@@ -69,10 +70,9 @@ const Section = ({ id, eyebrow, title, children, className = "bg-white/70" }) =>
 const NavLink = ({ href, children }) => (
   <a
     href={href}
-    className="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-emerald-50/95 hover:text-white hover:bg-emerald-900/20 transition-colors"
+    className="px-3.5 py-2 rounded-xl text-emerald-100/80 hover:text-white hover:bg-white/10 transition-colors text-xs font-semibold"
   >
-    <LogoMark className="w-4 h-4" />
-    <span className="text-sm font-medium">{children}</span>
+    {children}
   </a>
 );
 
@@ -87,6 +87,53 @@ const CatalanFlag = () => (
   />
 );
 
+const ProjectCard = ({ title, description, link, linkText, icon: Icon, lang }) => {
+  const [flipped, setFlipped] = useState(false);
+
+  return (
+    <div
+      className="w-48 h-48 sm:w-56 sm:h-56 cursor-pointer [perspective:1000px]"
+      onClick={() => setFlipped(!flipped)}
+    >
+      <motion.div
+        className="relative w-full h-full"
+        style={{ transformStyle: "preserve-3d" }}
+        animate={{ rotateY: flipped ? 180 : 0 }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+      >
+        {/* Front Side */}
+        <div
+          className="absolute inset-0 w-full h-full rounded-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-emerald-800 to-emerald-950 text-white shadow-lg ring-4 ring-emerald-500/20 text-center select-none"
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          <Icon className="w-8 h-8 sm:w-10 sm:h-10 mb-2 text-emerald-300" />
+          <h4 className="font-semibold text-sm sm:text-base leading-tight px-1">{title}</h4>
+          <span className="mt-2 text-[10px] sm:text-xs uppercase tracking-widest text-emerald-200/70 font-medium">
+            {lang === "es" ? "Saber más" : lang === "ca" ? "Saber més" : "Learn more"}
+          </span>
+        </div>
+
+        {/* Back Side */}
+        <div
+          className="absolute inset-0 w-full h-full rounded-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-white to-emerald-50 text-emerald-950 shadow-lg ring-4 ring-emerald-500/20 text-center"
+          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+        >
+          <p className="text-xs sm:text-sm leading-snug text-emerald-900 line-clamp-4 px-2">{description}</p>
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="mt-3 inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-emerald-700 hover:text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-3 py-1.5 rounded-full transition"
+          >
+            {linkText} <ChevronRight className="w-3 h-3" />
+          </a>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 // ───────── Main component ─────────
 export default function App() {
   const [lang, setLang] = useState("es");
@@ -96,6 +143,33 @@ export default function App() {
   
   // Estado para el banner de cookies
   const [showCookieBanner, setShowCookieBanner] = useState(false);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  const handleContactSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") || "";
+    const email = formData.get("email") || "";
+    const subject = formData.get("subject") || "Contacto Kizuna Global";
+    const message = formData.get("message") || "";
+    
+    const body = `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`;
+    window.location.href = `mailto:fran.casino@kizunaglobal.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const { scrollY } = useScroll();
+  const rotatePlanet = useTransform(scrollY, [0, 4000], [0, 360]);
+  const rotatePlanetInverse = useTransform(scrollY, [0, 4000], [360, 0]);
 
   useEffect(() => {
     const cacheKey = "drive_logos_cache_v1";
@@ -276,7 +350,22 @@ export default function App() {
           cookiePolicy: "Política de Cookies",
           cookiePolicyText: "Esta página web utiliza cookies técnicas para permitir su correcto funcionamiento, y cookies analíticas para mejorar la experiencia de navegación. El usuario puede revocar su consentimiento o configurar su navegador para bloquearlas.",
           cookieBannerText: "Utilizamos cookies propias y de terceros para el correcto funcionamiento de la web y mejorar tu experiencia. Al pulsar 'Aceptar', consientes su uso.",
-          cookieAccept: "Aceptar cookies"
+          cookieAccept: "Aceptar cookies",
+          projectsEventsMenu: "Proyectos y Eventos",
+          projectsEventsTitle: "Proyectos y Eventos Actuales",
+          projectsEventsLead: "Explora nuestras iniciativas en marcha y los próximos eventos. Haz clic en las tarjetas para descubrir más detalles.",
+          project1Title: "Hasta Que Él Venga",
+          project1Desc: "Organizamos la tercera edición de este congreso interdenominacional a nivel Nacional y Europeo",
+          project1LinkText: "Visitar Web",
+          project2Title: "Talleres de Salud Mental",
+          project2Desc: "Sesiones psicoeducativas sobre bienestar emocional y prevención del estrés digital.",
+          project2LinkText: "Más Información",
+          project3Title: "Ciberresiliencia 2026",
+          project3Desc: "Capacitación en uso ético de la IA y ciberseguridad para ciudadanos y empresas.",
+          project3LinkText: "Ver Detalles",
+          statutesTitle: "Estatutos y Misión",
+          statutesText: "Consulte los estatutos de fundación de Kizuna Global y las bases reguladoras de nuestra misión institucional.",
+          statutesLink: "Descargar Estatutos y Misión (PDF)"
         },
         ca: {
           about: "Qui som",
@@ -332,7 +421,22 @@ export default function App() {
           cookiePolicy: "Política de Galetes",
           cookiePolicyText: "Aquesta pàgina web utilitza galetes tècniques per permetre el seu correcte funcionament. L'usuari pot configurar el seu navegador per bloquejar-les.",
           cookieBannerText: "Utilitzem galetes per garantir el funcionament de la web i millorar la teva experiència. En prémer 'Acceptar', consents el seu ús.",
-          cookieAccept: "Acceptar galetes"
+          cookieAccept: "Acceptar galetes",
+          projectsEventsMenu: "Projectes i Esdeveniments",
+          projectsEventsTitle: "Projectes i Esdeveniments Actuals",
+          projectsEventsLead: "Explora les nostres iniciatives en marxa i els propers esdeveniments. Fes clic a les targetes per descobrir més detalls.",
+          project1Title: "Hasta Que Él Venga",
+          project1Desc: "Organitzem la tercera edició d'aquest congrés interdenominacional a nivell Nacional i Europeu",
+          project1LinkText: "Visitar Web",
+          project2Title: "Tallers de Salut Mental",
+          project2Desc: "Sessions psicoeducatives sobre benestar emocional i prevenció de l'estrès digital.",
+          project2LinkText: "Més Informació",
+          project3Title: "Ciberresiliència 2026",
+          project3Desc: "Capacitació en ús ètic de la IA i ciberseguretat per a ciutadans i empreses.",
+          project3LinkText: "Veure Detalls",
+          statutesTitle: "Estatuts i Missió",
+          statutesText: "Consulteu els estatuts de fundació de Kizuna Global i les bases reguladores de la nostra missió institucional.",
+          statutesLink: "Descarregar Estatuts i Missió (PDF)"
         },
         en: {
           about: "About",
@@ -388,13 +492,29 @@ export default function App() {
           cookiePolicy: "Cookie Policy",
           cookiePolicyText: "This website uses technical cookies to ensure its its proper functioning. Users can configure their browser to block them.",
           cookieBannerText: "We use cookies to ensure the website functions properly and to improve your experience. By clicking 'Accept', you consent to their use.",
-          cookieAccept: "Accept cookies"
+          cookieAccept: "Accept cookies",
+          projectsEventsMenu: "Projects & Events",
+          projectsEventsTitle: "Current Projects & Events",
+          projectsEventsLead: "Explore our ongoing initiatives and upcoming events. Click on the cards to discover more details.",
+          project1Title: "Hasta Que Él Venga",
+          project1Desc: "We organize the third edition of this interdenominational congress at National and European level",
+          project1LinkText: "Visit Website",
+          project2Title: "Mental Health Workshops",
+          project2Desc: "Psychoeducational sessions on emotional well-being and digital stress prevention.",
+          project2LinkText: "More Information",
+          project3Title: "Cyber-resilience 2026",
+          project3Desc: "Training in ethical AI use and cybersecurity for citizens and businesses.",
+          project3LinkText: "View Details",
+          statutesTitle: "Statutes & Mission",
+          statutesText: "View Kizuna Global's foundational statutes and the regulatory framework of our institutional mission.",
+          statutesLink: "Download Statutes & Mission (PDF)"
         },
       })[lang],
     [lang]
   );
 
   const menu = [
+    { href: "#projects-events", label: t.projectsEventsMenu },
     { href: "#about", label: t.about },
     { href: "#areas", label: t.areas },
     { href: "#partners", label: t.partners },
@@ -470,32 +590,82 @@ export default function App() {
 
   // ───────── Layout ─────────
   return (
-    <div className="relative min-h-screen text-emerald-950">
-      {/* Background */}
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${bg})` }} />
-        <div className="absolute inset-0 bg-emerald-50/80" />
+    <div className="relative min-h-screen text-white/95 selection:bg-emerald-500 selection:text-white">
+      {/* Redesigned Cosmic Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        {/* Near black/zinc slate theme */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-zinc-950 via-neutral-900 to-zinc-950" />
+        <div className="absolute inset-0 bg-cover bg-center opacity-[0.04] mix-blend-overlay" style={{ backgroundImage: `url(${bg})` }} />
+        {/* Subtle glow overlays */}
+        <div className="absolute top-[25%] right-[-10%] w-[700px] h-[700px] rounded-full bg-emerald-600/5 blur-[150px] pointer-events-none" />
+        <div className="absolute bottom-[20%] left-[-10%] w-[700px] h-[700px] rounded-full bg-teal-600/5 blur-[150px] pointer-events-none" />
       </div>
 
-      {/* Navbar */}
-      <header className="sticky top-0 z-50 backdrop-blur bg-emerald-900/85 border-b border-white/10">
-        <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-          <a href="#home" className="flex items-center gap-3 text-white">
-            <img src={logo} alt="Kizuna Global" className="h-10 sm:h-12 w-auto" />
-            <span className="font-serif tracking-[0.25em] hidden sm:block">KIZUNA GLOBAL</span>
+      {/* Scroll-animated background planet/network nodes */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <motion.div
+          style={{ rotate: rotatePlanet }}
+          className="absolute right-[-15%] top-[15%] w-[450px] h-[450px] md:w-[750px] md:h-[750px] opacity-[0.25]"
+        >
+          <svg viewBox="0 0 200 200" className="w-full h-full text-emerald-300">
+            <circle cx="100" cy="100" r="45" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
+            <circle cx="100" cy="100" r="40" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <ellipse cx="100" cy="100" rx="90" ry="25" fill="none" stroke="currentColor" strokeWidth="0.8" transform="rotate(-30 100 100)" />
+            <ellipse cx="100" cy="100" rx="80" ry="15" fill="none" stroke="currentColor" strokeWidth="1.2" transform="rotate(15 100 100)" strokeDasharray="5 5" />
+            <ellipse cx="100" cy="100" rx="65" ry="35" fill="none" stroke="currentColor" strokeWidth="0.5" transform="rotate(60 100 100)" />
+            <g stroke="currentColor" strokeWidth="0.3">
+              <line x1="100" y1="100" x2="35" y2="65" />
+              <line x1="100" y1="100" x2="165" y2="100" />
+              <line x1="100" y1="100" x2="80" y2="155" />
+              <line x1="100" y1="100" x2="135" y2="55" />
+            </g>
+            <circle cx="35" cy="65" r="3" fill="currentColor" />
+            <circle cx="165" cy="100" r="2" fill="currentColor" />
+            <circle cx="80" cy="155" r="4" fill="currentColor" />
+            <circle cx="135" cy="55" r="2.5" fill="currentColor" />
+            <circle cx="65" cy="115" r="1.5" fill="currentColor" />
+            <circle cx="120" cy="140" r="3.5" fill="currentColor" />
+          </svg>
+        </motion.div>
+
+        <motion.div
+          style={{ rotate: rotatePlanetInverse }}
+          className="absolute left-[-20%] bottom-[10%] w-[350px] h-[350px] md:w-[600px] md:h-[600px] opacity-[0.18]"
+        >
+          <svg viewBox="0 0 200 200" className="w-full h-full text-teal-300">
+            <circle cx="100" cy="100" r="30" fill="none" stroke="currentColor" strokeWidth="0.8" />
+            <ellipse cx="100" cy="100" rx="75" ry="20" fill="none" stroke="currentColor" strokeWidth="1" transform="rotate(45 100 100)" />
+            <ellipse cx="100" cy="100" rx="90" ry="12" fill="none" stroke="currentColor" strokeWidth="0.5" transform="rotate(-15 100 100)" strokeDasharray="3 3" />
+            <g stroke="currentColor" strokeWidth="0.3">
+              <line x1="100" y1="100" x2="50" y2="50" />
+              <line x1="100" y1="100" x2="150" y2="150" />
+              <line x1="100" y1="100" x2="45" y2="135" />
+            </g>
+            <circle cx="50" cy="50" r="2" fill="currentColor" />
+            <circle cx="150" cy="150" r="3" fill="currentColor" />
+            <circle cx="45" cy="135" r="2" fill="currentColor" />
+          </svg>
+        </motion.div>
+      </div>
+
+      {/* Floating Glass Navbar */}
+      <header className="sticky top-4 z-50 mx-auto max-w-6xl px-4 select-none">
+        <nav className="backdrop-blur-md bg-emerald-950/75 border border-white/10 rounded-2xl shadow-xl px-4 sm:px-6 flex items-center justify-between h-16 transition-all">
+          <a href="#home" className="flex items-center gap-2 text-white">
+            <span className="font-serif tracking-widest font-bold text-sm sm:text-base text-emerald-100 hover:text-white transition">KIZUNA GLOBAL</span>
           </a>
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-1">
             {menu.map((m) => (
               <NavLink key={m.href} href={m.href}>
                 {m.label}
               </NavLink>
             ))}
           </div>
-          <div className="flex items-center gap-2 ml-3">
+          <div className="flex items-center gap-2">
             <button
               aria-label="Català"
               onClick={() => setLang("ca")}
-              className={`rounded-lg px-2 py-1 text-white/90 hover:bg-white/10 ${lang === "ca" ? "bg-white/15" : ""}`}
+              className={`rounded-lg px-2 py-1 text-white/90 hover:bg-white/10 transition-colors ${lang === "ca" ? "bg-white/10" : ""}`}
               title="Català"
             >
               <CatalanFlag />
@@ -503,7 +673,7 @@ export default function App() {
             <button
               aria-label="Español"
               onClick={() => setLang("es")}
-              className={`rounded-lg px-2 py-1 hover:bg-white/10 ${lang === "es" ? "bg-white/15" : ""}`}
+              className={`rounded-lg px-2 py-1 hover:bg-white/10 transition-colors ${lang === "es" ? "bg-white/10" : ""}`}
               title="Español"
             >
               🇪🇸
@@ -511,73 +681,219 @@ export default function App() {
             <button
               aria-label="English"
               onClick={() => setLang("en")}
-              className={`rounded-lg px-2 py-1 hover:bg-white/10 ${lang === "en" ? "bg-white/15" : ""}`}
+              className={`rounded-lg px-2 py-1 hover:bg-white/10 transition-colors ${lang === "en" ? "bg-white/10" : ""}`}
               title="English"
             >
               🇬🇧
             </button>
-            <a href="#join" className="inline-flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-white hover:bg-white/20 transition">
+            <a href="#join" className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 px-3.5 py-2 text-xs sm:text-sm text-white font-semibold shadow-md hover:shadow-emerald-500/10 hover:-translate-y-0.5 transition-all duration-300">
               {t.participate} <ChevronRight className="w-4 h-4" />
             </a>
           </div>
         </nav>
       </header>
 
-      {/* Hero */}
-      <section id="home" className="py-24 sm:py-32 text-center relative">
-        <div className="mx-auto max-w-3xl px-4 text-emerald-950">
-          <img src={logo} alt="Kizuna Global" className="mx-auto h-28 w-auto mb-8" />
-          <h1 className="font-serif text-4xl sm:text-5xl leading-tight">{t.heroTitle}</h1>
-          <p className="mt-4 text-lg text-emerald-900/80">{t.heroLead}</p>
+      {/* Hero Section */}
+      <section id="home" className="py-24 sm:py-32 text-center relative select-none">
+        <div className="mx-auto max-w-3xl px-4">
+          <img 
+            src={logo} 
+            alt="Kizuna Global Logo" 
+            className="mx-auto h-40 sm:h-48 w-auto mb-8 filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)] select-none pointer-events-none"
+          />
+          <motion.h1 
+            className="font-serif text-4xl sm:text-6xl font-bold leading-tight text-white tracking-tight"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+          >
+            {t.heroTitle}
+          </motion.h1>
+          <motion.p 
+            className="mt-6 text-lg sm:text-xl text-emerald-200/85 max-w-2xl mx-auto leading-relaxed"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            {t.heroLead}
+          </motion.p>
+          <motion.div
+            className="mt-8 flex justify-center gap-4"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+          >
+            <a href="#about" className="inline-flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 shadow-md">
+              {t.explore}
+            </a>
+            <a href="#projects-events" className="inline-flex items-center justify-center rounded-xl bg-emerald-500 hover:bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 shadow-md">
+              {t.projectsEventsMenu} <ChevronRight className="w-4 h-4 ml-1" />
+            </a>
+          </motion.div>
         </div>
       </section>
 
-      <section id="carousel" className="relative overflow-hidden h-[50vh] flex items-center justify-center text-center">
-        {images.map((img, i) => (
-          <motion.img
-            key={i}
-            src={img}
-            alt="carousel"
-            className="absolute inset-0 w-full h-full object-contain bg-black"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: i === index ? 1 : 0 }}
-            transition={{ duration: 1 }}
-          />
-        ))}
-        <div className="absolute inset-0 bg-emerald-900/40" />
-        <div className="relative z-10 text-white px-4">
-          <h2 className="font-serif text-3xl sm:text-4xl">{t.carouselTitle}</h2>
-          <p className="mt-2 text-sm sm:text-base text-white/90">{t.carouselLead}</p>
+      <section id="carousel" className="relative overflow-hidden py-16 bg-gradient-to-b from-emerald-950 via-emerald-900 to-emerald-950 text-white text-center">
+        {/* Gallery Background Pattern */}
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center h-full">
+          <div>
+            <h2 className="font-serif text-3xl sm:text-4xl font-semibold tracking-wide text-white">{t.carouselTitle}</h2>
+            <p className="mt-2 text-sm sm:text-base text-emerald-200/85 max-w-2xl mx-auto">{t.carouselLead}</p>
+          </div>
+
+          {/* 3D Coverflow Container */}
+          <div className="relative mt-12 w-full max-w-5xl h-[280px] sm:h-[360px] flex items-center justify-center overflow-hidden [perspective:1200px] select-none">
+            {images.map((img, i) => {
+              let offset = i - index;
+              const N = images.length;
+              if (offset > N / 2) offset -= N;
+              if (offset < -N / 2) offset += N;
+
+              const isVisible = Math.abs(offset) <= 2;
+              if (!isVisible) return null;
+
+              const rotateY = offset * -35;
+              const translateZ = Math.abs(offset) * -180;
+              const scale = 1 - Math.abs(offset) * 0.15;
+              const opacity = 1 - Math.abs(offset) * 0.45;
+              const zIndex = 10 - Math.abs(offset);
+              const translateX = offset * (isMobile ? 110 : 250);
+
+              return (
+                <motion.div
+                  key={i}
+                  animate={{
+                    x: translateX,
+                    z: translateZ,
+                    rotateY: rotateY,
+                    scale: scale,
+                    opacity: opacity,
+                  }}
+                  style={{
+                    zIndex: zIndex,
+                    transformStyle: "preserve-3d",
+                  }}
+                  transition={{ type: "spring", stiffness: 220, damping: 25 }}
+                  className="absolute w-[240px] h-[160px] sm:w-[450px] sm:h-[280px] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-4 border-white/90 bg-emerald-950 cursor-pointer"
+                  onClick={() => setIndex(i)}
+                >
+                  <img
+                    src={img}
+                    alt={`kizuna-${i}`}
+                    className="w-full h-full object-cover pointer-events-none"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 pointer-events-none" />
+                </motion.div>
+              );
+            })}
+
+            {/* Navigation Arrows */}
+            <button
+              onClick={() => setIndex((i) => (i - 1 + images.length) % images.length)}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2.5 sm:p-3 rounded-full bg-black/40 hover:bg-black/60 text-white/90 hover:text-white transition ring-1 ring-white/10"
+              aria-label="Previous"
+            >
+              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+            </button>
+            <button
+              onClick={() => setIndex((i) => (i + 1) % images.length)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2.5 sm:p-3 rounded-full bg-black/40 hover:bg-black/60 text-white/90 hover:text-white transition ring-1 ring-white/10"
+              aria-label="Next"
+            >
+              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+            </button>
+          </div>
+
+          {/* Dots Indicator */}
+          <div className="mt-8 flex justify-center gap-2 max-w-full overflow-x-auto py-2 px-4 scrollbar-none">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                className={`h-2.5 transition-all duration-300 rounded-full ${
+                  i === index ? "w-8 bg-emerald-400" : "w-2.5 bg-emerald-700/60 hover:bg-emerald-600"
+                }`}
+                aria-label={`Go to slide ${i + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </section>
+
+      {/* Projects & Events Section */}
+      <Section
+        id="projects-events"
+        eyebrow={{ es: "Iniciativas", ca: "Iniciatives", en: "Initiatives" }[lang]}
+        title={t.projectsEventsTitle}
+      >
+        <p className="text-center text-emerald-200/90 max-w-2xl mx-auto -mt-2 mb-12">
+          {t.projectsEventsLead}
+        </p>
+        <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16">
+          <ProjectCard
+            title={t.project1Title}
+            description={t.project1Desc}
+            link="https://www.hastaqueelvenga.es/"
+            linkText={t.project1LinkText}
+            icon={Globe2}
+            lang={lang}
+          />
+          <ProjectCard
+            title={t.project2Title}
+            description={t.project2Desc}
+            link="#"
+            linkText={t.project2LinkText}
+            icon={HeartHandshake}
+            lang={lang}
+          />
+          <ProjectCard
+            title={t.project3Title}
+            description={t.project3Desc}
+            link="#"
+            linkText={t.project3LinkText}
+            icon={CalendarCheck}
+            lang={lang}
+          />
+        </div>
+      </Section>
 
       {/* About */}
       <Section id="about" eyebrow={{ es: "Introducción", ca: "Introducció", en: "Introduction" }[lang]} title={t.about}>
-        <p>{t.aboutP1}</p>
-        <p className="mt-4">{t.aboutP2}</p>
-        <p className="mt-4">{t.aboutP3}</p>
+        <div className="rounded-3xl bg-white/5 backdrop-blur-md p-8 sm:p-10 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] max-w-4xl mx-auto hover:border-emerald-500/20 transition-all duration-300">
+          <p className="text-base sm:text-lg leading-relaxed text-emerald-100/90">{t.aboutP1}</p>
+          <p className="mt-6 text-base leading-relaxed text-emerald-200/80">{t.aboutP2}</p>
+          <p className="mt-6 text-base leading-relaxed text-emerald-200/80">{t.aboutP3}</p>
+        </div>
       </Section>
 
       {/* Areas */}
       <Section id="areas" eyebrow={{ es: "Qué hacemos", ca: "Què fem", en: "What we do" }[lang]} title={t.areas}>
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-6">
           {areas.map((a, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              className="rounded-2xl bg-white/95 p-6 ring-1 ring-emerald-900/10 shadow-sm hover:shadow-md transition"
+              transition={{ type: "spring", stiffness: 100, damping: 15, delay: i * 0.1 }}
+              whileHover={{ y: -8, scale: 1.02, rotateX: 1.5, rotateY: -1.5, boxShadow: "0 20px 40px rgba(16,185,129,0.15)" }}
+              style={{ transformStyle: "preserve-3d" }}
+              className="rounded-3xl bg-white/5 backdrop-blur-md p-6 sm:p-8 border border-white/20 shadow-[0_20px_40px_rgba(0,0,0,0.35)] hover:border-emerald-500/60 transition-all duration-300"
             >
-              <div className="flex items-center gap-3 text-emerald-800">
-                {a.icon}
-                <h3 className="font-semibold text-lg">{a.title}</h3>
+              <div className="flex items-center gap-4 text-emerald-400">
+                <div className="p-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/30">
+                  {a.icon}
+                </div>
+                <h3 className="font-bold text-lg text-white tracking-tight">{a.title}</h3>
               </div>
-              <ul className="mt-4 space-y-2 text-emerald-900/85">
+              <ul className="mt-6 space-y-3.5 text-emerald-200/85">
                 {a.points.map((b, j) => (
-                  <li key={j} className="flex items-start gap-2">
-                    <LogoMark className="w-4 h-4 mt-1" /> <span>{b}</span>
+                  <li key={j} className="flex items-start gap-3 text-sm">
+                    <LogoMark className="w-4 h-4 mt-0.5 text-emerald-400/80 shrink-0" /> 
+                    <span className="leading-relaxed">{b}</span>
                   </li>
                 ))}
               </ul>
@@ -590,10 +906,20 @@ export default function App() {
       <Section id="partners" eyebrow={t.partners} title={{ es: "Colaboraciones y Red Internacional", ca: "Col·laboracions i Xarxa Internacional", en: "Collaborations & International Network" }[lang]}>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {partners.map((p, i) => (
-            <div key={i} className="rounded-2xl bg-white/95 p-6 ring-1 ring-emerald-900/10 shadow-sm flex items-center gap-3">
-              {p.icon}
-              <div className="font-semibold text-emerald-900">{p.name}</div>
-            </div>
+            <motion.div 
+              key={i} 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ type: "spring", stiffness: 100, damping: 15, delay: i * 0.08 }}
+              whileHover={{ y: -6, scale: 1.03, border: "1px solid rgba(16,185,129,0.5)" }}
+              className="rounded-2xl bg-white/5 backdrop-blur-md p-6 border border-white/20 shadow-[0_15px_30px_rgba(0,0,0,0.25)] flex items-center gap-4 transition-all duration-300"
+            >
+              <div className="p-2.5 rounded-xl bg-teal-500/15 border border-teal-500/30 text-teal-400 shrink-0">
+                {p.icon}
+              </div>
+              <div className="font-bold text-white text-sm sm:text-base tracking-wide">{p.name}</div>
+            </motion.div>
           ))}
         </div>
       </Section>
@@ -601,15 +927,15 @@ export default function App() {
       {/* Collaborating institutions & partners (logos) */}
       <Section
         id="collaborators"
-        browser={{ es: "Colaboraciones", ca: "Col·laboracions", en: "Collaborations" }[lang]}
+        eyebrow={{ es: "Colaboraciones", ca: "Col·laboracions", en: "Collaborations" }[lang]}
         title={t.partnersLogosTitle}
       >
-        <p className="text-emerald-900/80 max-w-3xl">
+        <p className="text-emerald-200/85 max-w-3xl">
           {t.partnersLogosLead}
         </p>
         <div className="mt-8">
           {(!DRIVE_LOGOS_FOLDER_ID || !DRIVE_API_KEY) && (
-            <div className="rounded-xl bg-amber-50 ring-1 ring-amber-200 p-4 text-sm text-amber-900">
+            <div className="rounded-xl bg-amber-500/15 border border-amber-500/30 p-4 text-sm text-amber-200">
               { { es:"Configura VITE_GDRIVE_LOGOS_FOLDER_ID para cargar los logos desde Drive.",
                   ca:"Configura VITE_GDRIVE_LOGOS_FOLDER_ID per carregar els logos des de Drive.",
                   en:"Set VITE_GDRIVE_LOGOS_FOLDER_ID to load logos from Drive." }[lang] }
@@ -623,10 +949,15 @@ export default function App() {
             "
           >
             {logos.map((l, i) => (
-              <div
+              <motion.div
                 key={`${l.name}-${i}`}
-                className="group rounded-2xl bg-white/95 ring-1 ring-emerald-900/10 shadow-sm
-                           flex items-center justify-center p-5 h-24 sm:h-28"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ type: "spring", stiffness: 120, damping: 15, delay: (i % 6) * 0.05 }}
+                whileHover={{ scale: 1.05, border: "1px solid rgba(16,185,129,0.5)" }}
+                className="group rounded-2xl bg-white/5 backdrop-blur-sm border border-white/25 shadow-md
+                           flex items-center justify-center p-5 h-24 sm:h-28 transition-all duration-300"
                 title={l.name}
               >
                 <img
@@ -635,9 +966,9 @@ export default function App() {
                   loading="lazy"
                   className="max-h-full max-w-full object-contain
                              opacity-90 group-hover:opacity-100 transition
-                             grayscale group-hover:grayscale-0"
+                             grayscale group-hover:grayscale-0 brightness-110 filter"
                 />
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -649,14 +980,16 @@ export default function App() {
           {ods.map((o) => (
             <motion.div
               key={o.n}
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 35 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="rounded-2xl bg-white/95 p-5 ring-1 ring-emerald-900/10 shadow-sm"
+              transition={{ type: "spring", stiffness: 100, damping: 15, delay: o.n * 0.03 }}
+              whileHover={{ y: -6, border: "1px solid rgba(16,185,129,0.6)" }}
+              className="rounded-2xl bg-white/5 backdrop-blur-md p-5 border border-white/20 shadow-[0_15px_30px_rgba(0,0,0,0.25)] transition-all duration-300"
             >
-              <div className="text-5xl font-black text-emerald-900/90">{o.n}</div>
-              <div className="mt-2 flex items-center gap-2 text-emerald-900/85">
-                <LogoMark className="w-5 h-5" /> {o.t}
+              <div className="text-5xl font-black text-emerald-400 tracking-tight">{o.n}</div>
+              <div className="mt-3 flex items-center gap-2 text-emerald-200/90 text-sm font-medium">
+                <LogoMark className="w-5 h-5 text-emerald-400 shrink-0" /> {o.t}
               </div>
             </motion.div>
           ))}
@@ -667,51 +1000,71 @@ export default function App() {
       <Section id="team" eyebrow={{ es: "Gobernanza", ca: "Governança", en: "Governance" }[lang]} title={t.team}>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {team.map((m, i) => (
-            <div key={i} className="rounded-2xl bg-white/95 p-6 ring-1 ring-emerald-900/10 shadow-sm">
-              <div className="flex items-center gap-3">
-                <Users className="w-6 h-6 text-emerald-700" />
-                <div>
-                  <div className="font-semibold">{m.name}</div>
-                  <div className="text-emerald-900/70">{m.role}</div>
-                </div>
+            <motion.div 
+              key={i} 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ type: "spring", stiffness: 100, damping: 15, delay: i * 0.1 }}
+              whileHover={{ y: -6, scale: 1.03, border: "1px solid rgba(16,185,129,0.5)" }}
+              className="rounded-2xl bg-white/5 backdrop-blur-md p-6 border border-white/20 shadow-[0_15px_35px_rgba(0,0,0,0.25)] flex items-center gap-4 transition-all duration-300"
+            >
+              <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 shrink-0">
+                <Users className="w-6 h-6" />
               </div>
-            </div>
+              <div>
+                <div className="font-bold text-white text-base tracking-wide">{m.name}</div>
+                <div className="text-emerald-300/80 text-xs sm:text-sm font-medium mt-0.5">{m.role}</div>
+              </div>
+            </motion.div>
           ))}
         </div>
       </Section>
 
       {/* Join / Contact */}
       <Section id="join" eyebrow={{ es: "Participa", ca: "Participa", en: "Get involved" }[lang]} title={t.join}>
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="rounded-2xl bg-gradient-to-br from-white to-emerald-50 p-6 ring-1 ring-emerald-900/10 shadow-sm max-w-xl mx-auto"
+        <motion.form
+          onSubmit={handleContactSubmit}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ type: "spring", stiffness: 100, damping: 15 }}
+          className="rounded-3xl bg-white/5 backdrop-blur-md border border-white/20 shadow-2xl p-6 sm:p-8 max-w-xl mx-auto hover:border-emerald-500/30 transition-colors duration-300"
         >
-          <h3 className="font-semibold mb-3">
+          <h3 className="font-bold text-lg text-white mb-4 tracking-tight">
             {{ es: "Contáctanos", ca: "Contacta'ns", en: "Contact us" }[lang]}
           </h3>
-          <div className="grid sm:grid-cols-2 gap-3">
+          <div className="grid sm:grid-cols-2 gap-4">
             <input
-              className="rounded-xl border border-emerald-900/20 bg-white px-4 py-3 w-full outline-none focus:ring-2 focus:ring-emerald-500"
+              name="name"
+              className="rounded-xl border border-white/20 bg-white/5 text-white placeholder-emerald-300/30 px-4 py-3 w-full outline-none focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/30 transition"
               placeholder={{ es: "Nombre", ca: "Nom", en: "Name" }[lang]}
+              required
             />
             <input
-              className="rounded-xl border border-emerald-900/20 bg-white px-4 py-3 w-full outline-none focus:ring-2 focus:ring-emerald-500"
+              name="email"
+              className="rounded-xl border border-white/20 bg-white/5 text-white placeholder-emerald-300/30 px-4 py-3 w-full outline-none focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/30 transition"
               placeholder="Email"
               type="email"
+              required
             />
           </div>
           <input
-            className="mt-3 rounded-xl border border-emerald-900/20 bg-white px-4 py-3 w-full outline-none focus:ring-2 focus:ring-emerald-500"
+            name="subject"
+            className="mt-4 rounded-xl border border-white/20 bg-white/5 text-white placeholder-emerald-300/30 px-4 py-3 w-full outline-none focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/30 transition"
             placeholder={{ es: "Asunto", ca: "Assumpte", en: "Subject" }[lang]}
+            required
           />
           <textarea
-            className="mt-3 rounded-xl border border-emerald-900/20 bg-white px-4 py-3 w-full h-28 outline-none focus:ring-2 focus:ring-emerald-500"
+            name="message"
+            className="mt-4 rounded-xl border border-white/20 bg-white/5 text-white placeholder-emerald-300/30 px-4 py-3 w-full h-28 outline-none focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/30 transition"
             placeholder={{ es: "Mensaje", ca: "Missatge", en: "Message" }[lang]}
+            required
           />
-          <button className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-emerald-900 px-5 py-3 text-white hover:shadow-md transition">
+          <button className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 px-6 py-3.5 text-white font-semibold shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5 transition-all duration-300">
             {t.send} <ChevronRight className="w-4 h-4" />
           </button>
-        </form>
+        </motion.form>
       </Section>
 
       {/* Legal & Transparency Texts */}
@@ -719,74 +1072,142 @@ export default function App() {
         id="legal-section" 
         eyebrow={t.legalEyebrow} 
         title={t.legalTitle}
-        className="bg-emerald-900/10 border-t border-emerald-900/10 backdrop-blur-sm"
+        className="bg-black/20 border-t border-white/5 backdrop-blur-md"
       >
-        <div className="grid gap-8 sm:grid-cols-2 mt-4 text-emerald-900/85">
-          <div id="transparencia" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
-            <h3 className="font-semibold text-lg mb-2">{t.transparency}</h3>
-            <p className="text-sm leading-relaxed">{t.transparencyText}</p>
-            <a href="#" className="inline-flex items-center gap-2 text-sm text-emerald-700 hover:text-emerald-900 font-medium mt-3 hover:underline">
-              <Download className="w-4 h-4" /> {t.transparencyLink}
-            </a>
-          </div>
+        <div className="grid gap-6 sm:grid-cols-2 mt-4 text-emerald-200/85">
+          <motion.div 
+            id="transparencia" 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.05 }}
+            whileHover={{ border: "1px solid rgba(16,185,129,0.4)" }}
+            className="rounded-2xl bg-white/5 backdrop-blur-md p-6 border border-white/20 shadow-[0_15px_35px_rgba(0,0,0,0.25)] flex flex-col justify-between transition-colors duration-300"
+          >
+            <div>
+              <h3 className="font-bold text-lg text-white mb-2">{t.transparency}</h3>
+              <p className="text-sm leading-relaxed">{t.transparencyText}</p>
+            </div>
+            <div className="mt-4 pt-2 border-t border-white/10">
+              <a href="#" className="inline-flex items-center gap-2 text-sm text-emerald-400 hover:text-emerald-300 font-semibold hover:underline">
+                <Download className="w-4 h-4" /> {t.transparencyLink}
+              </a>
+            </div>
+          </motion.div>
           
-          <div id="aviso-legal" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
-            <h3 className="font-semibold text-lg mb-2">{t.legalNotice}</h3>
+          <motion.div 
+            id="aviso-legal" 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            whileHover={{ border: "1px solid rgba(16,185,129,0.4)" }}
+            className="rounded-2xl bg-white/5 backdrop-blur-md p-6 border border-white/20 shadow-[0_15px_35px_rgba(0,0,0,0.25)] transition-colors duration-300"
+          >
+            <h3 className="font-bold text-lg text-white mb-2">{t.legalNotice}</h3>
             <p className="text-sm leading-relaxed mb-3 opacity-90">{t.legalNoticeIntro}</p>
             <ul className="text-sm space-y-1.5 font-medium">
-              <li><span className="text-emerald-900/60 font-normal">{t.legalOwner}:</span> KIZUNA GLOBAL INICIATIVES SOCIALS</li>
-              <li><span className="text-emerald-900/60 font-normal">{t.legalNIF}:</span> G24875486</li>
-              <li><span className="text-emerald-900/60 font-normal">{t.legalRegistry}:</span> Registre d'Entitats de la Generalitat de Catalunya (№ 79454)</li>
-              <li><span className="text-emerald-900/60 font-normal">{t.legalAddress}:</span> AVGDA LLUIS COMPANYS 14, LOCAL B1, 43005, TARRAGONA</li>
-              <li><span className="text-emerald-900/60 font-normal">{t.legalContact}:</span> fran.casino@gmail.com</li>
+              <li><span className="text-white/60 font-normal">{t.legalOwner}:</span> KIZUNA GLOBAL INICIATIVES SOCIALS</li>
+              <li><span className="text-white/60 font-normal">{t.legalNIF}:</span> G24875486</li>
+              <li><span className="text-white/60 font-normal">{t.legalRegistry}:</span> Registre d'Entitats de la Generalitat de Catalunya (№ 79454)</li>
+              <li><span className="text-white/60 font-normal">{t.legalAddress}:</span> AVGDA LLUIS COMPANYS 14, LOCAL B1, 43005, TARRAGONA</li>
+              <li><span className="text-white/60 font-normal">{t.legalContact}:</span> fran.casino@kizunaglobal.org</li>
             </ul>
-          </div>
+          </motion.div>
 
-          <div id="privacidad" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
-            <h3 className="font-semibold text-lg mb-2">{t.privacyPolicy}</h3>
+          <motion.div 
+            id="privacidad" 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            whileHover={{ border: "1px solid rgba(16,185,129,0.4)" }}
+            className="rounded-2xl bg-white/5 backdrop-blur-md p-6 border border-white/20 shadow-[0_15px_35px_rgba(0,0,0,0.25)] transition-colors duration-300"
+          >
+            <h3 className="font-bold text-lg text-white mb-2">{t.privacyPolicy}</h3>
             <p className="text-sm leading-relaxed">{t.privacyText}</p>
-          </div>
+          </motion.div>
 
-          <div id="igualdad" className="rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm flex flex-col justify-between">
+          <motion.div 
+            id="igualdad" 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            whileHover={{ border: "1px solid rgba(16,185,129,0.4)" }}
+            className="rounded-2xl bg-white/5 backdrop-blur-md p-6 border border-white/20 shadow-[0_15px_35px_rgba(0,0,0,0.25)] flex flex-col justify-between transition-colors duration-300"
+          >
             <div>
-              <h3 className="font-semibold text-lg mb-2">{t.equality}</h3>
+              <h3 className="font-bold text-lg text-white mb-2">{t.equality}</h3>
               <p className="text-sm leading-relaxed">{t.equalityText}</p>
             </div>
-            <div className="mt-4 pt-2 border-t border-emerald-900/5">
+            <div className="mt-4 pt-2 border-t border-white/10">
               <a 
                 href="https://drive.google.com/file/d/1-6Hiij5fECy21HnnU0P6fXu93lXu3KK_/view?usp=drive_link" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="inline-flex items-center gap-2 text-sm text-emerald-700 hover:text-emerald-900 font-semibold hover:underline"
+                className="inline-flex items-center gap-2 text-sm text-emerald-400 hover:text-emerald-300 font-semibold hover:underline"
               >
                 <Download className="w-4 h-4" /> {t.equalityLink}
               </a>
             </div>
-          </div>
+          </motion.div>
 
-          <div id="cookies" className="sm:col-span-2 rounded-2xl bg-white/80 p-6 ring-1 ring-emerald-900/10 shadow-sm">
-            <h3 className="font-semibold text-lg mb-2">{t.cookiePolicy}</h3>
+          <motion.div 
+            id="estatutos-mision" 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.25 }}
+            whileHover={{ border: "1px solid rgba(16,185,129,0.4)" }}
+            className="rounded-2xl bg-white/5 backdrop-blur-md p-6 border border-white/20 shadow-[0_15px_35px_rgba(0,0,0,0.25)] flex flex-col justify-between transition-colors duration-300"
+          >
+            <div>
+              <h3 className="font-bold text-lg text-white mb-2">{t.statutesTitle}</h3>
+              <p className="text-sm leading-relaxed">{t.statutesText}</p>
+            </div>
+            <div className="mt-4 pt-2 border-t border-white/10">
+              <a 
+                href="https://drive.google.com/file/d/1wrj49alPG7UIiulT9knSuaLTRBqw12t-/view?usp=sharing" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center gap-2 text-sm text-emerald-400 hover:text-emerald-300 font-semibold hover:underline"
+              >
+                <Download className="w-4 h-4" /> {t.statutesLink}
+              </a>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            id="cookies" 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            whileHover={{ border: "1px solid rgba(16,185,129,0.4)" }}
+            className="rounded-2xl bg-white/5 backdrop-blur-md p-6 border border-white/20 shadow-[0_15px_35px_rgba(0,0,0,0.25)] transition-colors duration-300"
+          >
+            <h3 className="font-bold text-lg text-white mb-2">{t.cookiePolicy}</h3>
             <p className="text-sm leading-relaxed">{t.cookiePolicyText}</p>
-          </div>
+          </motion.div>
         </div>
       </Section>
 
       {/* Footer */}
-      <footer className="bg-emerald-900/10 backdrop-blur-sm pb-10">
+      <footer className="bg-black/30 border-t border-white/5 backdrop-blur-md pb-10 pt-8 text-emerald-300/80">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3 text-emerald-900">
-            <img src={logo} alt="Kizuna" className="h-10 w-auto" />
-            <span className="font-serif tracking-[0.2em]">KIZUNA GLOBAL</span>
+          <div className="flex items-center gap-3 text-white">
+            <span className="font-serif tracking-[0.2em] font-semibold">KIZUNA GLOBAL</span>
           </div>
           
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-emerald-900/80 font-medium">
-            <a href="#transparencia" className="hover:text-emerald-900 hover:underline">{t.transparency}</a>
-            <a href="#aviso-legal" className="hover:text-emerald-900 hover:underline">{t.legalNotice}</a>
-            <a href="#privacidad" className="hover:text-emerald-900 hover:underline">{t.privacyPolicy}</a>
-            <a href="#cookies" className="hover:text-emerald-900 hover:underline">{t.cookiePolicy}</a>
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium">
+            <a href="#transparencia" className="hover:text-white hover:underline">{t.transparency}</a>
+            <a href="#aviso-legal" className="hover:text-white hover:underline">{t.legalNotice}</a>
+            <a href="#privacidad" className="hover:text-white hover:underline">{t.privacyPolicy}</a>
+            <a href="#cookies" className="hover:text-white hover:underline">{t.cookiePolicy}</a>
           </div>
 
-          <div className="text-sm text-emerald-900/70 text-center md:text-right">
+          <div className="text-sm text-center md:text-right">
             © {new Date().getFullYear()} Kizuna Global — Asociación sin ánimo de lucro.
           </div>
         </div>
