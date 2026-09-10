@@ -8,10 +8,11 @@ import {
   FileText, 
   Users, 
   BarChart3, 
-  Sparkles,
-  Lock,
-  HeartPulse
+  Sparkles, 
+  Lock, 
+  HeartPulse 
 } from "lucide-react";
+import diputacioLogo from "../assets/diputacio_tarragona.svg";
 
 export default function ProjecteAbsentisme2026({ lang, setLang, onBack }) {
   const content = {
@@ -219,7 +220,6 @@ export default function ProjecteAbsentisme2026({ lang, setLang, onBack }) {
 
   const cur = content[lang] || content.es;
   const surveyUrl = "https://docs.google.com/forms/d/e/1FAIpQLSd5sm2uppkc-JUeAo5Rw_7YW3GZlrXinVcMk8LTy8ncW5tgUA/viewform?usp=dialog";
-  const diputacioLogo = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Logotipo_de_la_Diputaci%C3%B3_de_Tarragona.svg/500px-Logotipo_de_la_Diputaci%C3%B3_de_Tarragona.svg.png";
 
   return (
     <div className="min-h-screen text-slate-100 font-sans pb-16">
@@ -334,8 +334,7 @@ export default function ProjecteAbsentisme2026({ lang, setLang, onBack }) {
             <img 
               src={diputacioLogo} 
               alt="Diputació de Tarragona" 
-              className="h-12 w-auto max-w-[130px] sm:max-w-[150px] object-contain"
-              loading="lazy"
+              className="h-10 sm:h-12 w-auto max-w-[180px] sm:max-w-[220px] object-contain"
             />
           </div>
         </motion.header>
