@@ -27,11 +27,10 @@ export default function ProjecteAbsentisme2026({ lang, setLang, onBack }) {
       title: "Estudi de la Salut Psicosocial, el Presentisme i les Baixes Laborals al Camp de Tarragona i Catalunya",
       lead: (
         <>
-          Una investigació independent impulsada per <strong>Kizuna Global Iniciatives Socials</strong>, amb el suport de la <strong>Diputació de Tarragona</strong>, orientada a comprendre les causes reals de l'esgotament laboral i dissenyar solucions preventives aplicables al teixit productiu local.
+          Una investigació independent impulsada per <strong>Kizuna Global Iniciatives Socials</strong>, amb el suport de la <strong>Diputació de Tarragona</strong>, orientada a comprendre les causes reals de l'esgotament laboral i dissenyar solucions preventives aplicables al teixit productiu local. L'enquesta és totalment anònima.
         </>
       ),
       ctaBtn: "Respondre el Qüestionari Anònim (2-3 min)",
-      ctaNote: "100% Anònim · Finalitat científica i social · Sense dades personals",
       
       objectivesTitle: "Objectius de la Recerca",
       objectives: [
@@ -94,11 +93,10 @@ export default function ProjecteAbsentisme2026({ lang, setLang, onBack }) {
       title: "Estudio sobre Salud Psicosocial, Presentismo y Bajas Laborales en el Camp de Tarragona y Cataluña",
       lead: (
         <>
-          Una investigación independiente impulsada por <strong>Kizuna Global Iniciatives Socials</strong>, con la subvención de la <strong>Diputació de Tarragona</strong>, diseñada para identificar los factores determinantes del agotamiento laboral y construir protocolos preventivos aplicables a las organizaciones.
+          Una investigación independiente impulsada por <strong>Kizuna Global Iniciatives Socials</strong>, con la subvención de la <strong>Diputació de Tarragona</strong>, diseñada para identificar los factores determinantes del agotamiento laboral y construir protocolos preventivos aplicables a las organizaciones. La encuesta es totalmente anónima.
         </>
       ),
       ctaBtn: "Participar en la Encuesta Anónima (2-3 min)",
-      ctaNote: "100% Anónimo · Rigor científico · Sin recolección de datos sensibles",
       
       objectivesTitle: "Objetivos del Estudio",
       objectives: [
@@ -161,11 +159,10 @@ export default function ProjecteAbsentisme2026({ lang, setLang, onBack }) {
       title: "Occupational Psychosocial Health, Presenteeism, and Sick Leave in Camp de Tarragona & Catalonia",
       lead: (
         <>
-          An independent research initiative led by <strong>Kizuna Global Iniciatives Socials</strong> and supported by the <strong>Diputació de Tarragona</strong>, designed to identify the operational root causes of workplace burnout and establish actionable preventive guidelines.
+          An independent research initiative led by <strong>Kizuna Global Iniciatives Socials</strong> and supported by the <strong>Diputació de Tarragona</strong>, designed to identify the operational root causes of workplace burnout and establish actionable preventive guidelines. The survey is completely anonymous.
         </>
       ),
       ctaBtn: "Take the Anonymous Survey (2-3 min)",
-      ctaNote: "100% Anonymous · Scientific research · No identifiable data collected",
       
       objectivesTitle: "Research Objectives",
       objectives: [
@@ -367,10 +364,6 @@ export default function ProjecteAbsentisme2026({ lang, setLang, onBack }) {
                 <span>{cur.ctaBtn}</span>
                 <ExternalLink className="w-4 h-4" />
               </a>
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-emerald-200/80">
-                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>{cur.ctaNote}</span>
-              </div>
             </div>
           </div>
         </motion.section>
