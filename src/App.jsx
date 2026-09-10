@@ -24,6 +24,7 @@ import img3 from "./assets/ela3.jpeg";
 import img4 from "./assets/mont1.jpeg";
 import img5 from "./assets/consell1.jpg";
 import img6 from "./assets/consell2.jpg";
+import ProjecteAbsentisme2026 from "./pages/ProjecteAbsentisme2026";
 
 const DRIVE_API_KEY = import.meta.env.VITE_GDRIVE_API_KEY;
 const DRIVE_FOLDER_ID = import.meta.env.VITE_GDRIVE_FOLDER_ID;
@@ -87,7 +88,7 @@ const CatalanFlag = () => (
   />
 );
 
-const ProjectCard = ({ title, description, link, linkText, icon: Icon, lang }) => {
+const ProjectCard = ({ title, description, link, linkText, icon: Icon, lang, isExternal = true, onClick }) => {
   const [flipped, setFlipped] = useState(false);
 
   return (
@@ -121,10 +122,15 @@ const ProjectCard = ({ title, description, link, linkText, icon: Icon, lang }) =
           <p className="text-xs sm:text-sm leading-snug text-emerald-900 line-clamp-4 px-2">{description}</p>
           <a
             href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="mt-3 inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-emerald-700 hover:text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-3 py-1.5 rounded-full transition"
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onClick) {
+                onClick(e);
+              }
+            }}
+            className="mt-3 inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-emerald-700 hover:text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-3 py-1.5 rounded-full transition cursor-pointer"
           >
             {linkText} <ChevronRight className="w-3 h-3" />
           </a>
@@ -132,6 +138,19 @@ const ProjectCard = ({ title, description, link, linkText, icon: Icon, lang }) =
       </motion.div>
     </div>
   );
+};
+
+const getRouteFromUrl = () => {
+  if (typeof window === "undefined") return "home";
+  const pathname = window.location.pathname.replace(/\/$/, "");
+  const hash = window.location.hash.replace(/^#\/?/, "");
+  if (
+    pathname.endsWith("projecte_absentisme_diputacio_2026") ||
+    hash.startsWith("projecte_absentisme_diputacio_2026")
+  ) {
+    return "projecte_absentisme_diputacio_2026";
+  }
+  return "home";
 };
 
 // ───────── Main component ─────────
@@ -143,8 +162,41 @@ export default function App() {
   
   // Estado para el banner de cookies
   const [showCookieBanner, setShowCookieBanner] = useState(false);
+  const [currentRoute, setCurrentRoute] = useState(getRouteFromUrl);
 
   const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleUrlChange = () => {
+      setCurrentRoute(getRouteFromUrl());
+    };
+    window.addEventListener("popstate", handleUrlChange);
+    window.addEventListener("hashchange", handleUrlChange);
+    return () => {
+      window.removeEventListener("popstate", handleUrlChange);
+      window.removeEventListener("hashchange", handleUrlChange);
+    };
+  }, []);
+
+  const navigateTo = (route, e) => {
+    if (e) e.preventDefault();
+    if (route === "home") {
+      window.history.pushState({}, "", "/#projects-events");
+      setCurrentRoute("home");
+      setTimeout(() => {
+        const el = document.getElementById("projects-events");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      }, 50);
+    } else if (route === "projecte_absentisme_diputacio_2026") {
+      window.history.pushState({}, "", "/projecte_absentisme_diputacio_2026");
+      setCurrentRoute("projecte_absentisme_diputacio_2026");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const handleContactSubmit = (e) => {
     e.preventDefault();
@@ -357,9 +409,9 @@ export default function App() {
           project1Title: "Hasta Que Él Venga",
           project1Desc: "Organizamos la tercera edición de este congreso interdenominacional a nivel Nacional y Europeo",
           project1LinkText: "Visitar Web",
-          project2Title: "Talleres de Salud Mental",
-          project2Desc: "Sesiones psicoeducativas sobre bienestar emocional y prevención del estrés digital.",
-          project2LinkText: "Más Información",
+          project2Title: "Proyecto Prevencion Absentisme 2026",
+          project2Desc: "Proyecto financiado por Diputació de Tarragona para prevenir absentismo laboral.",
+          project2LinkText: "Ver Proyecto",
           project3Title: "Ciberresiliencia 2026",
           project3Desc: "Capacitación en uso ético de la IA y ciberseguridad para ciudadanos y empresas.",
           project3LinkText: "Ver Detalles",
@@ -428,9 +480,9 @@ export default function App() {
           project1Title: "Hasta Que Él Venga",
           project1Desc: "Organitzem la tercera edició d'aquest congrés interdenominacional a nivell Nacional i Europeu",
           project1LinkText: "Visitar Web",
-          project2Title: "Tallers de Salut Mental",
-          project2Desc: "Sessions psicoeducatives sobre benestar emocional i prevenció de l'estrès digital.",
-          project2LinkText: "Més Informació",
+          project2Title: "Projecte Prevenció Absentisme 2026",
+          project2Desc: "Projecte finançat per la Diputació de Tarragona per prevenir l'absentisme laboral.",
+          project2LinkText: "Veure Projecte",
           project3Title: "Ciberresiliència 2026",
           project3Desc: "Capacitació en ús ètic de la IA i ciberseguretat per a ciutadans i empreses.",
           project3LinkText: "Veure Detalls",
@@ -499,9 +551,9 @@ export default function App() {
           project1Title: "Hasta Que Él Venga",
           project1Desc: "We organize the third edition of this interdenominational congress at National and European level",
           project1LinkText: "Visit Website",
-          project2Title: "Mental Health Workshops",
-          project2Desc: "Psychoeducational sessions on emotional well-being and digital stress prevention.",
-          project2LinkText: "More Information",
+          project2Title: "Absenteeism Prevention Project 2026",
+          project2Desc: "Project funded by Diputació de Tarragona to prevent workplace absenteeism.",
+          project2LinkText: "View Project",
           project3Title: "Cyber-resilience 2026",
           project3Desc: "Training in ethical AI use and cybersecurity for citizens and businesses.",
           project3LinkText: "View Details",
@@ -588,6 +640,37 @@ export default function App() {
     { role: { es: "Voluntaria", ca: "Voluntària", en: "Volunteer" }[lang], name: "Esther Creus" },
   ];
 
+  if (currentRoute === "projecte_absentisme_diputacio_2026") {
+    return (
+      <div className="relative min-h-screen text-white/95 selection:bg-emerald-500 selection:text-white">
+        <div className="fixed inset-0 -z-10 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-tr from-zinc-950 via-neutral-900 to-zinc-950" />
+          <div className="absolute inset-0 bg-cover bg-center opacity-[0.04] mix-blend-overlay" style={{ backgroundImage: `url(${bg})` }} />
+          <div className="absolute top-[25%] right-[-10%] w-[700px] h-[700px] rounded-full bg-emerald-600/10 blur-[150px] pointer-events-none" />
+          <div className="absolute bottom-[20%] left-[-10%] w-[700px] h-[700px] rounded-full bg-teal-600/10 blur-[150px] pointer-events-none" />
+        </div>
+        <ProjecteAbsentisme2026
+          lang={lang}
+          setLang={setLang}
+          onBack={(e) => navigateTo("home", e)}
+        />
+        {showCookieBanner && (
+          <div className="fixed bottom-0 left-0 right-0 z-[100] bg-emerald-950 text-white p-4 sm:p-5 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-sm opacity-90 max-w-3xl">
+              {t.cookieBannerText}
+            </p>
+            <button 
+              onClick={handleAcceptCookies}
+              className="shrink-0 rounded-xl bg-white px-5 py-2.5 text-emerald-950 font-medium hover:bg-emerald-50 transition"
+            >
+              {t.cookieAccept}
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   // ───────── Layout ─────────
   return (
     <div className="relative min-h-screen text-white/95 selection:bg-emerald-500 selection:text-white">
@@ -661,31 +744,41 @@ export default function App() {
               </NavLink>
             ))}
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              aria-label="Català"
-              onClick={() => setLang("ca")}
-              className={`rounded-lg px-2 py-1 text-white/90 hover:bg-white/10 transition-colors ${lang === "ca" ? "bg-white/10" : ""}`}
-              title="Català"
-            >
-              <CatalanFlag />
-            </button>
-            <button
-              aria-label="Español"
-              onClick={() => setLang("es")}
-              className={`rounded-lg px-2 py-1 hover:bg-white/10 transition-colors ${lang === "es" ? "bg-white/10" : ""}`}
-              title="Español"
-            >
-              🇪🇸
-            </button>
-            <button
-              aria-label="English"
-              onClick={() => setLang("en")}
-              className={`rounded-lg px-2 py-1 hover:bg-white/10 transition-colors ${lang === "en" ? "bg-white/10" : ""}`}
-              title="English"
-            >
-              🇬🇧
-            </button>
+          <div className="flex items-center gap-3">
+            {/* Language Switcher Pills */}
+            <div className="flex items-center bg-black/40 p-1 rounded-xl border border-white/10 text-xs font-medium">
+              <button
+                onClick={() => setLang("ca")}
+                className={`px-2.5 py-1 rounded-lg transition-all ${
+                  lang === "ca"
+                    ? "bg-emerald-500 text-white font-bold shadow-md shadow-emerald-900/50"
+                    : "text-emerald-200/80 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                Català
+              </button>
+              <button
+                onClick={() => setLang("es")}
+                className={`px-2.5 py-1 rounded-lg transition-all ${
+                  lang === "es"
+                    ? "bg-emerald-500 text-white font-bold shadow-md shadow-emerald-900/50"
+                    : "text-emerald-200/80 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                Castellano
+              </button>
+              <button
+                onClick={() => setLang("en")}
+                className={`px-2.5 py-1 rounded-lg transition-all ${
+                  lang === "en"
+                    ? "bg-emerald-500 text-white font-bold shadow-md shadow-emerald-900/50"
+                    : "text-emerald-200/80 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                English
+              </button>
+            </div>
+
             <a href="#join" className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 px-3.5 py-2 text-xs sm:text-sm text-white font-semibold shadow-md hover:shadow-emerald-500/10 hover:-translate-y-0.5 transition-all duration-300">
               {t.participate} <ChevronRight className="w-4 h-4" />
             </a>
@@ -844,10 +937,12 @@ export default function App() {
           <ProjectCard
             title={t.project2Title}
             description={t.project2Desc}
-            link="#"
+            link="/projecte_absentisme_diputacio_2026"
             linkText={t.project2LinkText}
             icon={HeartHandshake}
             lang={lang}
+            isExternal={false}
+            onClick={(e) => navigateTo("projecte_absentisme_diputacio_2026", e)}
           />
           <ProjectCard
             title={t.project3Title}
