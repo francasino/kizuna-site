@@ -22,6 +22,12 @@ function spaFallbackPlugin() {
           fs.mkdirSync(subpageDir, { recursive: true });
         }
         fs.copyFileSync(indexPath, path.join(subpageDir, "index.html"));
+
+        const eventsDir = path.join(distDir, "events");
+        if (!fs.existsSync(eventsDir)) {
+          fs.mkdirSync(eventsDir, { recursive: true });
+        }
+        fs.copyFileSync(indexPath, path.join(eventsDir, "index.html"));
       }
     }
   };
