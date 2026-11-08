@@ -70,7 +70,7 @@ export default function EventsPage({ lang, setLang, onBack }) {
       ],
 
       eventsSectionBadge: "Portfolio d'Esdeveniments",
-      eventsSectionTitle: "Esdeveniments Organitzats",
+      eventsSectionTitle: "Esdeveniments",
       eventsSectionLead:
         "Coneix les grans cites gestionades i acompanyades per KIZUNA GLOBAL EVENTS, on la precisió organitzativa i el servei integral han marcat la diferència.",
 
@@ -88,8 +88,7 @@ export default function EventsPage({ lang, setLang, onBack }) {
       kizunaRolePoints: [
         "Coordinació tècnica integral i gestió del recinte a la Fira de Reus per acollir milers de congressistes.",
         "Operativa completa d'agència de viatges: bloqueig i gestió d'allotjaments hotelers per a assistents i delegacions de tot Europa.",
-        "Coordinació de trasllats, viatges i atenció personalitzada per a ponents VIP, músics i equips tècnics.",
-        "Supervisió in situ d'accessos, acreditacions digitals i suport permanent a l'equip promotor."
+        "Coordinació de trasllats, viatges i atenció personalitzada per a ponents VIP, músics i equips tècnics."
       ],
 
       visitOfficialWeb: "Visitar Web Oficial (hastaqueelvenga.es)",
@@ -138,7 +137,7 @@ export default function EventsPage({ lang, setLang, onBack }) {
       ],
 
       eventsSectionBadge: "Portfolio de Eventos",
-      eventsSectionTitle: "Eventos Organizados",
+      eventsSectionTitle: "Eventos",
       eventsSectionLead:
         "Conoce las grandes convocatorias gestionadas y acompañadas por KIZUNA GLOBAL EVENTS, donde la excelencia logística y el acompañamiento integral garantizan un impacto memorable.",
 
@@ -156,8 +155,7 @@ export default function EventsPage({ lang, setLang, onBack }) {
       kizunaRolePoints: [
         "Coordinación técnica integral y gestión del recinto ferial Fira de Reus para acoger a miles de congresistas.",
         "Operativa completa de agencia de viajes: bloqueo y gestión hotelera para asistentes y delegaciones de toda España y Europa.",
-        "Coordinación de traslados, transfers y atención VIP a ponentes internacionales, músicos y equipos de producción.",
-        "Control de accesos in situ, sistemas de acreditación y asistencia logística permanente durante todas las jornadas."
+        "Coordinación de traslados, transfers y atención VIP a ponentes internacionales, músicos y equipos de producción."
       ],
 
       visitOfficialWeb: "Visitar Web Oficial (hastaqueelvenga.es)",
@@ -206,7 +204,7 @@ export default function EventsPage({ lang, setLang, onBack }) {
       ],
 
       eventsSectionBadge: "Events Portfolio",
-      eventsSectionTitle: "Organized Events",
+      eventsSectionTitle: "Events",
       eventsSectionLead:
         "Explore key large-scale events coordinated and managed by KIZUNA GLOBAL EVENTS, where operational rigor and turnkey logistics make every experience memorable.",
 
@@ -224,8 +222,7 @@ export default function EventsPage({ lang, setLang, onBack }) {
       kizunaRolePoints: [
         "End-to-end technical coordination and contracting of the Fira de Reus exhibition center to accommodate thousands of attendees.",
         "Full-scope travel agency management: hotel room blocks and group bookings across Tarragona province for European delegations.",
-        "Airport and high-speed train transfers, chauffeur services, and VIP logistics for international guest speakers and artists.",
-        "On-site access control, digital badge credentialing, and 24/7 logistical support during the entire event."
+        "Airport and high-speed train transfers, chauffeur services, and VIP logistics for international guest speakers and artists."
       ],
 
       visitOfficialWeb: "Visit Official Website (hastaqueelvenga.es)",
