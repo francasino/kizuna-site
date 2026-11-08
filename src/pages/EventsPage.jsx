@@ -17,7 +17,9 @@ import {
   Mail,
   Send,
   Globe2,
-  Compass
+  Compass,
+  Instagram,
+  Linkedin
 } from "lucide-react";
 
 import placeholder1 from "../assets/placeholders/events/placeholder-event-1.png";
@@ -47,8 +49,8 @@ export default function EventsPage({ lang, setLang, onBack }) {
       pillars: [
         {
           icon: <Building2 className="w-6 h-6" />,
-          title: "Logística i Producció Integral",
-          desc: "Planificació i contractació d'espais firals, congressuals i hotelers. Coordinació de muntatges, equips audiovisuals d'avantguarda, il·luminació i so professional."
+          title: "Disseny i Logística d'Esdeveniments",
+          desc: "T'ajudem en el disseny i la logística integral del teu esdeveniment, acompanyant-te en la planificació i gestió de tots els elements necessaris."
         },
         {
           icon: <Plane className="w-6 h-6" />,
@@ -98,7 +100,7 @@ export default function EventsPage({ lang, setLang, onBack }) {
       contactLead:
         "A KIZUNA GLOBAL EVENTS posem a la teva disposició la nostra experiència de més de 30 anys i tota la nostra xarxa logística i d'agència de viatges per fer del teu projecte un èxit rotund.",
       contactBtn: "Contacta amb KIZUNA GLOBAL EVENTS",
-      contactEmail: "fran.casino@kizunaglobal.org"
+      contactEmail: "ester.creus@kizunaglobal.org"
     },
 
     es: {
@@ -115,8 +117,8 @@ export default function EventsPage({ lang, setLang, onBack }) {
       pillars: [
         {
           icon: <Building2 className="w-6 h-6" />,
-          title: "Logística y Producción Integral",
-          desc: "Planificación y contratación de recintos feriales, palacios de congresos y espacios singulares. Montajes técnicos de sonido, iluminación escénica y streaming profesional."
+          title: "Diseño y Logística de Eventos",
+          desc: "Te ayudamos en el diseño y la logística de tu evento, acompañándote en la planificación y gestión de todos los elementos necesarios."
         },
         {
           icon: <Plane className="w-6 h-6" />,
@@ -166,7 +168,7 @@ export default function EventsPage({ lang, setLang, onBack }) {
       contactLead:
         "En KIZUNA GLOBAL EVENTS ponemos a tu disposición más de 30 años de experiencia contrastada, una red integral de contactos y servicios plenos de agencia de viajes para que tu evento sea un éxito rotundo.",
       contactBtn: "Contactar con KIZUNA GLOBAL EVENTS",
-      contactEmail: "fran.casino@kizunaglobal.org"
+      contactEmail: "ester.creus@kizunaglobal.org"
     },
 
     en: {
@@ -183,8 +185,8 @@ export default function EventsPage({ lang, setLang, onBack }) {
       pillars: [
         {
           icon: <Building2 className="w-6 h-6" />,
-          title: "Comprehensive Logistics & Venues",
-          desc: "Planning, venue leasing, and operations for exhibition centers, convention complexes, and arenas. High-end stage production, audio engineering, and dynamic lighting."
+          title: "Event Design & Logistics",
+          desc: "We help you in the design and logistics of your event, accompanying and guiding you through every step of the planning and coordination."
         },
         {
           icon: <Plane className="w-6 h-6" />,
@@ -234,7 +236,7 @@ export default function EventsPage({ lang, setLang, onBack }) {
       contactLead:
         "KIZUNA GLOBAL EVENTS provides over 30 years of experience, a vast network of industry partners, and complete travel agency capabilities to ensure your event's absolute success.",
       contactBtn: "Contact KIZUNA GLOBAL EVENTS",
-      contactEmail: "fran.casino@kizunaglobal.org"
+      contactEmail: "ester.creus@kizunaglobal.org"
     }
   };
 
@@ -345,7 +347,36 @@ export default function EventsPage({ lang, setLang, onBack }) {
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3.5">
+            {/* Social Network Icons inside sticky top banner */}
+            <div className="flex items-center gap-1 sm:gap-1.5">
+              <a
+                href="https://www.instagram.com/associacio_kizuna_global/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram Kizuna Global"
+                title="Instagram · @associacio_kizuna_global"
+                className="group flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-white/5 hover:bg-pink-500/15 border border-white/10 hover:border-pink-500/40 text-pink-400 hover:text-pink-300 transition-all duration-300 hover:scale-105 shadow-sm"
+              >
+                <Instagram className="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:scale-110 drop-shadow-[0_1px_6px_rgba(236,72,153,0.4)]" />
+                <span className="hidden xl:inline text-xs font-semibold text-white/90 group-hover:text-white">Instagram</span>
+              </a>
+
+              <a
+                href="https://www.linkedin.com/company/kizuna-global-iniciatives-socials/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn Kizuna Global"
+                title="LinkedIn · Kizuna Global Iniciatives Socials"
+                className="group flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-white/5 hover:bg-blue-500/20 border border-white/10 hover:border-blue-400/50 text-blue-400 hover:text-blue-300 transition-all duration-300 hover:scale-105 shadow-sm"
+              >
+                <Linkedin className="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:scale-110 drop-shadow-[0_1px_6px_rgba(59,130,246,0.4)]" />
+                <span className="hidden xl:inline text-xs font-semibold text-white/90 group-hover:text-white">LinkedIn</span>
+              </a>
+            </div>
+
+            <div className="hidden sm:block h-5 w-px bg-white/15" />
+
             {/* Quick Language Switcher Pills */}
             <div className="flex items-center bg-black/50 p-1 rounded-xl border border-white/10 text-xs font-medium">
               <button
@@ -681,14 +712,6 @@ export default function EventsPage({ lang, setLang, onBack }) {
                     <span>{cur.visitOfficialWeb}</span>
                     <ExternalLink className="w-4 h-4" />
                   </a>
-
-                  <a
-                    href="#contact-events"
-                    className="inline-flex items-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 px-5 py-3 text-sm sm:text-base font-semibold text-white transition-all hover:-translate-y-0.5"
-                  >
-                    <span>{cur.contactBtn}</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </a>
                 </div>
               </div>
             </div>
@@ -712,7 +735,7 @@ export default function EventsPage({ lang, setLang, onBack }) {
               {cur.contactLead}
             </p>
 
-            <div className="pt-4 flex justify-center">
+            <div className="pt-4 flex flex-col items-center gap-2">
               <a
                 href={`mailto:${cur.contactEmail}?subject=Consulta%20Kizuna%20Global%20Events`}
                 className="inline-flex items-center gap-2.5 rounded-xl bg-blue-500 hover:bg-blue-600 px-7 py-3.5 text-base font-bold text-white transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-500/30"
@@ -720,6 +743,9 @@ export default function EventsPage({ lang, setLang, onBack }) {
                 <Mail className="w-5 h-5" />
                 <span>{cur.contactBtn}</span>
               </a>
+              <span className="text-xs text-blue-300/80 mt-1 font-mono">
+                {cur.contactEmail}
+              </span>
             </div>
           </div>
         </motion.section>
