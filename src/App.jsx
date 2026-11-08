@@ -13,7 +13,9 @@ import {
   Newspaper,
   PiggyBank,
   Download,
-  CalendarCheck
+  CalendarCheck,
+  Instagram,
+  Linkedin
 } from "lucide-react";
 
 import logo from "./assets/kizuna-logo.png";
@@ -25,6 +27,7 @@ import img4 from "./assets/mont1.jpeg";
 import img5 from "./assets/consell1.jpg";
 import img6 from "./assets/consell2.jpg";
 import ProjecteAbsentisme2026 from "./pages/ProjecteAbsentisme2026";
+import EventsPage from "./pages/EventsPage";
 
 const DRIVE_API_KEY = import.meta.env.VITE_GDRIVE_API_KEY;
 const DRIVE_FOLDER_ID = import.meta.env.VITE_GDRIVE_FOLDER_ID;
@@ -150,6 +153,12 @@ const getRouteFromUrl = () => {
   ) {
     return "projecte_absentisme_diputacio_2026";
   }
+  if (
+    pathname.endsWith("events") ||
+    hash.startsWith("events")
+  ) {
+    return "events";
+  }
   return "home";
 };
 
@@ -181,19 +190,16 @@ export default function App() {
   const navigateTo = (route, e) => {
     if (e) e.preventDefault();
     if (route === "home") {
-      window.history.pushState({}, "", "/#projects-events");
+      window.history.pushState({}, "", "/");
       setCurrentRoute("home");
-      setTimeout(() => {
-        const el = document.getElementById("projects-events");
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        } else {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-      }, 50);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (route === "projecte_absentisme_diputacio_2026") {
       window.history.pushState({}, "", "/projecte_absentisme_diputacio_2026");
       setCurrentRoute("projecte_absentisme_diputacio_2026");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (route === "events") {
+      window.history.pushState({}, "", "/events");
+      setCurrentRoute("events");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
@@ -351,12 +357,13 @@ export default function App() {
           about: "Quiénes somos",
           areas: "Áreas de acción",
           eu: "Cooperación EU",
-          partners: "Proyectos y Alianzas",
+          partners: "Alianzas",
           ods: "Agenda 2030",
           team: "Equipo",
           join: "Súmate",
           news: "Noticias",
           participate: "Participa",
+          eventsBtn: "EVENTOS",
           explore: "Explorar áreas",
           collaborate: "Colabora",
           send: "Enviar",
@@ -408,7 +415,7 @@ export default function App() {
           projectsEventsLead: "Explora nuestras iniciativas en marcha y los próximos eventos. Haz clic en las tarjetas para descubrir más detalles.",
           project1Title: "Hasta Que Él Venga",
           project1Desc: "Organizamos la tercera edición de este congreso interdenominacional a nivel Nacional y Europeo",
-          project1LinkText: "Visitar Web",
+          project1LinkText: "Ver Eventos / Web",
           project2Title: "Proyecto Prevencion Absentisme 2026",
           project2Desc: "Proyecto financiado por Diputació de Tarragona para prevenir absentismo laboral.",
           project2LinkText: "Ver Proyecto",
@@ -423,12 +430,13 @@ export default function App() {
           about: "Qui som",
           areas: "Àrees d'acció",
           eu: "Cooperació UE",
-          partners: "Projectes i Aliances",
+          partners: "Aliances",
           ods: "Agenda 2030",
           team: "Equip",
           join: "Uneix-t'hi",
           news: "Notícies",
           participate: "Participa",
+          eventsBtn: "ESDEVENIMENTS",
           explore: "Explora àrees",
           collaborate: "Col·labora",
           send: "Envia",
@@ -479,7 +487,7 @@ export default function App() {
           projectsEventsLead: "Explora les nostres iniciatives en marxa i els propers esdeveniments. Fes clic a les targetes per descobrir més detalls.",
           project1Title: "Hasta Que Él Venga",
           project1Desc: "Organitzem la tercera edició d'aquest congrés interdenominacional a nivell Nacional i Europeu",
-          project1LinkText: "Visitar Web",
+          project1LinkText: "Veure Esdeveniments / Web",
           project2Title: "Projecte Prevenció Absentisme 2026",
           project2Desc: "Projecte finançat per la Diputació de Tarragona per prevenir l'absentisme laboral.",
           project2LinkText: "Veure Projecte",
@@ -494,12 +502,13 @@ export default function App() {
           about: "About",
           areas: "Focus Areas",
           eu: "EU Cooperation",
-          partners: "Projects & Partnerships",
+          partners: "Alliances",
           ods: "2030 Agenda",
           team: "Team",
           join: "Join",
           news: "News",
           participate: "Participate",
+          eventsBtn: "EVENTS",
           explore: "Explore areas",
           collaborate: "Collaborate",
           send: "Send",
@@ -550,7 +559,7 @@ export default function App() {
           projectsEventsLead: "Explore our ongoing initiatives and upcoming events. Click on the cards to discover more details.",
           project1Title: "Hasta Que Él Venga",
           project1Desc: "We organize the third edition of this interdenominational congress at National and European level",
-          project1LinkText: "Visit Website",
+          project1LinkText: "View Events / Web",
           project2Title: "Absenteeism Prevention Project 2026",
           project2Desc: "Project funded by Diputació de Tarragona to prevent workplace absenteeism.",
           project2LinkText: "View Project",
@@ -639,6 +648,37 @@ export default function App() {
     { role: { es: "Tesorero", ca: "Tresorer", en: "Treasurer" }[lang], name: "David Domènech Vallvé" },
     { role: { es: "Voluntaria", ca: "Voluntària", en: "Volunteer" }[lang], name: "Esther Creus" },
   ];
+
+  if (currentRoute === "events") {
+    return (
+      <div className="relative min-h-screen text-white/95 selection:bg-blue-500 selection:text-white">
+        <div className="fixed inset-0 -z-10 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-tr from-zinc-950 via-neutral-900 to-zinc-950" />
+          <div className="absolute inset-0 bg-cover bg-center opacity-[0.04] mix-blend-overlay" style={{ backgroundImage: `url(${bg})` }} />
+          <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] rounded-full bg-blue-600/10 blur-[150px] pointer-events-none" />
+          <div className="absolute bottom-[20%] left-[-10%] w-[700px] h-[700px] rounded-full bg-cyan-600/10 blur-[150px] pointer-events-none" />
+        </div>
+        <EventsPage
+          lang={lang}
+          setLang={setLang}
+          onBack={(e) => navigateTo("home", e)}
+        />
+        {showCookieBanner && (
+          <div className="fixed bottom-0 left-0 right-0 z-[100] bg-slate-950 text-white p-4 sm:p-5 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10">
+            <p className="text-sm opacity-90 max-w-3xl">
+              {t.cookieBannerText}
+            </p>
+            <button 
+              onClick={handleAcceptCookies}
+              className="shrink-0 rounded-xl bg-white px-5 py-2.5 text-slate-950 font-medium hover:bg-slate-100 transition cursor-pointer"
+            >
+              {t.cookieAccept}
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   if (currentRoute === "projecte_absentisme_diputacio_2026") {
     return (
@@ -778,13 +818,42 @@ export default function App() {
                 English
               </button>
             </div>
-
-            <a href="#join" className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 px-3.5 py-2 text-xs sm:text-sm text-white font-semibold shadow-md hover:shadow-emerald-500/10 hover:-translate-y-0.5 transition-all duration-300">
-              {t.participate} <ChevronRight className="w-4 h-4" />
-            </a>
           </div>
         </nav>
       </header>
+
+      {/* Social Networks with Big Icons below the top banner */}
+      <div className="relative z-40 flex justify-center items-center gap-4 sm:gap-6 pt-4 pb-2 select-none">
+        <a
+          href="https://www.instagram.com/associacio_kizuna_global/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram Kizuna Global"
+          title="Instagram · @associacio_kizuna_global"
+          className="group flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 hover:border-pink-500/50 backdrop-blur-md shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-0.5"
+        >
+          <Instagram className="w-8 h-8 sm:w-9 sm:h-9 text-pink-400 group-hover:text-pink-300 transition-transform group-hover:scale-110 drop-shadow-[0_2px_8px_rgba(236,72,153,0.3)]" />
+          <div className="flex flex-col text-left">
+            <span className="text-xs sm:text-sm font-bold text-white tracking-wide">Instagram</span>
+            <span className="text-[10px] text-pink-300/80 hidden sm:inline">@associacio_kizuna_global</span>
+          </div>
+        </a>
+
+        <a
+          href="https://www.linkedin.com/company/kizuna-global-iniciatives-socials/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn Kizuna Global"
+          title="LinkedIn · Kizuna Global Iniciatives Socials"
+          className="group flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 hover:border-blue-400/50 backdrop-blur-md shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-0.5"
+        >
+          <Linkedin className="w-8 h-8 sm:w-9 sm:h-9 text-blue-400 group-hover:text-blue-300 transition-transform group-hover:scale-110 drop-shadow-[0_2px_8px_rgba(59,130,246,0.3)]" />
+          <div className="flex flex-col text-left">
+            <span className="text-xs sm:text-sm font-bold text-white tracking-wide">LinkedIn</span>
+            <span className="text-[10px] text-blue-300/80 hidden sm:inline">Kizuna Global</span>
+          </div>
+        </a>
+      </div>
 
       {/* Hero Section */}
       <section id="home" className="py-24 sm:py-32 text-center relative select-none">
@@ -811,17 +880,18 @@ export default function App() {
             {t.heroLead}
           </motion.p>
           <motion.div
-            className="mt-8 flex justify-center gap-4"
+            className="mt-8 flex justify-center"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
-            <a href="#about" className="inline-flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 shadow-md">
-              {t.explore}
-            </a>
-            <a href="#projects-events" className="inline-flex items-center justify-center rounded-xl bg-emerald-500 hover:bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 shadow-md">
-              {t.projectsEventsMenu} <ChevronRight className="w-4 h-4 ml-1" />
-            </a>
+            <button
+              onClick={(e) => navigateTo("events", e)}
+              className="inline-flex items-center justify-center gap-2.5 rounded-xl bg-blue-500 hover:bg-blue-600 px-8 py-3.5 text-base sm:text-lg font-bold tracking-wider text-white transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-500/30 ring-2 ring-blue-400/40 cursor-pointer group"
+            >
+              <span>{t.eventsBtn}</span>
+              <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </button>
           </motion.div>
         </div>
       </section>
@@ -929,10 +999,12 @@ export default function App() {
           <ProjectCard
             title={t.project1Title}
             description={t.project1Desc}
-            link="https://www.hastaqueelvenga.es/"
+            link="/events"
             linkText={t.project1LinkText}
             icon={Globe2}
             lang={lang}
+            isExternal={false}
+            onClick={(e) => navigateTo("events", e)}
           />
           <ProjectCard
             title={t.project2Title}
@@ -1291,8 +1363,28 @@ export default function App() {
       {/* Footer */}
       <footer className="bg-black/30 border-t border-white/5 backdrop-blur-md pb-10 pt-8 text-emerald-300/80">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3 text-white">
+          <div className="flex items-center gap-4 text-white">
             <span className="font-serif tracking-[0.2em] font-semibold">KIZUNA GLOBAL</span>
+            <div className="flex items-center gap-2 border-l border-white/20 pl-4">
+              <a
+                href="https://www.instagram.com/associacio_kizuna_global/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Instagram"
+                className="text-pink-400 hover:text-pink-300 transition"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/kizuna-global-iniciatives-socials/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="LinkedIn"
+                className="text-blue-400 hover:text-blue-300 transition"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+            </div>
           </div>
           
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium">
